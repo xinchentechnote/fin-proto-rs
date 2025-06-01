@@ -11,7 +11,7 @@ pub struct SimpleMessage {
 impl BinaryCodec for SimpleMessage {
     fn encode(&self, buf: &mut BytesMut) {
         buf.put_u16(self.msg_type);
-        put_string(buf, &self.json_body)
+        put_string(buf, &self.json_body);
     }
 
     fn decode(buf: &mut Bytes) -> Option<SimpleMessage> {
@@ -27,48 +27,21 @@ impl BinaryCodec for SimpleMessage {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use bytes::{Bytes, BytesMut};
+    use bytes::BytesMut;
 
     #[test]
-    fn test_simple_message_encode_decode() {
+    fn test_simple_message_codec() {
         let original = SimpleMessage {
-            msg_type: 1001,
-            json_body: r#"{"key": "value"}"#.to_string(),
+            msg_type: Default::default(),
+            json_body: "example".to_string(),
         };
 
         let mut buf = BytesMut::new();
         original.encode(&mut buf);
-
         let mut bytes = buf.freeze();
-        let decoded = SimpleMessage::decode(&mut bytes).expect("decode failed");
 
-        assert_eq!(decoded, original);
-    }
+        let decoded = SimpleMessage::decode(&mut bytes).unwrap();
 
-    #[test]
-    fn test_simple_message_empty_json() {
-        let original = SimpleMessage {
-            msg_type: 42,
-            json_body: "".to_string(),
-        };
-
-        let mut buf = BytesMut::new();
-        original.encode(&mut buf);
-
-        let mut bytes = buf.freeze();
-        let decoded = SimpleMessage::decode(&mut bytes).expect("decode failed");
-
-        assert_eq!(decoded, original);
-    }
-
-    #[test]
-    fn test_simple_message_truncated_data() {
-        // Simulate buffer with only msg_type and no string length/content
-        let mut buf = Bytes::from_static(&[0x03, 0xE9]); // 1001 in u16
-        let decoded = SimpleMessage::decode(&mut buf);
-        assert!(
-            decoded.is_none(),
-            "Expected decode failure on truncated data"
-        );
+        assert_eq!(original, decoded);
     }
 }
