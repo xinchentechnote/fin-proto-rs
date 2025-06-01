@@ -1,0 +1,36 @@
+name: fin-proto-rs CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        submodules: recursive
+
+    - name: Install Rust
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: stable
+        override: true
+    - name: install nextest
+      uses: taiki-e/install-action@nextest
+    - name: Build
+      run: cargo build --verbose
+
+    - name: Run Tests
+      run: cargo nextest run --all-features
+    - name: Lint
+      run: cargo clippy -- -D warnings
+
+    - name: Format Check
+      run: cargo fmt --all -- --check
