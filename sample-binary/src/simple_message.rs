@@ -32,7 +32,7 @@ mod tests {
     #[test]
     fn test_simple_message_codec() {
         let original = SimpleMessage {
-            msg_type: Default::default(),
+            msg_type: 1234,
             json_body: "example".to_string(),
         };
 
