@@ -1,0 +1,12 @@
+[package]
+name = "binary-codec"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+bytes = "1.10.1"
+
+
+[lib]
+name = "binary_codec"
+path = "src/lib.rs"

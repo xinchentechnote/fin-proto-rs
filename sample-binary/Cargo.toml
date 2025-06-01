@@ -1,0 +1,12 @@
+[package]
+name = "sample-binary"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+binary-codec = { path = "../binary-codec" }
+bytes = "1.10.1"
+
+[lib]
+name = "sample_binary"
+path = "src/lib.rs"

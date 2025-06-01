@@ -1,0 +1,1 @@
+export PATH=~/workspace/fin-protoc/bin/:$PATH
