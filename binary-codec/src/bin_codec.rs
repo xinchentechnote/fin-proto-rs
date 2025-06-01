@@ -19,7 +19,7 @@ pub fn get_string(buf: &mut Bytes) -> Option<String> {
     if buf.remaining() < len {
         return None;
     }
-    Some(String::from_utf8(buf.copy_to_bytes(len).to_vec()).ok()?)
+    String::from_utf8(buf.copy_to_bytes(len).to_vec()).ok()
 }
 
 pub fn put_char(buf: &mut BytesMut, c: char) {
