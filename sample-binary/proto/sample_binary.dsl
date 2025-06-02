@@ -22,7 +22,7 @@ packet RiskControlRequest {
     char OrderType `订单类型`,
     u64 Price `价格`,
     u32 Qty `数量`,
-    string ExtraInfo `附加信息`,
+    repeat string ExtraInfo `附加信息`,
 //  SubOrder {
 //		char[16] ClOrdID `子订单号`,
 //		u64 Price `子订单价格`,

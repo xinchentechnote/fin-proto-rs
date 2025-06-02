@@ -12,7 +12,7 @@ pub struct RiskControlRequest {
     pub order_type: char,
     pub price: u64,
     pub qty: u32,
-    pub extra_info: String,
+    pub extra_info: Vec<String>,
 }
 
 impl BinaryCodec for RiskControlRequest {
@@ -25,7 +25,7 @@ impl BinaryCodec for RiskControlRequest {
         put_char(buf, self.order_type);
         buf.put_u64(self.price);
         buf.put_u32(self.qty);
-        put_string(buf, &self.extra_info);
+        put_string_list::<u16, u16>(buf, &self.extra_info);
     }
 
     fn decode(buf: &mut Bytes) -> Option<RiskControlRequest> {
@@ -37,7 +37,7 @@ impl BinaryCodec for RiskControlRequest {
         let order_type = get_char(buf)?;
         let price = buf.get_u64();
         let qty = buf.get_u32();
-        let extra_info = get_string(buf)?;
+        let extra_info = get_string_list::<u16, u16>(buf)?;
         Some(Self {
             unique_order_id,
             cl_ord_id,
@@ -68,7 +68,7 @@ mod tests {
             order_type: 'a',
             price: 123456789,
             qty: 123456,
-            extra_info: "example".to_string(),
+            extra_info: vec!["example".to_string(), "test".to_string()],
         };
 
         let mut buf = BytesMut::new();
