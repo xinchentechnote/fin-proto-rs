@@ -6,25 +6,48 @@ use bytes::{Buf, BufMut, Bytes, BytesMut};
 pub struct SubOrder {
     pub cl_ord_id: String,
     pub price: u64,
-    pub qty: u64,
+    pub qty: u32,
 }
 
 impl BinaryCodec for SubOrder {
     fn encode(&self, buf: &mut BytesMut) {
         put_char_array(buf, &self.cl_ord_id, 16);
         buf.put_u64(self.price);
-        buf.put_u64(self.qty);
+        buf.put_u32(self.qty);
     }
 
     fn decode(buf: &mut Bytes) -> Option<SubOrder> {
         let cl_ord_id = get_char_array(buf, 16)?;
         let price = buf.get_u64();
-        let qty = buf.get_u64();
+        let qty = buf.get_u32();
         Some(Self {
             cl_ord_id,
             price,
             qty,
         })
+    }
+}
+
+#[cfg(test)]
+mod sub_order_tests {
+    use super::*;
+    use bytes::BytesMut;
+
+    #[test]
+    fn test_sub_order_codec() {
+        let original = SubOrder {
+            cl_ord_id: vec!['a'; 16].into_iter().collect::<String>(),
+            price: 123456789,
+            qty: 123456,
+        };
+
+        let mut buf = BytesMut::new();
+        original.encode(&mut buf);
+        let mut bytes = buf.freeze();
+
+        let decoded = SubOrder::decode(&mut bytes).unwrap();
+
+        assert_eq!(original, decoded);
     }
 }
 
@@ -83,7 +106,7 @@ impl BinaryCodec for RiskControlRequest {
 }
 
 #[cfg(test)]
-mod tests {
+mod risk_control_request_tests {
     use super::*;
     use bytes::BytesMut;
 
@@ -100,8 +123,8 @@ mod tests {
             qty: 123456,
             extra_info: vec!["example".to_string(), "test".to_string()],
             sub_order: SubOrder {
-                cl_ord_id: "123".to_string(),
-                price: 123,
+                cl_ord_id: vec!['a'; 16].into_iter().collect::<String>(),
+                price: 123456789,
                 qty: 123456,
             },
         };

@@ -22,7 +22,7 @@ impl BinaryCodec for Detail {
 }
 
 #[cfg(test)]
-mod tests {
+mod detail_tests {
     use super::*;
     use bytes::BytesMut;
 
