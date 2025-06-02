@@ -29,7 +29,7 @@ impl BinaryCodec for RiskControlResponse {
 }
 
 #[cfg(test)]
-mod tests {
+mod risk_control_response_tests {
     use super::*;
     use bytes::BytesMut;
 

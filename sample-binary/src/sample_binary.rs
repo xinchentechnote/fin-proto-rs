@@ -2,8 +2,8 @@
 use binary_codec::*;
 use bytes::{Buf, BufMut, Bytes, BytesMut};
 
-use crate::risk_control_request::RiskControlRequest;
-use crate::risk_control_response::RiskControlResponse;
+use crate::risk_control_request::*;
+use crate::risk_control_response::*;
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum MsgType {
@@ -45,9 +45,7 @@ impl BinaryCodec for SampleBinary {
 }
 
 #[cfg(test)]
-mod tests {
-    use crate::risk_control_request::SubOrder;
-
+mod sample_binary_tests {
     use super::*;
     use bytes::BytesMut;
 
@@ -67,8 +65,8 @@ mod tests {
                 qty: 123456,
                 extra_info: vec!["example".to_string(), "test".to_string()],
                 sub_order: SubOrder {
-                    cl_ord_id: "123".to_string(),
-                    price: 123,
+                    cl_ord_id: vec!['a'; 16].into_iter().collect::<String>(),
+                    price: 123456789,
                     qty: 123456,
                 },
             }),
