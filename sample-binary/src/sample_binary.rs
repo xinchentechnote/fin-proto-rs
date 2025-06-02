@@ -46,6 +46,8 @@ impl BinaryCodec for SampleBinary {
 
 #[cfg(test)]
 mod tests {
+    use crate::risk_control_request::SubOrder;
+
     use super::*;
     use bytes::BytesMut;
 
@@ -64,6 +66,11 @@ mod tests {
                 price: 123456789,
                 qty: 123456,
                 extra_info: vec!["example".to_string(), "test".to_string()],
+                sub_order: SubOrder {
+                    cl_ord_id: "123".to_string(),
+                    price: 123,
+                    qty: 123456,
+                },
             }),
         };
 

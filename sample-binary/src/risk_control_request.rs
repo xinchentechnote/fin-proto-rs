@@ -3,6 +3,32 @@ use binary_codec::*;
 use bytes::{Buf, BufMut, Bytes, BytesMut};
 
 #[derive(Debug, Clone, PartialEq)]
+pub struct SubOrder {
+    pub cl_ord_id: String,
+    pub price: u64,
+    pub qty: u64,
+}
+
+impl BinaryCodec for SubOrder {
+    fn encode(&self, buf: &mut BytesMut) {
+        put_char_array(buf, &self.cl_ord_id, 16);
+        buf.put_u64(self.price);
+        buf.put_u64(self.qty);
+    }
+
+    fn decode(buf: &mut Bytes) -> Option<SubOrder> {
+        let cl_ord_id = get_char_array(buf, 16)?;
+        let price = buf.get_u64();
+        let qty = buf.get_u64();
+        Some(Self {
+            cl_ord_id,
+            price,
+            qty,
+        })
+    }
+}
+
+#[derive(Debug, Clone, PartialEq)]
 pub struct RiskControlRequest {
     pub unique_order_id: String,
     pub cl_ord_id: String,
@@ -13,6 +39,7 @@ pub struct RiskControlRequest {
     pub price: u64,
     pub qty: u32,
     pub extra_info: Vec<String>,
+    pub sub_order: SubOrder,
 }
 
 impl BinaryCodec for RiskControlRequest {
@@ -26,6 +53,7 @@ impl BinaryCodec for RiskControlRequest {
         buf.put_u64(self.price);
         buf.put_u32(self.qty);
         put_string_list::<u16, u16>(buf, &self.extra_info);
+        self.sub_order.encode(buf);
     }
 
     fn decode(buf: &mut Bytes) -> Option<RiskControlRequest> {
@@ -38,6 +66,7 @@ impl BinaryCodec for RiskControlRequest {
         let price = buf.get_u64();
         let qty = buf.get_u32();
         let extra_info = get_string_list::<u16, u16>(buf)?;
+        let sub_order = SubOrder::decode(buf)?;
         Some(Self {
             unique_order_id,
             cl_ord_id,
@@ -48,6 +77,7 @@ impl BinaryCodec for RiskControlRequest {
             price,
             qty,
             extra_info,
+            sub_order,
         })
     }
 }
@@ -69,6 +99,11 @@ mod tests {
             price: 123456789,
             qty: 123456,
             extra_info: vec!["example".to_string(), "test".to_string()],
+            sub_order: SubOrder {
+                cl_ord_id: "123".to_string(),
+                price: 123,
+                qty: 123456,
+            },
         };
 
         let mut buf = BytesMut::new();
