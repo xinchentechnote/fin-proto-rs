@@ -5,6 +5,218 @@ pub trait BinaryCodec: Sized {
     fn decode(buf: &mut Bytes) -> Option<Self>;
 }
 
+pub trait LengthPrefix: Sized {
+    fn read(buf: &mut Bytes) -> Option<usize>;
+    fn write(len: usize, buf: &mut BytesMut);
+}
+
+impl LengthPrefix for u8 {
+    fn read(buf: &mut Bytes) -> Option<usize> {
+        if buf.remaining() >= 1 {
+            Some(buf.get_u8() as usize)
+        } else {
+            None
+        }
+    }
+    fn write(len: usize, buf: &mut BytesMut) {
+        buf.put_u8(len as u8);
+    }
+}
+
+impl LengthPrefix for u16 {
+    fn read(buf: &mut Bytes) -> Option<usize> {
+        if buf.remaining() >= 2 {
+            Some(buf.get_u16() as usize)
+        } else {
+            None
+        }
+    }
+    fn write(len: usize, buf: &mut BytesMut) {
+        buf.put_u16(len as u16);
+    }
+}
+
+impl LengthPrefix for u32 {
+    fn read(buf: &mut Bytes) -> Option<usize> {
+        if buf.remaining() >= 4 {
+            Some(buf.get_u32() as usize)
+        } else {
+            None
+        }
+    }
+    fn write(len: usize, buf: &mut BytesMut) {
+        buf.put_u32(len as u32);
+    }
+}
+
+impl BinaryCodec for u8 {
+    fn encode(&self, buf: &mut BytesMut) {
+        buf.put_u8(*self);
+    }
+    fn decode(buf: &mut Bytes) -> Option<Self> {
+        if buf.remaining() >= 1 {
+            Some(buf.get_u8())
+        } else {
+            None
+        }
+    }
+}
+
+impl BinaryCodec for u16 {
+    fn encode(&self, buf: &mut BytesMut) {
+        buf.put_u16(*self);
+    }
+    fn decode(buf: &mut Bytes) -> Option<Self> {
+        if buf.remaining() >= 2 {
+            Some(buf.get_u16())
+        } else {
+            None
+        }
+    }
+}
+impl BinaryCodec for u32 {
+    fn encode(&self, buf: &mut BytesMut) {
+        buf.put_u32(*self);
+    }
+    fn decode(buf: &mut Bytes) -> Option<Self> {
+        if buf.remaining() >= 4 {
+            Some(buf.get_u32())
+        } else {
+            None
+        }
+    }
+}
+impl BinaryCodec for u64 {
+    fn encode(&self, buf: &mut BytesMut) {
+        buf.put_u64(*self);
+    }
+    fn decode(buf: &mut Bytes) -> Option<Self> {
+        if buf.remaining() >= 8 {
+            Some(buf.get_u64())
+        } else {
+            None
+        }
+    }
+}
+
+impl BinaryCodec for i8 {
+    fn encode(&self, buf: &mut BytesMut) {
+        buf.put_i8(*self);
+    }
+    fn decode(buf: &mut Bytes) -> Option<Self> {
+        if buf.remaining() >= 1 {
+            Some(buf.get_i8())
+        } else {
+            None
+        }
+    }
+}
+
+impl BinaryCodec for i16 {
+    fn encode(&self, buf: &mut BytesMut) {
+        buf.put_i16(*self);
+    }
+    fn decode(buf: &mut Bytes) -> Option<Self> {
+        if buf.remaining() >= 2 {
+            Some(buf.get_i16())
+        } else {
+            None
+        }
+    }
+}
+
+impl BinaryCodec for i32 {
+    fn encode(&self, buf: &mut BytesMut) {
+        buf.put_i32(*self);
+    }
+    fn decode(buf: &mut Bytes) -> Option<Self> {
+        if buf.remaining() >= 4 {
+            Some(buf.get_i32())
+        } else {
+            None
+        }
+    }
+}
+
+impl BinaryCodec for i64 {
+    fn encode(&self, buf: &mut BytesMut) {
+        buf.put_i64(*self);
+    }
+    fn decode(buf: &mut Bytes) -> Option<Self> {
+        if buf.remaining() >= 8 {
+            Some(buf.get_i64())
+        } else {
+            None
+        }
+    }
+}
+
+impl BinaryCodec for String {
+    fn encode(&self, buf: &mut BytesMut) {
+        put_string(buf, self);
+    }
+
+    fn decode(buf: &mut Bytes) -> Option<Self> {
+        get_string(buf)
+    }
+}
+
+pub fn get_list<T, L>(buf: &mut Bytes) -> Option<Vec<T>>
+where
+    T: BinaryCodec,
+    L: LengthPrefix,
+{
+    let len = L::read(buf)?;
+    let mut result = Vec::with_capacity(len);
+    for _ in 0..len {
+        result.push(T::decode(buf)?);
+    }
+    Some(result)
+}
+
+pub fn get_string_list<L1, L2>(buf: &mut Bytes) -> Option<Vec<String>>
+where
+    L1: LengthPrefix,
+    L2: LengthPrefix,
+{
+    let len = L1::read(buf)?;
+    let mut result = Vec::with_capacity(len);
+    for _ in 0..len {
+        let str_len = L2::read(buf)?;
+        if buf.remaining() < str_len {
+            return None; // Not enough bytes for the string
+        }
+        let bytes = buf.copy_to_bytes(str_len);
+        let s = String::from_utf8(bytes.to_vec()).ok()?;
+        result.push(s);
+    }
+    Some(result)
+}
+
+pub fn put_string_list<L1, L2>(buf: &mut BytesMut, items: &[String])
+where
+    L1: LengthPrefix,
+    L2: LengthPrefix,
+{
+    L1::write(items.len(), buf);
+    for item in items {
+        let bytes = item.as_bytes();
+        L2::write(bytes.len(), buf);
+        buf.extend_from_slice(bytes);
+    }
+}
+
+pub fn put_list<T, L>(buf: &mut BytesMut, items: &[T])
+where
+    T: BinaryCodec,
+    L: LengthPrefix,
+{
+    L::write(items.len(), buf);
+    for item in items {
+        item.encode(buf);
+    }
+}
+
 // Utility Functions
 pub fn put_string(buf: &mut BytesMut, s: &str) {
     buf.put_u16(s.len() as u16);
@@ -141,5 +353,29 @@ mod tests {
         let decoded = get_char_array(&mut bytes, 10);
 
         assert_eq!(decoded, Some("Hello".to_string()));
+    }
+
+    #[test]
+    fn test_put_list() {
+        let mut buf = BytesMut::new();
+        let original = vec![1, 2, 3];
+        put_list::<u8, u16>(&mut buf, &original);
+
+        let mut bytes = buf.freeze();
+        let decoded = get_list::<u8, u16>(&mut bytes);
+
+        assert_eq!(decoded, Some(original));
+    }
+
+    #[test]
+    fn test_put_string_list() {
+        let mut buf = BytesMut::new();
+        let original = vec!["Hello".to_string(), "World".to_string()];
+        put_string_list::<u16, u16>(&mut buf, &original);
+
+        let mut bytes = buf.freeze();
+        let decoded = get_string_list::<u16, u16>(&mut bytes);
+
+        assert_eq!(decoded, Some(original));
     }
 }

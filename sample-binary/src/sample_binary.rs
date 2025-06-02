@@ -63,7 +63,7 @@ mod tests {
                 order_type: 'a',
                 price: 123456789,
                 qty: 123456,
-                extra_info: "example".to_string(),
+                extra_info: vec!["example".to_string(), "test".to_string()],
             }),
         };
 
