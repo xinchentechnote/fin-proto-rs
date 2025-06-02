@@ -27,7 +27,8 @@ pub fn get_char_array(buf: &mut Bytes, fixed_length: usize) -> Option<String> {
         return None;
     }
     let bytes = buf.copy_to_bytes(fixed_length);
-    String::from_utf8(bytes.to_vec()).ok()
+    let s = String::from_utf8(bytes.to_vec()).ok()?;
+    Some(s.trim_end_matches('\0').to_string())
 }
 
 pub fn get_string(buf: &mut Bytes) -> Option<String> {
@@ -139,6 +140,6 @@ mod tests {
         let mut bytes = buf.freeze();
         let decoded = get_char_array(&mut bytes, 10);
 
-        assert_eq!(decoded, Some("Hello\0\0\0\0\0".to_string()));
+        assert_eq!(decoded, Some("Hello".to_string()));
     }
 }
