@@ -61,9 +61,9 @@ mod tests {
     fn test_risk_control_request_codec() {
         let original = RiskControlRequest {
             unique_order_id: "example".to_string(),
-            cl_ord_id: "String".to_string(),
-            market_id: "101".to_string(),
-            security_id: "String".to_string(),
+            cl_ord_id: vec!['a'; 16].into_iter().collect::<String>(),
+            market_id: vec!['a'; 3].into_iter().collect::<String>(),
+            security_id: vec!['a'; 12].into_iter().collect::<String>(),
             side: 'a',
             order_type: 'a',
             price: 123456789,

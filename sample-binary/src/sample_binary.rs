@@ -2,19 +2,20 @@
 use binary_codec::*;
 use bytes::{Buf, BufMut, Bytes, BytesMut};
 
-use crate::{risk_control_request::RiskControlRequest, risk_control_response::RiskControlResponse};
+use crate::risk_control_request::RiskControlRequest;
+use crate::risk_control_response::RiskControlResponse;
+
+#[derive(Debug, Clone, PartialEq)]
+pub enum MsgType {
+    RiskControlRequest(RiskControlRequest),
+    RiskControlResponse(RiskControlResponse),
+}
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct SampleBinary {
     pub msg_type: u16,
     pub body_length: u16,
     pub msg_type_body: MsgType,
-}
-
-#[derive(Debug, Clone, PartialEq)]
-pub enum MsgType {
-    RiskControlRequest(RiskControlRequest),
-    RiskControlResponse(RiskControlResponse),
 }
 
 impl BinaryCodec for SampleBinary {
@@ -51,18 +52,18 @@ mod tests {
     #[test]
     fn test_sample_binary_codec() {
         let original = SampleBinary {
+            body_length: 1234,
             msg_type: 4,
-            body_length: 0,
             msg_type_body: MsgType::RiskControlRequest(RiskControlRequest {
-                unique_order_id: "String".to_string(),
-                cl_ord_id: "String".to_string(),
-                market_id: "101".to_string(),
-                security_id: "String".to_string(),
-                side: '1',
-                order_type: '1',
-                price: 12345,
-                qty: 123,
-                extra_info: "String".to_string(),
+                unique_order_id: "example".to_string(),
+                cl_ord_id: vec!['a'; 16].into_iter().collect::<String>(),
+                market_id: vec!['a'; 3].into_iter().collect::<String>(),
+                security_id: vec!['a'; 12].into_iter().collect::<String>(),
+                side: 'a',
+                order_type: 'a',
+                price: 123456789,
+                qty: 123456,
+                extra_info: "example".to_string(),
             }),
         };
 
@@ -71,8 +72,7 @@ mod tests {
         let mut bytes = buf.freeze();
 
         let decoded = SampleBinary::decode(&mut bytes).unwrap();
-        println!("{:?}", original);
-        println!("{:?}", decoded);
+
         assert_eq!(original, decoded);
     }
 }
