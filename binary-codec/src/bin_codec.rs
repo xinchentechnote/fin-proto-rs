@@ -11,6 +11,25 @@ pub fn put_string(buf: &mut BytesMut, s: &str) {
     buf.extend_from_slice(s.as_bytes());
 }
 
+// put_char_array writes a fixed-length string to the buffer, padding with zeros if necessary.
+pub fn put_char_array(buf: &mut BytesMut, s: &str, fixed_length: usize) {
+    let bytes = s.as_bytes();
+    let len = bytes.len().min(fixed_length);
+    buf.extend_from_slice(&bytes[..len]);
+    if len < fixed_length {
+        buf.extend_from_slice(&vec![0; fixed_length - len]);
+    }
+}
+
+// get_char_array retrieves a fixed-length string from the buffer.
+pub fn get_char_array(buf: &mut Bytes, fixed_length: usize) -> Option<String> {
+    if buf.remaining() < fixed_length {
+        return None;
+    }
+    let bytes = buf.copy_to_bytes(fixed_length);
+    String::from_utf8(bytes.to_vec()).ok()
+}
+
 pub fn get_string(buf: &mut Bytes) -> Option<String> {
     if buf.remaining() < 2 {
         return None;
@@ -109,5 +128,17 @@ mod tests {
         let decoded = MyMessage::decode(&mut bytes);
 
         assert_eq!(decoded, Some(original));
+    }
+
+    #[test]
+    fn test_put_string_fixed() {
+        let mut buf = BytesMut::new();
+        let original = "Hello";
+        put_char_array(&mut buf, original, 10);
+
+        let mut bytes = buf.freeze();
+        let decoded = get_char_array(&mut bytes, 10);
+
+        assert_eq!(decoded, Some("Hello\0\0\0\0\0".to_string()));
     }
 }
