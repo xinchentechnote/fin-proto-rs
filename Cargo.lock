@@ -30,3 +30,7 @@ dependencies = [
  "binary-codec",
  "bytes",
 ]
+
+[[package]]
+name = "szse-binary"
+version = "0.1.0"
