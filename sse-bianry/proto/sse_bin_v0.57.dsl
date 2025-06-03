@@ -174,22 +174,22 @@ packet ExecRptInfo {
 }
 
 packet ExecRptSync {
-   //   repeat SubExecRptSync {
+      repeat SubExecRptSync {
           char[8] Pbu `登录或订阅 PBU`,
           uint32 SetID `平台内分区号`,
           uint64 BeginReportIndex `分区预期回报序号，暂不支持2^32及更大取值`
-   //   } //size uint16
+      } //size uint16
 }
 
 packet ExecRptSyncRsp {
-  //  repeat SubExecRptSyncRsp {
+    repeat SubExecRptSyncRsp {
         char[8] Pbu `登录或订阅 PBU`,
         uint32 SetID `平台内分区号`,
         uint64 BeginReportIndex `分区回报序号起点`,
         uint64 EndReportIndex `分区最大回报序号`,
         uint32 RejReason `拒绝码`,
         char[64] Text `描述`
-  //  }
+    }
 }
 
 packet ExecRptEndOfStream {
