@@ -3,7 +3,7 @@ use binary_codec::*;
 use bytes::{Buf, BufMut, Bytes, BytesMut};
 
 #[derive(Debug, Clone, PartialEq)]
-pub struct ExecRptSyncRsp {
+pub struct SubExecRptSyncRsp {
     pub pbu: String,
     pub set_id: u32,
     pub begin_report_index: u64,
@@ -12,7 +12,7 @@ pub struct ExecRptSyncRsp {
     pub text: String,
 }
 
-impl BinaryCodec for ExecRptSyncRsp {
+impl BinaryCodec for SubExecRptSyncRsp {
     fn encode(&self, buf: &mut BytesMut) {
         put_char_array(buf, &self.pbu, 8);
         buf.put_u32(self.set_id);
@@ -22,7 +22,7 @@ impl BinaryCodec for ExecRptSyncRsp {
         put_char_array(buf, &self.text, 64);
     }
 
-    fn decode(buf: &mut Bytes) -> Option<ExecRptSyncRsp> {
+    fn decode(buf: &mut Bytes) -> Option<SubExecRptSyncRsp> {
         let pbu = get_char_array(buf, 8)?;
         let set_id = buf.get_u32();
         let begin_report_index = buf.get_u64();
@@ -41,6 +41,50 @@ impl BinaryCodec for ExecRptSyncRsp {
 }
 
 #[cfg(test)]
+mod sub_exec_rpt_sync_rsp_tests {
+    use super::*;
+    use bytes::BytesMut;
+
+    #[test]
+    fn test_sub_exec_rpt_sync_rsp_codec() {
+        let original = SubExecRptSyncRsp {
+            pbu: vec!['a'; 8].into_iter().collect::<String>(),
+            set_id: 123456,
+            begin_report_index: 123456789,
+            end_report_index: 123456789,
+            rej_reason: 123456,
+            text: vec!['a'; 64].into_iter().collect::<String>(),
+        };
+
+        let mut buf = BytesMut::new();
+        original.encode(&mut buf);
+        let mut bytes = buf.freeze();
+
+        let decoded = SubExecRptSyncRsp::decode(&mut bytes).unwrap();
+
+        assert_eq!(original, decoded);
+    }
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct ExecRptSyncRsp {
+    pub sub_exec_rpt_sync_rsp: Vec<SubExecRptSyncRsp>,
+}
+
+impl BinaryCodec for ExecRptSyncRsp {
+    fn encode(&self, buf: &mut BytesMut) {
+        put_list::<SubExecRptSyncRsp, u16>(buf, &self.sub_exec_rpt_sync_rsp);
+    }
+
+    fn decode(buf: &mut Bytes) -> Option<ExecRptSyncRsp> {
+        let sub_exec_rpt_sync_rsp = get_list::<SubExecRptSyncRsp, u16>(buf)?;
+        Some(Self {
+            sub_exec_rpt_sync_rsp,
+        })
+    }
+}
+
+#[cfg(test)]
 mod exec_rpt_sync_rsp_tests {
     use super::*;
     use bytes::BytesMut;
@@ -48,12 +92,7 @@ mod exec_rpt_sync_rsp_tests {
     #[test]
     fn test_exec_rpt_sync_rsp_codec() {
         let original = ExecRptSyncRsp {
-            pbu: vec!['a'; 8].into_iter().collect::<String>(),
-            set_id: 123456,
-            begin_report_index: 123456789,
-            end_report_index: 123456789,
-            rej_reason: 123456,
-            text: vec!['a'; 64].into_iter().collect::<String>(),
+            sub_exec_rpt_sync_rsp: vec![],
         };
 
         let mut buf = BytesMut::new();

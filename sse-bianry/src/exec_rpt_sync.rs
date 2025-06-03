@@ -3,20 +3,20 @@ use binary_codec::*;
 use bytes::{Buf, BufMut, Bytes, BytesMut};
 
 #[derive(Debug, Clone, PartialEq)]
-pub struct ExecRptSync {
+pub struct SubExecRptSync {
     pub pbu: String,
     pub set_id: u32,
     pub begin_report_index: u64,
 }
 
-impl BinaryCodec for ExecRptSync {
+impl BinaryCodec for SubExecRptSync {
     fn encode(&self, buf: &mut BytesMut) {
         put_char_array(buf, &self.pbu, 8);
         buf.put_u32(self.set_id);
         buf.put_u64(self.begin_report_index);
     }
 
-    fn decode(buf: &mut Bytes) -> Option<ExecRptSync> {
+    fn decode(buf: &mut Bytes) -> Option<SubExecRptSync> {
         let pbu = get_char_array(buf, 8)?;
         let set_id = buf.get_u32();
         let begin_report_index = buf.get_u64();
@@ -29,6 +29,45 @@ impl BinaryCodec for ExecRptSync {
 }
 
 #[cfg(test)]
+mod sub_exec_rpt_sync_tests {
+    use super::*;
+    use bytes::BytesMut;
+
+    #[test]
+    fn test_sub_exec_rpt_sync_codec() {
+        let original = SubExecRptSync {
+            pbu: vec!['a'; 8].into_iter().collect::<String>(),
+            set_id: 123456,
+            begin_report_index: 123456789,
+        };
+
+        let mut buf = BytesMut::new();
+        original.encode(&mut buf);
+        let mut bytes = buf.freeze();
+
+        let decoded = SubExecRptSync::decode(&mut bytes).unwrap();
+
+        assert_eq!(original, decoded);
+    }
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct ExecRptSync {
+    pub sub_exec_rpt_sync: Vec<SubExecRptSync>,
+}
+
+impl BinaryCodec for ExecRptSync {
+    fn encode(&self, buf: &mut BytesMut) {
+        put_list::<SubExecRptSync, u16>(buf, &self.sub_exec_rpt_sync);
+    }
+
+    fn decode(buf: &mut Bytes) -> Option<ExecRptSync> {
+        let sub_exec_rpt_sync = get_list::<SubExecRptSync, u16>(buf)?;
+        Some(Self { sub_exec_rpt_sync })
+    }
+}
+
+#[cfg(test)]
 mod exec_rpt_sync_tests {
     use super::*;
     use bytes::BytesMut;
@@ -36,9 +75,7 @@ mod exec_rpt_sync_tests {
     #[test]
     fn test_exec_rpt_sync_codec() {
         let original = ExecRptSync {
-            pbu: vec!['a'; 8].into_iter().collect::<String>(),
-            set_id: 123456,
-            begin_report_index: 123456789,
+            sub_exec_rpt_sync: vec![],
         };
 
         let mut buf = BytesMut::new();
