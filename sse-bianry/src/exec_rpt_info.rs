@@ -5,16 +5,26 @@ use bytes::{Buf, BufMut, Bytes, BytesMut};
 #[derive(Debug, Clone, PartialEq)]
 pub struct ExecRptInfo {
     pub platform_id: u16,
+    pub pbu: Vec<String>,
+    pub set_id: Vec<u32>,
 }
 
 impl BinaryCodec for ExecRptInfo {
     fn encode(&self, buf: &mut BytesMut) {
         buf.put_u16(self.platform_id);
+        put_fixed_string_list::<u16>(buf, &self.pbu, 8);
+        put_list::<u32, u16>(buf, &self.set_id);
     }
 
     fn decode(buf: &mut Bytes) -> Option<ExecRptInfo> {
         let platform_id = buf.get_u16();
-        Some(Self { platform_id })
+        let pbu = get_fixed_string_list::<u16>(buf, 8)?;
+        let set_id = get_list::<u32, u16>(buf)?;
+        Some(Self {
+            platform_id,
+            pbu,
+            set_id,
+        })
     }
 }
 
@@ -25,7 +35,11 @@ mod exec_rpt_info_tests {
 
     #[test]
     fn test_exec_rpt_info_codec() {
-        let original = ExecRptInfo { platform_id: 1234 };
+        let original = ExecRptInfo {
+            platform_id: 1234,
+            pbu: vec!["a".to_string(); 8],
+            set_id: vec![123456, 654321],
+        };
 
         let mut buf = BytesMut::new();
         original.encode(&mut buf);

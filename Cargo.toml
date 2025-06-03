@@ -1,6 +1,6 @@
 [workspace]
 members = [
     "binary-codec",  # 核心 trait 定义
-    "sample-binary", # 样例
+    "sample-binary", "sse-bianry",
 ]
 resolver = "2"
