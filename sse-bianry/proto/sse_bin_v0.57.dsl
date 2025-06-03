@@ -169,8 +169,8 @@ packet PlatformState {
 
 packet ExecRptInfo {
     uint16 PlatformID `平台标识 0=竞价平台`,
-    //repeat char[8] Pbu `登录或订阅 PBU`, //size uint16
-    //repeat uint32 SetID `平台内分区号` //size uint16
+    repeat char[8] Pbu `登录或订阅 PBU`, //size uint16
+    repeat uint32 SetID `平台内分区号` //size uint16
 }
 
 packet ExecRptSync {

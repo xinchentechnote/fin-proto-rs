@@ -193,6 +193,23 @@ where
     Some(result)
 }
 
+pub fn get_fixed_string_list<L>(buf: &mut Bytes, fixed_length: usize) -> Option<Vec<String>>
+where
+    L: LengthPrefix,
+{
+    let len = L::read(buf)?;
+    let mut result = Vec::with_capacity(len);
+    for _ in 0..len {
+        if buf.remaining() < fixed_length {
+            return None; // Not enough bytes for the fixed-length string
+        }
+        let bytes = buf.copy_to_bytes(fixed_length);
+        let s = String::from_utf8(bytes.to_vec()).ok()?;
+        result.push(s.trim_end_matches('\0').to_string());
+    }
+    Some(result)
+}
+
 pub fn put_string_list<L1, L2>(buf: &mut BytesMut, items: &[String])
 where
     L1: LengthPrefix,
@@ -203,6 +220,21 @@ where
         let bytes = item.as_bytes();
         L2::write(bytes.len(), buf);
         buf.extend_from_slice(bytes);
+    }
+}
+
+pub fn put_fixed_string_list<L>(buf: &mut BytesMut, items: &[String], fixed_length: usize)
+where
+    L: LengthPrefix,
+{
+    L::write(items.len(), buf);
+    for item in items {
+        let bytes = item.as_bytes();
+        let len = bytes.len().min(fixed_length);
+        buf.extend_from_slice(&bytes[..len]);
+        if len < fixed_length {
+            buf.extend_from_slice(&vec![0; fixed_length - len]);
+        }
     }
 }
 
@@ -377,5 +409,20 @@ mod tests {
         let decoded = get_string_list::<u16, u16>(&mut bytes);
 
         assert_eq!(decoded, Some(original));
+    }
+
+    #[test]
+    fn test_put_fixed_string_list() {
+        let mut buf = BytesMut::new();
+        let original = vec!["Hello".to_string(), "World".to_string()];
+        put_fixed_string_list::<u16>(&mut buf, &original, 10);
+
+        let mut bytes = buf.freeze();
+        let decoded = get_fixed_string_list::<u16>(&mut bytes, 10);
+
+        assert_eq!(
+            decoded,
+            Some(vec!["Hello".to_string(), "World".to_string()])
+        );
     }
 }

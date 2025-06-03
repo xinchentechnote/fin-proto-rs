@@ -22,3 +22,11 @@ dependencies = [
  "binary-codec",
  "bytes",
 ]
+
+[[package]]
+name = "sse-bianry"
+version = "0.1.0"
+dependencies = [
+ "binary-codec",
+ "bytes",
+]
