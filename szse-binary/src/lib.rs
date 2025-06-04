@@ -1,14 +1,71 @@
-pub fn add(left: u64, right: u64) -> u64 {
-    left + right
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn it_works() {
-        let result = add(2, 2);
-        assert_eq!(result, 4);
-    }
-}
+pub mod business_reject;
+pub mod cancel_reject;
+pub mod execution_confirm;
+pub mod execution_report;
+pub mod extend_100101;
+pub mod extend_100201;
+pub mod extend_100301;
+pub mod extend_100501;
+pub mod extend_100601;
+pub mod extend_100701;
+pub mod extend_101401;
+pub mod extend_101501;
+pub mod extend_101601;
+pub mod extend_101701;
+pub mod extend_101801;
+pub mod extend_102701;
+pub mod extend_102801;
+pub mod extend_102901;
+pub mod extend_103501;
+pub mod extend_103701;
+pub mod extend_104101;
+pub mod extend_104128;
+pub mod extend_104701;
+pub mod extend_106301;
+pub mod extend_200102;
+pub mod extend_200115;
+pub mod extend_200202;
+pub mod extend_200215;
+pub mod extend_200302;
+pub mod extend_200315;
+pub mod extend_200402;
+pub mod extend_200415;
+pub mod extend_200502;
+pub mod extend_200515;
+pub mod extend_200602;
+pub mod extend_200615;
+pub mod extend_200702;
+pub mod extend_200715;
+pub mod extend_201202;
+pub mod extend_201502;
+pub mod extend_201602;
+pub mod extend_201702;
+pub mod extend_201802;
+pub mod extend_202702;
+pub mod extend_202802;
+pub mod extend_202902;
+pub mod extend_203102;
+pub mod extend_203502;
+pub mod extend_203702;
+pub mod extend_203715;
+pub mod extend_204102;
+pub mod extend_204115;
+pub mod extend_204129;
+pub mod extend_204130;
+pub mod extend_204702;
+pub mod extend_204715;
+pub mod extend_206302;
+pub mod extend_206315;
+pub mod heartbeat;
+pub mod logon;
+pub mod logout;
+pub mod new_order;
+pub mod order_cancel_request;
+pub mod partition_report;
+pub mod platform_info;
+pub mod platform_partition;
+pub mod platform_state_info;
+pub mod report_finished;
+pub mod report_synchronization;
+pub mod szse_binary;
+pub mod trading_session_status;
