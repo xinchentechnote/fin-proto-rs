@@ -6,7 +6,7 @@ use crate::risk_control_request::*;
 use crate::risk_control_response::*;
 
 #[derive(Debug, Clone, PartialEq)]
-pub enum MsgType {
+pub enum SampleBinaryMsgTypeEnum {
     RiskControlRequest(RiskControlRequest),
     RiskControlResponse(RiskControlResponse),
 }
@@ -15,7 +15,7 @@ pub enum MsgType {
 pub struct SampleBinary {
     pub msg_type: u16,
     pub body_length: u16,
-    pub msg_type_body: MsgType,
+    pub msg_type_body: SampleBinaryMsgTypeEnum,
 }
 
 impl BinaryCodec for SampleBinary {
@@ -23,8 +23,8 @@ impl BinaryCodec for SampleBinary {
         buf.put_u16(self.msg_type);
         buf.put_u16(self.body_length);
         match &self.msg_type_body {
-            MsgType::RiskControlRequest(msg) => msg.encode(buf),
-            MsgType::RiskControlResponse(msg) => msg.encode(buf),
+            SampleBinaryMsgTypeEnum::RiskControlRequest(msg) => msg.encode(buf),
+            SampleBinaryMsgTypeEnum::RiskControlResponse(msg) => msg.encode(buf),
         }
     }
 
@@ -32,8 +32,8 @@ impl BinaryCodec for SampleBinary {
         let msg_type = buf.get_u16();
         let body_length = buf.get_u16();
         let msg_type_body = match msg_type {
-            4 => MsgType::RiskControlRequest(RiskControlRequest::decode(buf)?),
-            5 => MsgType::RiskControlResponse(RiskControlResponse::decode(buf)?),
+            4 => SampleBinaryMsgTypeEnum::RiskControlRequest(RiskControlRequest::decode(buf)?),
+            5 => SampleBinaryMsgTypeEnum::RiskControlResponse(RiskControlResponse::decode(buf)?),
             _ => return None,
         };
         Some(Self {
@@ -54,7 +54,7 @@ mod sample_binary_tests {
         let original = SampleBinary {
             body_length: 1234,
             msg_type: 4,
-            msg_type_body: MsgType::RiskControlRequest(RiskControlRequest {
+            msg_type_body: SampleBinaryMsgTypeEnum::RiskControlRequest(RiskControlRequest {
                 unique_order_id: "example".to_string(),
                 cl_ord_id: vec!['a'; 16].into_iter().collect::<String>(),
                 market_id: vec!['a'; 3].into_iter().collect::<String>(),
