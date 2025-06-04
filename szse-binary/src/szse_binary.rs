@@ -38,7 +38,7 @@ pub enum SzseBinaryMsgTypeEnum {
 #[derive(Debug, Clone, PartialEq)]
 pub struct SzseBinary {
     pub msg_type: u32,
-    pub body_lenght: u32,
+    pub body_length: u32,
     pub msg_type_body: SzseBinaryMsgTypeEnum,
     pub checksum: i32,
 }
@@ -46,7 +46,7 @@ pub struct SzseBinary {
 impl BinaryCodec for SzseBinary {
     fn encode(&self, buf: &mut BytesMut) {
         buf.put_u32(self.msg_type);
-        buf.put_u32(self.body_lenght);
+        buf.put_u32(self.body_length);
         match &self.msg_type_body {
             SzseBinaryMsgTypeEnum::Logon(msg) => msg.encode(buf),
             SzseBinaryMsgTypeEnum::Logout(msg) => msg.encode(buf),
@@ -68,7 +68,7 @@ impl BinaryCodec for SzseBinary {
 
     fn decode(buf: &mut Bytes) -> Option<SzseBinary> {
         let msg_type = buf.get_u32();
-        let body_lenght = buf.get_u32();
+        let body_length = buf.get_u32();
         let msg_type_body = match msg_type {
             1 => SzseBinaryMsgTypeEnum::Logon(Logon::decode(buf)?),
             2 => SzseBinaryMsgTypeEnum::Logout(Logout::decode(buf)?),
@@ -152,7 +152,7 @@ impl BinaryCodec for SzseBinary {
         let checksum = buf.get_i32();
         Some(Self {
             msg_type,
-            body_lenght,
+            body_length,
             msg_type_body,
             checksum,
         })
@@ -167,7 +167,7 @@ mod szse_binary_tests {
     #[test]
     fn test_szse_binary_codec() {
         let original = SzseBinary {
-            body_lenght: 123456,
+            body_length: 123456,
             msg_type: 1,
             msg_type_body: SzseBinaryMsgTypeEnum::Logon(Logon {
                 sender_comp_id: vec!['a'; 20].into_iter().collect::<String>(),

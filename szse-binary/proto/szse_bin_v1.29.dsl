@@ -24,7 +24,6 @@ MetaData DataType {
 }
 
 MetaData SessionField {
-    uInt32 BodyLenght `消息体长度`
     uInt32 BodyLength `消息体长度`
     uInt32 MsgType `消息类型`
     char[20] SenderCompID `发送方代码`
@@ -37,7 +36,6 @@ MetaData SessionField {
 }
 
 MetaData BusinessField {
-    AccountID AccoutID `证券账户`
     Int32 AlertRatio `预警线，单位为百分比，定义为 N6(2)`
     char[3] ApplID `应用标识`
     Amt AccruedInterestAmt `借贷费用金额`
@@ -60,7 +58,7 @@ MetaData BusinessField {
     char[30] ContactInfo `联系方式，可能包含中文字符，表示最多 30 个字节`
     char[12] Contactor `联系人，可能包含中文字符，表示最多 12 个字节`
     char[6] ContractAccountCode `合约账户标识码`
-    AccoutID CounterpartyAccountID `对手方证券账户`
+    AccountID CounterpartyAccountID `对手方证券账户`
     BranchID CounterpartyBranchID `对手方营业部代码`
     char[8] CounterpartyConfirmID `对手方约定号`
     char[16] CounterpartyExecID `交易所赋予的执行编号，单个交易日内不重复`
@@ -77,13 +75,13 @@ MetaData BusinessField {
     uInt8 CoveredOrUncovered `备兑标签，衍生品交易填写，0=Covered，表示备兑仓；1=UnCovered，表示普通仓`
     Qty CumQty `累计执行数量`
     uInt16 CxlRejReason `撤单拒绝原因代码，正数`
-    AccoutID DeductionAccountID `用于扣划证券的证券账户`
+    AccountID DeductionAccountID `用于扣划证券的证券账户`
     PBUID DeductionPBU `用于扣划证券的交易单元`
     Qty DeliverQty `证券交付数量`
     char DeliverySide `方向，1=质押，2=解押`
     char DesignationInstruction `注册指令，3 表示转托管`
     uInt8 DesignationTransType `注册指令类型，1=New，表示新注册请求；3=Cancel，表示注册撤单`
-    AccoutID DisposalAccountID `待处置券存放账户`
+    AccountID DisposalAccountID `待处置券存放账户`
     uInt8 DisposalFlag `处置标识，0=不同意，1=同意`
     PBUID DisposalPBU `待处置券存放交易单元`
     char[16] ExecID `交易所赋予的执行编号，单个交易日内不重复`
@@ -246,7 +244,7 @@ MetaData BusinessField {
 
 root packet SzseBinary {
     MsgType,
-    BodyLenght,
+    BodyLength,
     match MsgType {
         1 : Logon,
         2 : Logout,
