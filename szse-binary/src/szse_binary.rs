@@ -162,7 +162,6 @@ impl BinaryCodec for SzseBinary {
 #[cfg(test)]
 mod szse_binary_tests {
     use super::*;
-
     use bytes::BytesMut;
 
     #[test]

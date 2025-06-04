@@ -59,7 +59,6 @@ impl BinaryCodec for BusinessReject {
 #[cfg(test)]
 mod business_reject_tests {
     use super::*;
-
     use bytes::BytesMut;
 
     #[test]

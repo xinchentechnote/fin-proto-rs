@@ -31,7 +31,6 @@ impl BinaryCodec for ReportFinished {
 #[cfg(test)]
 mod report_finished_tests {
     use super::*;
-
     use bytes::BytesMut;
 
     #[test]

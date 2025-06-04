@@ -16,7 +16,6 @@ impl BinaryCodec for Heartbeat {
 #[cfg(test)]
 mod heartbeat_tests {
     use super::*;
-
     use bytes::BytesMut;
 
     #[test]

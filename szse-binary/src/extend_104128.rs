@@ -87,7 +87,6 @@ impl BinaryCodec for Extend104128 {
 #[cfg(test)]
 mod extend_104128_tests {
     use super::*;
-
     use bytes::BytesMut;
 
     #[test]

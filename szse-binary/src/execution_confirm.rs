@@ -228,7 +228,6 @@ impl BinaryCodec for ExecutionConfirm {
 #[cfg(test)]
 mod execution_confirm_tests {
     use super::*;
-
     use bytes::BytesMut;
 
     #[test]

@@ -21,7 +21,6 @@ impl BinaryCodec for PlatformPartition {
 #[cfg(test)]
 mod platform_partition_tests {
     use super::*;
-
     use bytes::BytesMut;
 
     #[test]

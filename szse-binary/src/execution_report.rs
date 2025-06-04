@@ -179,7 +179,6 @@ impl BinaryCodec for ExecutionReport {
 #[cfg(test)]
 mod execution_report_tests {
     use super::*;
-
     use bytes::BytesMut;
 
     #[test]

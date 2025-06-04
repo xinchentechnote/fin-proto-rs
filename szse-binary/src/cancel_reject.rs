@@ -91,7 +91,6 @@ impl BinaryCodec for CancelReject {
 #[cfg(test)]
 mod cancel_reject_tests {
     use super::*;
-
     use bytes::BytesMut;
 
     #[test]
