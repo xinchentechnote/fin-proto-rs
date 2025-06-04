@@ -3,10 +3,12 @@
 MetaData DataType {
     Int64 Price `价格，N13(4)`,
     Int64 Qty `数量，N15(2)`
+    Int64 DeliveryQty `数量，N15(2)`
     Int64 Amt `金额，N18(4)`
     Int64 SeqNum `消息序号`
     uInt16 Boolean `1=True/Yes,0=False/No`
     uInt32 Length `长度表示字节为单位的数据长度，正数`
+    Int64 LocalTimestamp `本地时间戳，YYYYMMDDHHMMSSsss（毫秒），YYYY = 0000-9999, MM = 01-12, DD = 01-31, HH = 00-23, MM = 00-59, SS = 00-60 (秒)，sss=000-999 (毫秒)。`
     Int64 LocalTimeStamp `本地时间戳，YYYYMMDDHHMMSSsss（毫秒），YYYY = 0000-9999, MM = 01-12, DD = 01-31, HH = 00-23, MM = 00-59, SS = 00-60 (秒)，sss=000-999 (毫秒)。`
     uInt32 NumInGroup `重复数，表示重复组的个数，正数`
     uInt32 LocalMktDate `本地市场日期，格式 YYYYMMDD，YYYY =     0000-9999, MM = 01-12, DD = 01-31`
@@ -22,6 +24,7 @@ MetaData DataType {
 }
 
 MetaData SessionField {
+    uInt32 BodyLenght `消息体长度`
     uInt32 BodyLength `消息体长度`
     uInt32 MsgType `消息类型`
     char[20] SenderCompID `发送方代码`
@@ -34,7 +37,7 @@ MetaData SessionField {
 }
 
 MetaData BusinessField {
-    AccountID AccountID `证券账户`
+    AccountID AccoutID `证券账户`
     Int32 AlertRatio `预警线，单位为百分比，定义为 N6(2)`
     char[3] ApplID `应用标识`
     Amt AccruedInterestAmt `借贷费用金额`
@@ -279,7 +282,7 @@ root packet SzseBinary {
         ] : ExecutionReport,
         190007 : OrderCancelRequest,
         290008 : CancelReject,
-    } Body,
+    },
     int32 Checksum,
 }
 
@@ -345,7 +348,7 @@ packet NewOrder {
         "410" : Extend104101,
         "417" : Extend104128,
         "470" : Extend104701,
-    } ExtendFields  `各业务扩展字段`
+    }  `各业务扩展字段`
 }
 
 packet Extend100101 {
@@ -357,6 +360,12 @@ packet Extend100101 {
 }
 
 packet Extend100201 {
+    StopPx `止损价`
+    MinQty `最低成交数量`
+    MaxPriceLevels `最多成交价位数，0 表示不限制成交价位数`
+    TimeInForce `订单有效时间类型`
+}
+packet Extend100301 {
     StopPx `止损价`
     MinQty `最低成交数量`
     MaxPriceLevels `最多成交价位数，0 表示不限制成交价位数`
@@ -527,7 +536,7 @@ packet ExecutionConfirm {
         "410" : Extend204102,
         "417" : Extend204129,
         "470" : Extend204702,
-    } ExtendFields `各业务扩展字段`
+    } `各业务扩展字段`
 }
 
 packet Extend200102 {
@@ -539,6 +548,12 @@ packet Extend200102 {
 }
 
 packet Extend200202 {
+  StopPx `止损价`
+  MinQty `最低成交数量`
+  MaxPriceLevels `最多成交价位数（0 表示不限制）`
+  TimeInForce `订单有效时间类型`
+}
+packet Extend200302 {
   StopPx `止损价`
   MinQty `最低成交数量`
   MaxPriceLevels `最多成交价位数（0 表示不限制）`
@@ -709,7 +724,7 @@ packet ExecutionReport {
         ["410", "412", "413", "415", "416"] : Extend204115,
         "417" : Extend204130,
         "470" : Extend204715,
-    } ExtendFields `各业务扩展字段`
+    } `各业务扩展字段`
 }
 
 packet Extend200115 {
@@ -717,6 +732,9 @@ packet Extend200115 {
 }
 
 packet Extend200215 {
+  MaturityDate `到期日`
+}
+packet Extend200315 {
   MaturityDate `到期日`
 }
 
@@ -736,7 +754,17 @@ packet Extend200615 {
   CashMargin `信用标识`
 }
 
+packet Extend206315 {
+  CashMargin `信用标识`
+}
+
 packet Extend200715 {
+  ExpirationDays `期限，单位为天数`
+  ExpirationType `期限类型`
+  MaturityDate `到期日`
+  ShareProperty `股份性质`
+}
+packet Extend204715 {
   ExpirationDays `期限，单位为天数`
   ExpirationType `期限类型`
   MaturityDate `到期日`
@@ -832,7 +860,7 @@ packet BusinessReject {
 
 packet ReportSynchronization {
   NoPartitions `平台分区数量`
-  partitions repeat PartitionReport
+  repeat PartitionReport
 }
 
 packet PartitionReport {
@@ -854,7 +882,7 @@ packet ReportFinished {
 packet PlatformInfo {
   PlatformID `平台号（1=现货集中竞价交易平台 2=综合金融服务平台 3=非交易处理平台 4=衍生品集中竞价交易平台 5=国际市场互联平台 6=固定收益交易平台）`
   NoPartitions `平台分区数量`
-  partitions repeat PlatformPartition
+  repeat PlatformPartition
 }
 
 packet PlatformPartition {
