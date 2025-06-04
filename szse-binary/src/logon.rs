@@ -39,7 +39,6 @@ impl BinaryCodec for Logon {
 #[cfg(test)]
 mod logon_tests {
     use super::*;
-
     use bytes::BytesMut;
 
     #[test]

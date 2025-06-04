@@ -27,7 +27,6 @@ impl BinaryCodec for Logout {
 #[cfg(test)]
 mod logout_tests {
     use super::*;
-
     use bytes::BytesMut;
 
     #[test]

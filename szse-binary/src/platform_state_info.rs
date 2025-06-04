@@ -27,7 +27,6 @@ impl BinaryCodec for PlatformStateInfo {
 #[cfg(test)]
 mod platform_state_info_tests {
     use super::*;
-
     use bytes::BytesMut;
 
     #[test]

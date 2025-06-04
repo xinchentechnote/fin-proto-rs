@@ -27,7 +27,6 @@ impl BinaryCodec for PartitionReport {
 #[cfg(test)]
 mod partition_report_tests {
     use super::*;
-
     use bytes::BytesMut;
 
     #[test]

@@ -180,7 +180,6 @@ impl BinaryCodec for NewOrder {
 #[cfg(test)]
 mod new_order_tests {
     use super::*;
-
     use bytes::BytesMut;
 
     #[test]

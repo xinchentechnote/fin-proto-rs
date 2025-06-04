@@ -47,7 +47,6 @@ impl BinaryCodec for TradingSessionStatus {
 #[cfg(test)]
 mod trading_session_status_tests {
     use super::*;
-
     use bytes::BytesMut;
 
     #[test]

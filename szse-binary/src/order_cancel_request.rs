@@ -71,7 +71,6 @@ impl BinaryCodec for OrderCancelRequest {
 #[cfg(test)]
 mod order_cancel_request_tests {
     use super::*;
-
     use bytes::BytesMut;
 
     #[test]

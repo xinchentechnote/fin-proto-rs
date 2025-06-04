@@ -21,7 +21,6 @@ impl BinaryCodec for Extend103701 {
 #[cfg(test)]
 mod extend_103701_tests {
     use super::*;
-
     use bytes::BytesMut;
 
     #[test]
