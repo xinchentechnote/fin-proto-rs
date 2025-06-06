@@ -1,6 +1,8 @@
-# 基本命令（实时抓包）
+# tshark 基本命令
 tshark -X lua_script:proto/sse_binary_01.lua -i any -f "tcp port 8080" -V
 sudo tshark -X lua_script:proto/sse_binary.lua -i any -f "tcp port 8080" -V
+sudo tshark -i any -f "tcp port 8080" -w 8080.pcap
+
 
 # 常用参数说明：
 # -X lua_script:<file>  加载Lua脚本
@@ -10,3 +12,6 @@ sudo tshark -X lua_script:proto/sse_binary.lua -i any -f "tcp port 8080" -V
 # -r <file>             读取已有pcap文件
 # -w <file>             保存抓包结果
 # -Y <display filter>   显示过滤
+
+# tcpdump  基本命令
+sudo tcpdump -i any port 8080 -w capture.pcap
