@@ -15,147 +15,147 @@ end
 local sse_binary_proto = Proto("SseBinary", "SseBinary Protocol")
 local fields = {
     -- Field from SseBinary
-    msg_type = ProtoField.uint32("sse_binary.msg_type", "MsgType", base.DEC),
-    msg_seq_num = ProtoField.uint64("sse_binary.msg_seq_num", "MsgSeqNum", base.DEC),
-    msg_body_len = ProtoField.uint32("sse_binary.msg_body_len", "MsgBodyLen", base.DEC),
+    sse_binary_msg_type = ProtoField.uint32("sse_binary.msg_type", "MsgType", base.DEC),
+    sse_binary_msg_seq_num = ProtoField.uint64("sse_binary.msg_seq_num", "MsgSeqNum", base.DEC),
+    sse_binary_msg_body_len = ProtoField.uint32("sse_binary.msg_body_len", "MsgBodyLen", base.DEC),
     -- Unsupported type: match
-    checksum = ProtoField.uint32("sse_binary.checksum", "Checksum", base.DEC),
+    sse_binary_checksum = ProtoField.uint32("sse_binary.checksum", "Checksum", base.DEC),
     -- Field from Heartbeat
     -- Field from Logon
-    sender_comp_id = ProtoField.string("logon.sender_comp_id", "SenderCompID"),
-    target_comp_id = ProtoField.string("logon.target_comp_id", "TargetCompID"),
-    heart_bt_int = ProtoField.uint32("logon.heart_bt_int", "HeartBtInt", base.DEC),
-    prtcl_version = ProtoField.string("logon.prtcl_version", "PrtclVersion"),
-    trade_date = ProtoField.uint32("logon.trade_date", "TradeDate", base.DEC),
-    q_size = ProtoField.uint32("logon.q_size", "QSize", base.DEC),
+    logon_sender_comp_id = ProtoField.string("logon.sender_comp_id", "SenderCompID"),
+    logon_target_comp_id = ProtoField.string("logon.target_comp_id", "TargetCompID"),
+    logon_heart_bt_int = ProtoField.uint32("logon.heart_bt_int", "HeartBtInt", base.DEC),
+    logon_prtcl_version = ProtoField.string("logon.prtcl_version", "PrtclVersion"),
+    logon_trade_date = ProtoField.uint32("logon.trade_date", "TradeDate", base.DEC),
+    logon_q_size = ProtoField.uint32("logon.q_size", "QSize", base.DEC),
     -- Field from Logout
-    session_status = ProtoField.uint32("logout.session_status", "SessionStatus", base.DEC),
-    text = ProtoField.string("logout.text", "Text"),
+    logout_session_status = ProtoField.uint32("logout.session_status", "SessionStatus", base.DEC),
+    logout_text = ProtoField.string("logout.text", "Text"),
     -- Field from NewOrderSingle
-    biz_id = ProtoField.uint32("new_order_single.biz_id", "BizID", base.DEC),
-    biz_pbu = ProtoField.string("new_order_single.biz_pbu", "BizPbu"),
-    cl_ord_id = ProtoField.string("new_order_single.cl_ord_id", "ClOrdID"),
-    security_id = ProtoField.string("new_order_single.security_id", "SecurityID"),
-    account = ProtoField.string("new_order_single.account", "Account"),
-    owner_type = ProtoField.uint32("new_order_single.owner_type", "OwnerType", base.DEC),
-    side = ProtoField.char("new_order_single.side", "Side", base.OCT),
-    price = ProtoField.int64("new_order_single.price", "Price", base.DEC),
-    order_qty = ProtoField.int64("new_order_single.order_qty", "OrderQty", base.DEC),
-    ord_type = ProtoField.char("new_order_single.ord_type", "OrdType", base.OCT),
-    time_in_force = ProtoField.char("new_order_single.time_in_force", "TimeInForce", base.OCT),
-    transact_time = ProtoField.uint64("new_order_single.transact_time", "TransactTime", base.DEC),
-    credit_tag = ProtoField.string("new_order_single.credit_tag", "CreditTag"),
-    clearing_firm = ProtoField.string("new_order_single.clearing_firm", "ClearingFirm"),
-    branch_id = ProtoField.string("new_order_single.branch_id", "BranchID"),
-    user_info = ProtoField.string("new_order_single.user_info", "UserInfo"),
+    new_order_single_biz_id = ProtoField.uint32("new_order_single.biz_id", "BizID", base.DEC),
+    new_order_single_biz_pbu = ProtoField.string("new_order_single.biz_pbu", "BizPbu"),
+    new_order_single_cl_ord_id = ProtoField.string("new_order_single.cl_ord_id", "ClOrdID"),
+    new_order_single_security_id = ProtoField.string("new_order_single.security_id", "SecurityID"),
+    new_order_single_account = ProtoField.string("new_order_single.account", "Account"),
+    new_order_single_owner_type = ProtoField.uint32("new_order_single.owner_type", "OwnerType", base.DEC),
+    new_order_single_side = ProtoField.char("new_order_single.side", "Side", base.OCT),
+    new_order_single_price = ProtoField.int64("new_order_single.price", "Price", base.DEC),
+    new_order_single_order_qty = ProtoField.int64("new_order_single.order_qty", "OrderQty", base.DEC),
+    new_order_single_ord_type = ProtoField.char("new_order_single.ord_type", "OrdType", base.OCT),
+    new_order_single_time_in_force = ProtoField.char("new_order_single.time_in_force", "TimeInForce", base.OCT),
+    new_order_single_transact_time = ProtoField.uint64("new_order_single.transact_time", "TransactTime", base.DEC),
+    new_order_single_credit_tag = ProtoField.string("new_order_single.credit_tag", "CreditTag"),
+    new_order_single_clearing_firm = ProtoField.string("new_order_single.clearing_firm", "ClearingFirm"),
+    new_order_single_branch_id = ProtoField.string("new_order_single.branch_id", "BranchID"),
+    new_order_single_user_info = ProtoField.string("new_order_single.user_info", "UserInfo"),
     -- Field from OrderCancel
-    biz_id = ProtoField.uint32("order_cancel.biz_id", "BizID", base.DEC),
-    biz_pbu = ProtoField.string("order_cancel.biz_pbu", "BizPbu"),
-    cl_ord_id = ProtoField.string("order_cancel.cl_ord_id", "ClOrdID"),
-    security_id = ProtoField.string("order_cancel.security_id", "SecurityID"),
-    account = ProtoField.string("order_cancel.account", "Account"),
-    owner_type = ProtoField.uint32("order_cancel.owner_type", "OwnerType", base.DEC),
-    side = ProtoField.char("order_cancel.side", "Side", base.OCT),
-    orig_cl_ord_id = ProtoField.string("order_cancel.orig_cl_ord_id", "OrigClOrdID"),
-    transact_time = ProtoField.uint64("order_cancel.transact_time", "TransactTime", base.DEC),
-    branch_id = ProtoField.string("order_cancel.branch_id", "BranchID"),
-    user_info = ProtoField.string("order_cancel.user_info", "UserInfo"),
+    order_cancel_biz_id = ProtoField.uint32("order_cancel.biz_id", "BizID", base.DEC),
+    order_cancel_biz_pbu = ProtoField.string("order_cancel.biz_pbu", "BizPbu"),
+    order_cancel_cl_ord_id = ProtoField.string("order_cancel.cl_ord_id", "ClOrdID"),
+    order_cancel_security_id = ProtoField.string("order_cancel.security_id", "SecurityID"),
+    order_cancel_account = ProtoField.string("order_cancel.account", "Account"),
+    order_cancel_owner_type = ProtoField.uint32("order_cancel.owner_type", "OwnerType", base.DEC),
+    order_cancel_side = ProtoField.char("order_cancel.side", "Side", base.OCT),
+    order_cancel_orig_cl_ord_id = ProtoField.string("order_cancel.orig_cl_ord_id", "OrigClOrdID"),
+    order_cancel_transact_time = ProtoField.uint64("order_cancel.transact_time", "TransactTime", base.DEC),
+    order_cancel_branch_id = ProtoField.string("order_cancel.branch_id", "BranchID"),
+    order_cancel_user_info = ProtoField.string("order_cancel.user_info", "UserInfo"),
     -- Field from Confirm
-    pbu = ProtoField.string("confirm.pbu", "Pbu"),
-    set_id = ProtoField.uint32("confirm.set_id", "SetID", base.DEC),
-    report_index = ProtoField.uint64("confirm.report_index", "ReportIndex", base.DEC),
-    biz_id = ProtoField.uint32("confirm.biz_id", "BizID", base.DEC),
-    exec_type = ProtoField.char("confirm.exec_type", "ExecType", base.OCT),
-    biz_pbu = ProtoField.string("confirm.biz_pbu", "BizPbu"),
-    cl_ord_id = ProtoField.string("confirm.cl_ord_id", "ClOrdID"),
-    security_id = ProtoField.string("confirm.security_id", "SecurityID"),
-    account = ProtoField.string("confirm.account", "Account"),
-    owner_type = ProtoField.uint32("confirm.owner_type", "OwnerType", base.DEC),
-    side = ProtoField.char("confirm.side", "Side", base.OCT),
-    price = ProtoField.int64("confirm.price", "Price", base.DEC),
-    order_qty = ProtoField.int64("confirm.order_qty", "OrderQty", base.DEC),
-    leaves_qty = ProtoField.int64("confirm.leaves_qty", "LeavesQty", base.DEC),
-    cxl_qty = ProtoField.int64("confirm.cxl_qty", "CxlQty", base.DEC),
-    ord_type = ProtoField.char("confirm.ord_type", "OrdType", base.OCT),
-    time_in_force = ProtoField.char("confirm.time_in_force", "TimeInForce", base.OCT),
-    ord_status = ProtoField.char("confirm.ord_status", "OrdStatus", base.OCT),
-    credit_tag = ProtoField.string("confirm.credit_tag", "CreditTag"),
-    orig_cl_ord_id = ProtoField.string("confirm.orig_cl_ord_id", "OrigClOrdID"),
-    clearing_firm = ProtoField.string("confirm.clearing_firm", "ClearingFirm"),
-    branch_id = ProtoField.string("confirm.branch_id", "BranchID"),
-    ord_rej_reason = ProtoField.uint32("confirm.ord_rej_reason", "OrdRejReason", base.DEC),
-    ord_cnfm_id = ProtoField.string("confirm.ord_cnfm_id", "OrdCnfmID"),
-    orig_ord_cnfm_id = ProtoField.string("confirm.orig_ord_cnfm_id", "OrigOrdCnfmID"),
-    trade_date = ProtoField.uint32("confirm.trade_date", "TradeDate", base.DEC),
-    transact_time = ProtoField.uint64("confirm.transact_time", "TransactTime", base.DEC),
-    user_info = ProtoField.string("confirm.user_info", "UserInfo"),
+    confirm_pbu = ProtoField.string("confirm.pbu", "Pbu"),
+    confirm_set_id = ProtoField.uint32("confirm.set_id", "SetID", base.DEC),
+    confirm_report_index = ProtoField.uint64("confirm.report_index", "ReportIndex", base.DEC),
+    confirm_biz_id = ProtoField.uint32("confirm.biz_id", "BizID", base.DEC),
+    confirm_exec_type = ProtoField.char("confirm.exec_type", "ExecType", base.OCT),
+    confirm_biz_pbu = ProtoField.string("confirm.biz_pbu", "BizPbu"),
+    confirm_cl_ord_id = ProtoField.string("confirm.cl_ord_id", "ClOrdID"),
+    confirm_security_id = ProtoField.string("confirm.security_id", "SecurityID"),
+    confirm_account = ProtoField.string("confirm.account", "Account"),
+    confirm_owner_type = ProtoField.uint32("confirm.owner_type", "OwnerType", base.DEC),
+    confirm_side = ProtoField.char("confirm.side", "Side", base.OCT),
+    confirm_price = ProtoField.int64("confirm.price", "Price", base.DEC),
+    confirm_order_qty = ProtoField.int64("confirm.order_qty", "OrderQty", base.DEC),
+    confirm_leaves_qty = ProtoField.int64("confirm.leaves_qty", "LeavesQty", base.DEC),
+    confirm_cxl_qty = ProtoField.int64("confirm.cxl_qty", "CxlQty", base.DEC),
+    confirm_ord_type = ProtoField.char("confirm.ord_type", "OrdType", base.OCT),
+    confirm_time_in_force = ProtoField.char("confirm.time_in_force", "TimeInForce", base.OCT),
+    confirm_ord_status = ProtoField.char("confirm.ord_status", "OrdStatus", base.OCT),
+    confirm_credit_tag = ProtoField.string("confirm.credit_tag", "CreditTag"),
+    confirm_orig_cl_ord_id = ProtoField.string("confirm.orig_cl_ord_id", "OrigClOrdID"),
+    confirm_clearing_firm = ProtoField.string("confirm.clearing_firm", "ClearingFirm"),
+    confirm_branch_id = ProtoField.string("confirm.branch_id", "BranchID"),
+    confirm_ord_rej_reason = ProtoField.uint32("confirm.ord_rej_reason", "OrdRejReason", base.DEC),
+    confirm_ord_cnfm_id = ProtoField.string("confirm.ord_cnfm_id", "OrdCnfmID"),
+    confirm_orig_ord_cnfm_id = ProtoField.string("confirm.orig_ord_cnfm_id", "OrigOrdCnfmID"),
+    confirm_trade_date = ProtoField.uint32("confirm.trade_date", "TradeDate", base.DEC),
+    confirm_transact_time = ProtoField.uint64("confirm.transact_time", "TransactTime", base.DEC),
+    confirm_user_info = ProtoField.string("confirm.user_info", "UserInfo"),
     -- Field from CancelReject
-    pbu = ProtoField.string("cancel_reject.pbu", "Pbu"),
-    set_id = ProtoField.uint32("cancel_reject.set_id", "SetID", base.DEC),
-    report_index = ProtoField.uint64("cancel_reject.report_index", "ReportIndex", base.DEC),
-    biz_id = ProtoField.uint32("cancel_reject.biz_id", "BizID", base.DEC),
-    biz_pbu = ProtoField.string("cancel_reject.biz_pbu", "BizPbu"),
-    cl_ord_id = ProtoField.string("cancel_reject.cl_ord_id", "ClOrdID"),
-    security_id = ProtoField.string("cancel_reject.security_id", "SecurityID"),
-    orig_cl_ord_id = ProtoField.string("cancel_reject.orig_cl_ord_id", "OrigClOrdID"),
-    branch_id = ProtoField.string("cancel_reject.branch_id", "BranchID"),
-    cxl_rej_reason = ProtoField.uint32("cancel_reject.cxl_rej_reason", "CxlRejReason", base.DEC),
-    trade_date = ProtoField.uint32("cancel_reject.trade_date", "TradeDate", base.DEC),
-    transact_time = ProtoField.uint64("cancel_reject.transact_time", "TransactTime", base.DEC),
-    user_info = ProtoField.string("cancel_reject.user_info", "UserInfo"),
+    cancel_reject_pbu = ProtoField.string("cancel_reject.pbu", "Pbu"),
+    cancel_reject_set_id = ProtoField.uint32("cancel_reject.set_id", "SetID", base.DEC),
+    cancel_reject_report_index = ProtoField.uint64("cancel_reject.report_index", "ReportIndex", base.DEC),
+    cancel_reject_biz_id = ProtoField.uint32("cancel_reject.biz_id", "BizID", base.DEC),
+    cancel_reject_biz_pbu = ProtoField.string("cancel_reject.biz_pbu", "BizPbu"),
+    cancel_reject_cl_ord_id = ProtoField.string("cancel_reject.cl_ord_id", "ClOrdID"),
+    cancel_reject_security_id = ProtoField.string("cancel_reject.security_id", "SecurityID"),
+    cancel_reject_orig_cl_ord_id = ProtoField.string("cancel_reject.orig_cl_ord_id", "OrigClOrdID"),
+    cancel_reject_branch_id = ProtoField.string("cancel_reject.branch_id", "BranchID"),
+    cancel_reject_cxl_rej_reason = ProtoField.uint32("cancel_reject.cxl_rej_reason", "CxlRejReason", base.DEC),
+    cancel_reject_trade_date = ProtoField.uint32("cancel_reject.trade_date", "TradeDate", base.DEC),
+    cancel_reject_transact_time = ProtoField.uint64("cancel_reject.transact_time", "TransactTime", base.DEC),
+    cancel_reject_user_info = ProtoField.string("cancel_reject.user_info", "UserInfo"),
     -- Field from Report
-    pbu = ProtoField.string("report.pbu", "Pbu"),
-    set_id = ProtoField.uint32("report.set_id", "SetID", base.DEC),
-    report_index = ProtoField.uint64("report.report_index", "ReportIndex", base.DEC),
-    biz_id = ProtoField.uint32("report.biz_id", "BizID", base.DEC),
-    exec_type = ProtoField.char("report.exec_type", "ExecType", base.OCT),
-    biz_pbu = ProtoField.string("report.biz_pbu", "BizPbu"),
-    cl_ord_id = ProtoField.string("report.cl_ord_id", "ClOrdID"),
-    security_id = ProtoField.string("report.security_id", "SecurityID"),
-    account = ProtoField.string("report.account", "Account"),
-    owner_type = ProtoField.uint32("report.owner_type", "OwnerType", base.DEC),
-    side = ProtoField.char("report.side", "Side", base.OCT),
-    price = ProtoField.int64("report.price", "Price", base.DEC),
-    order_qty = ProtoField.int64("report.order_qty", "OrderQty", base.DEC),
-    leaves_qty = ProtoField.int64("report.leaves_qty", "LeavesQty", base.DEC),
-    cxl_qty = ProtoField.int64("report.cxl_qty", "CxlQty", base.DEC),
-    ord_type = ProtoField.char("report.ord_type", "OrdType", base.OCT),
-    time_in_force = ProtoField.char("report.time_in_force", "TimeInForce", base.OCT),
-    ord_status = ProtoField.char("report.ord_status", "OrdStatus", base.OCT),
-    credit_tag = ProtoField.string("report.credit_tag", "CreditTag"),
-    orig_cl_ord_id = ProtoField.string("report.orig_cl_ord_id", "OrigClOrdID"),
-    clearing_firm = ProtoField.string("report.clearing_firm", "ClearingFirm"),
-    branch_id = ProtoField.string("report.branch_id", "BranchID"),
-    ord_rej_reason = ProtoField.uint32("report.ord_rej_reason", "OrdRejReason", base.DEC),
-    ord_cnfm_id = ProtoField.string("report.ord_cnfm_id", "OrdCnfmID"),
-    orig_ord_cnfm_id = ProtoField.string("report.orig_ord_cnfm_id", "OrigOrdCnfmID"),
-    trade_date = ProtoField.uint32("report.trade_date", "TradeDate", base.DEC),
-    transact_time = ProtoField.uint64("report.transact_time", "TransactTime", base.DEC),
-    user_info = ProtoField.string("report.user_info", "UserInfo"),
+    report_pbu = ProtoField.string("report.pbu", "Pbu"),
+    report_set_id = ProtoField.uint32("report.set_id", "SetID", base.DEC),
+    report_report_index = ProtoField.uint64("report.report_index", "ReportIndex", base.DEC),
+    report_biz_id = ProtoField.uint32("report.biz_id", "BizID", base.DEC),
+    report_exec_type = ProtoField.char("report.exec_type", "ExecType", base.OCT),
+    report_biz_pbu = ProtoField.string("report.biz_pbu", "BizPbu"),
+    report_cl_ord_id = ProtoField.string("report.cl_ord_id", "ClOrdID"),
+    report_security_id = ProtoField.string("report.security_id", "SecurityID"),
+    report_account = ProtoField.string("report.account", "Account"),
+    report_owner_type = ProtoField.uint32("report.owner_type", "OwnerType", base.DEC),
+    report_side = ProtoField.char("report.side", "Side", base.OCT),
+    report_price = ProtoField.int64("report.price", "Price", base.DEC),
+    report_order_qty = ProtoField.int64("report.order_qty", "OrderQty", base.DEC),
+    report_leaves_qty = ProtoField.int64("report.leaves_qty", "LeavesQty", base.DEC),
+    report_cxl_qty = ProtoField.int64("report.cxl_qty", "CxlQty", base.DEC),
+    report_ord_type = ProtoField.char("report.ord_type", "OrdType", base.OCT),
+    report_time_in_force = ProtoField.char("report.time_in_force", "TimeInForce", base.OCT),
+    report_ord_status = ProtoField.char("report.ord_status", "OrdStatus", base.OCT),
+    report_credit_tag = ProtoField.string("report.credit_tag", "CreditTag"),
+    report_orig_cl_ord_id = ProtoField.string("report.orig_cl_ord_id", "OrigClOrdID"),
+    report_clearing_firm = ProtoField.string("report.clearing_firm", "ClearingFirm"),
+    report_branch_id = ProtoField.string("report.branch_id", "BranchID"),
+    report_ord_rej_reason = ProtoField.uint32("report.ord_rej_reason", "OrdRejReason", base.DEC),
+    report_ord_cnfm_id = ProtoField.string("report.ord_cnfm_id", "OrdCnfmID"),
+    report_orig_ord_cnfm_id = ProtoField.string("report.orig_ord_cnfm_id", "OrigOrdCnfmID"),
+    report_trade_date = ProtoField.uint32("report.trade_date", "TradeDate", base.DEC),
+    report_transact_time = ProtoField.uint64("report.transact_time", "TransactTime", base.DEC),
+    report_user_info = ProtoField.string("report.user_info", "UserInfo"),
     -- Field from OrderReject
-    biz_id = ProtoField.uint32("order_reject.biz_id", "BizID", base.DEC),
-    biz_pbu = ProtoField.string("order_reject.biz_pbu", "BizPbu"),
-    cl_ord_id = ProtoField.string("order_reject.cl_ord_id", "ClOrdID"),
-    security_id = ProtoField.string("order_reject.security_id", "SecurityID"),
-    ord_rej_reason = ProtoField.uint32("order_reject.ord_rej_reason", "OrdRejReason", base.DEC),
-    trade_date = ProtoField.uint32("order_reject.trade_date", "TradeDate", base.DEC),
-    transact_time = ProtoField.uint64("order_reject.transact_time", "TransactTime", base.DEC),
-    user_info = ProtoField.string("order_reject.user_info", "UserInfo"),
+    order_reject_biz_id = ProtoField.uint32("order_reject.biz_id", "BizID", base.DEC),
+    order_reject_biz_pbu = ProtoField.string("order_reject.biz_pbu", "BizPbu"),
+    order_reject_cl_ord_id = ProtoField.string("order_reject.cl_ord_id", "ClOrdID"),
+    order_reject_security_id = ProtoField.string("order_reject.security_id", "SecurityID"),
+    order_reject_ord_rej_reason = ProtoField.uint32("order_reject.ord_rej_reason", "OrdRejReason", base.DEC),
+    order_reject_trade_date = ProtoField.uint32("order_reject.trade_date", "TradeDate", base.DEC),
+    order_reject_transact_time = ProtoField.uint64("order_reject.transact_time", "TransactTime", base.DEC),
+    order_reject_user_info = ProtoField.string("order_reject.user_info", "UserInfo"),
     -- Field from PlatformState
-    platform_id = ProtoField.uint32("platform_state.platform_id", "PlatformID", base.DEC),
-    platform_state = ProtoField.uint32("platform_state.platform_state", "PlatformState", base.DEC),
+    platform_state_platform_id = ProtoField.uint32("platform_state.platform_id", "PlatformID", base.DEC),
+    platform_state_platform_state = ProtoField.uint32("platform_state.platform_state", "PlatformState", base.DEC),
     -- Field from ExecRptInfo
-    platform_id = ProtoField.uint32("exec_rpt_info.platform_id", "PlatformID", base.DEC),
-    pbu = ProtoField.string("exec_rpt_info.pbu", "Pbu"),
-    set_id = ProtoField.uint32("exec_rpt_info.set_id", "SetID", base.DEC),
+    exec_rpt_info_platform_id = ProtoField.uint32("exec_rpt_info.platform_id", "PlatformID", base.DEC),
+    exec_rpt_info_pbu = ProtoField.string("exec_rpt_info.pbu", "Pbu"),
+    exec_rpt_info_set_id = ProtoField.uint32("exec_rpt_info.set_id", "SetID", base.DEC),
     -- Field from ExecRptSync
     -- Unsupported type: SubExecRptSync
     -- Field from ExecRptSyncRsp
     -- Unsupported type: SubExecRptSyncRsp
     -- Field from ExecRptEndOfStream
-    pbu = ProtoField.string("exec_rpt_end_of_stream.pbu", "Pbu"),
-    set_id = ProtoField.uint32("exec_rpt_end_of_stream.set_id", "SetID", base.DEC),
-    end_report_index = ProtoField.uint64("exec_rpt_end_of_stream.end_report_index", "EndReportIndex", base.DEC),
+    exec_rpt_end_of_stream_pbu = ProtoField.string("exec_rpt_end_of_stream.pbu", "Pbu"),
+    exec_rpt_end_of_stream_set_id = ProtoField.uint32("exec_rpt_end_of_stream.set_id", "SetID", base.DEC),
+    exec_rpt_end_of_stream_end_report_index = ProtoField.uint64("exec_rpt_end_of_stream.end_report_index", "EndReportIndex", base.DEC),
 }
 
 for _, field in pairs(fields) do
@@ -171,17 +171,17 @@ end
 
 local function dissect_logon(buf, tree, offset)
     local subtree = tree:add(sse_binary_proto, buf(offset, 1), "Logon")
-    subtree:add(fields.sender_comp_id, buf(offset, 32))
+    subtree:add(fields.logon_sender_comp_id, buf(offset, 32))
     offset = offset + 32
-    subtree:add(fields.target_comp_id, buf(offset, 32))
+    subtree:add(fields.logon_target_comp_id, buf(offset, 32))
     offset = offset + 32
-    subtree:add(fields.heart_bt_int, buf(offset, 2))
+    subtree:add(fields.logon_heart_bt_int, buf(offset, 2))
     offset = offset + 2
-    subtree:add(fields.prtcl_version, buf(offset, 8))
+    subtree:add(fields.logon_prtcl_version, buf(offset, 8))
     offset = offset + 8
-    subtree:add(fields.trade_date, buf(offset, 4))
+    subtree:add(fields.logon_trade_date, buf(offset, 4))
     offset = offset + 4
-    subtree:add(fields.q_size, buf(offset, 4))
+    subtree:add(fields.logon_q_size, buf(offset, 4))
     offset = offset + 4
     return offset
 end
@@ -189,9 +189,9 @@ end
 
 local function dissect_logout(buf, tree, offset)
     local subtree = tree:add(sse_binary_proto, buf(offset, 1), "Logout")
-    subtree:add(fields.session_status, buf(offset, 4))
+    subtree:add(fields.logout_session_status, buf(offset, 4))
     offset = offset + 4
-    subtree:add(fields.text, buf(offset, 64))
+    subtree:add(fields.logout_text, buf(offset, 64))
     offset = offset + 64
     return offset
 end
@@ -199,37 +199,37 @@ end
 
 local function dissect_new_order_single(buf, tree, offset)
     local subtree = tree:add(sse_binary_proto, buf(offset, 1), "NewOrderSingle")
-    subtree:add(fields.biz_id, buf(offset, 4))
+    subtree:add(fields.new_order_single_biz_id, buf(offset, 4))
     offset = offset + 4
-    subtree:add(fields.biz_pbu, buf(offset, 8))
+    subtree:add(fields.new_order_single_biz_pbu, buf(offset, 8))
     offset = offset + 8
-    subtree:add(fields.cl_ord_id, buf(offset, 10))
+    subtree:add(fields.new_order_single_cl_ord_id, buf(offset, 10))
     offset = offset + 10
-    subtree:add(fields.security_id, buf(offset, 12))
+    subtree:add(fields.new_order_single_security_id, buf(offset, 12))
     offset = offset + 12
-    subtree:add(fields.account, buf(offset, 13))
+    subtree:add(fields.new_order_single_account, buf(offset, 13))
     offset = offset + 13
-    subtree:add(fields.owner_type, buf(offset, 1))
+    subtree:add(fields.new_order_single_owner_type, buf(offset, 1))
     offset = offset + 1
-    subtree:add(fields.side, buf(offset, 1))
+    subtree:add(fields.new_order_single_side, buf(offset, 1))
     offset = offset + 1
-    subtree:add(fields.price, buf(offset, 8))
+    subtree:add(fields.new_order_single_price, buf(offset, 8))
     offset = offset + 8
-    subtree:add(fields.order_qty, buf(offset, 8))
+    subtree:add(fields.new_order_single_order_qty, buf(offset, 8))
     offset = offset + 8
-    subtree:add(fields.ord_type, buf(offset, 1))
+    subtree:add(fields.new_order_single_ord_type, buf(offset, 1))
     offset = offset + 1
-    subtree:add(fields.time_in_force, buf(offset, 1))
+    subtree:add(fields.new_order_single_time_in_force, buf(offset, 1))
     offset = offset + 1
-    subtree:add(fields.transact_time, buf(offset, 8))
+    subtree:add(fields.new_order_single_transact_time, buf(offset, 8))
     offset = offset + 8
-    subtree:add(fields.credit_tag, buf(offset, 2))
+    subtree:add(fields.new_order_single_credit_tag, buf(offset, 2))
     offset = offset + 2
-    subtree:add(fields.clearing_firm, buf(offset, 8))
+    subtree:add(fields.new_order_single_clearing_firm, buf(offset, 8))
     offset = offset + 8
-    subtree:add(fields.branch_id, buf(offset, 8))
+    subtree:add(fields.new_order_single_branch_id, buf(offset, 8))
     offset = offset + 8
-    subtree:add(fields.user_info, buf(offset, 32))
+    subtree:add(fields.new_order_single_user_info, buf(offset, 32))
     offset = offset + 32
     return offset
 end
@@ -237,27 +237,27 @@ end
 
 local function dissect_order_cancel(buf, tree, offset)
     local subtree = tree:add(sse_binary_proto, buf(offset, 1), "OrderCancel")
-    subtree:add(fields.biz_id, buf(offset, 4))
+    subtree:add(fields.order_cancel_biz_id, buf(offset, 4))
     offset = offset + 4
-    subtree:add(fields.biz_pbu, buf(offset, 8))
+    subtree:add(fields.order_cancel_biz_pbu, buf(offset, 8))
     offset = offset + 8
-    subtree:add(fields.cl_ord_id, buf(offset, 10))
+    subtree:add(fields.order_cancel_cl_ord_id, buf(offset, 10))
     offset = offset + 10
-    subtree:add(fields.security_id, buf(offset, 12))
+    subtree:add(fields.order_cancel_security_id, buf(offset, 12))
     offset = offset + 12
-    subtree:add(fields.account, buf(offset, 13))
+    subtree:add(fields.order_cancel_account, buf(offset, 13))
     offset = offset + 13
-    subtree:add(fields.owner_type, buf(offset, 1))
+    subtree:add(fields.order_cancel_owner_type, buf(offset, 1))
     offset = offset + 1
-    subtree:add(fields.side, buf(offset, 1))
+    subtree:add(fields.order_cancel_side, buf(offset, 1))
     offset = offset + 1
-    subtree:add(fields.orig_cl_ord_id, buf(offset, 10))
+    subtree:add(fields.order_cancel_orig_cl_ord_id, buf(offset, 10))
     offset = offset + 10
-    subtree:add(fields.transact_time, buf(offset, 8))
+    subtree:add(fields.order_cancel_transact_time, buf(offset, 8))
     offset = offset + 8
-    subtree:add(fields.branch_id, buf(offset, 8))
+    subtree:add(fields.order_cancel_branch_id, buf(offset, 8))
     offset = offset + 8
-    subtree:add(fields.user_info, buf(offset, 32))
+    subtree:add(fields.order_cancel_user_info, buf(offset, 32))
     offset = offset + 32
     return offset
 end
@@ -265,61 +265,61 @@ end
 
 local function dissect_confirm(buf, tree, offset)
     local subtree = tree:add(sse_binary_proto, buf(offset, 1), "Confirm")
-    subtree:add(fields.pbu, buf(offset, 8))
+    subtree:add(fields.confirm_pbu, buf(offset, 8))
     offset = offset + 8
-    subtree:add(fields.set_id, buf(offset, 4))
+    subtree:add(fields.confirm_set_id, buf(offset, 4))
     offset = offset + 4
-    subtree:add(fields.report_index, buf(offset, 8))
+    subtree:add(fields.confirm_report_index, buf(offset, 8))
     offset = offset + 8
-    subtree:add(fields.biz_id, buf(offset, 4))
+    subtree:add(fields.confirm_biz_id, buf(offset, 4))
     offset = offset + 4
-    subtree:add(fields.exec_type, buf(offset, 1))
+    subtree:add(fields.confirm_exec_type, buf(offset, 1))
     offset = offset + 1
-    subtree:add(fields.biz_pbu, buf(offset, 8))
+    subtree:add(fields.confirm_biz_pbu, buf(offset, 8))
     offset = offset + 8
-    subtree:add(fields.cl_ord_id, buf(offset, 10))
+    subtree:add(fields.confirm_cl_ord_id, buf(offset, 10))
     offset = offset + 10
-    subtree:add(fields.security_id, buf(offset, 12))
+    subtree:add(fields.confirm_security_id, buf(offset, 12))
     offset = offset + 12
-    subtree:add(fields.account, buf(offset, 13))
+    subtree:add(fields.confirm_account, buf(offset, 13))
     offset = offset + 13
-    subtree:add(fields.owner_type, buf(offset, 1))
+    subtree:add(fields.confirm_owner_type, buf(offset, 1))
     offset = offset + 1
-    subtree:add(fields.side, buf(offset, 1))
+    subtree:add(fields.confirm_side, buf(offset, 1))
     offset = offset + 1
-    subtree:add(fields.price, buf(offset, 8))
+    subtree:add(fields.confirm_price, buf(offset, 8))
     offset = offset + 8
-    subtree:add(fields.order_qty, buf(offset, 8))
+    subtree:add(fields.confirm_order_qty, buf(offset, 8))
     offset = offset + 8
-    subtree:add(fields.leaves_qty, buf(offset, 8))
+    subtree:add(fields.confirm_leaves_qty, buf(offset, 8))
     offset = offset + 8
-    subtree:add(fields.cxl_qty, buf(offset, 8))
+    subtree:add(fields.confirm_cxl_qty, buf(offset, 8))
     offset = offset + 8
-    subtree:add(fields.ord_type, buf(offset, 1))
+    subtree:add(fields.confirm_ord_type, buf(offset, 1))
     offset = offset + 1
-    subtree:add(fields.time_in_force, buf(offset, 1))
+    subtree:add(fields.confirm_time_in_force, buf(offset, 1))
     offset = offset + 1
-    subtree:add(fields.ord_status, buf(offset, 1))
+    subtree:add(fields.confirm_ord_status, buf(offset, 1))
     offset = offset + 1
-    subtree:add(fields.credit_tag, buf(offset, 2))
+    subtree:add(fields.confirm_credit_tag, buf(offset, 2))
     offset = offset + 2
-    subtree:add(fields.orig_cl_ord_id, buf(offset, 10))
+    subtree:add(fields.confirm_orig_cl_ord_id, buf(offset, 10))
     offset = offset + 10
-    subtree:add(fields.clearing_firm, buf(offset, 8))
+    subtree:add(fields.confirm_clearing_firm, buf(offset, 8))
     offset = offset + 8
-    subtree:add(fields.branch_id, buf(offset, 8))
+    subtree:add(fields.confirm_branch_id, buf(offset, 8))
     offset = offset + 8
-    subtree:add(fields.ord_rej_reason, buf(offset, 4))
+    subtree:add(fields.confirm_ord_rej_reason, buf(offset, 4))
     offset = offset + 4
-    subtree:add(fields.ord_cnfm_id, buf(offset, 16))
+    subtree:add(fields.confirm_ord_cnfm_id, buf(offset, 16))
     offset = offset + 16
-    subtree:add(fields.orig_ord_cnfm_id, buf(offset, 16))
+    subtree:add(fields.confirm_orig_ord_cnfm_id, buf(offset, 16))
     offset = offset + 16
-    subtree:add(fields.trade_date, buf(offset, 4))
+    subtree:add(fields.confirm_trade_date, buf(offset, 4))
     offset = offset + 4
-    subtree:add(fields.transact_time, buf(offset, 8))
+    subtree:add(fields.confirm_transact_time, buf(offset, 8))
     offset = offset + 8
-    subtree:add(fields.user_info, buf(offset, 32))
+    subtree:add(fields.confirm_user_info, buf(offset, 32))
     offset = offset + 32
     return offset
 end
@@ -327,31 +327,31 @@ end
 
 local function dissect_cancel_reject(buf, tree, offset)
     local subtree = tree:add(sse_binary_proto, buf(offset, 1), "CancelReject")
-    subtree:add(fields.pbu, buf(offset, 8))
+    subtree:add(fields.cancel_reject_pbu, buf(offset, 8))
     offset = offset + 8
-    subtree:add(fields.set_id, buf(offset, 4))
+    subtree:add(fields.cancel_reject_set_id, buf(offset, 4))
     offset = offset + 4
-    subtree:add(fields.report_index, buf(offset, 8))
+    subtree:add(fields.cancel_reject_report_index, buf(offset, 8))
     offset = offset + 8
-    subtree:add(fields.biz_id, buf(offset, 4))
+    subtree:add(fields.cancel_reject_biz_id, buf(offset, 4))
     offset = offset + 4
-    subtree:add(fields.biz_pbu, buf(offset, 8))
+    subtree:add(fields.cancel_reject_biz_pbu, buf(offset, 8))
     offset = offset + 8
-    subtree:add(fields.cl_ord_id, buf(offset, 10))
+    subtree:add(fields.cancel_reject_cl_ord_id, buf(offset, 10))
     offset = offset + 10
-    subtree:add(fields.security_id, buf(offset, 12))
+    subtree:add(fields.cancel_reject_security_id, buf(offset, 12))
     offset = offset + 12
-    subtree:add(fields.orig_cl_ord_id, buf(offset, 10))
+    subtree:add(fields.cancel_reject_orig_cl_ord_id, buf(offset, 10))
     offset = offset + 10
-    subtree:add(fields.branch_id, buf(offset, 8))
+    subtree:add(fields.cancel_reject_branch_id, buf(offset, 8))
     offset = offset + 8
-    subtree:add(fields.cxl_rej_reason, buf(offset, 4))
+    subtree:add(fields.cancel_reject_cxl_rej_reason, buf(offset, 4))
     offset = offset + 4
-    subtree:add(fields.trade_date, buf(offset, 4))
+    subtree:add(fields.cancel_reject_trade_date, buf(offset, 4))
     offset = offset + 4
-    subtree:add(fields.transact_time, buf(offset, 8))
+    subtree:add(fields.cancel_reject_transact_time, buf(offset, 8))
     offset = offset + 8
-    subtree:add(fields.user_info, buf(offset, 32))
+    subtree:add(fields.cancel_reject_user_info, buf(offset, 32))
     offset = offset + 32
     return offset
 end
@@ -359,61 +359,61 @@ end
 
 local function dissect_report(buf, tree, offset)
     local subtree = tree:add(sse_binary_proto, buf(offset, 1), "Report")
-    subtree:add(fields.pbu, buf(offset, 8))
+    subtree:add(fields.report_pbu, buf(offset, 8))
     offset = offset + 8
-    subtree:add(fields.set_id, buf(offset, 4))
+    subtree:add(fields.report_set_id, buf(offset, 4))
     offset = offset + 4
-    subtree:add(fields.report_index, buf(offset, 8))
+    subtree:add(fields.report_report_index, buf(offset, 8))
     offset = offset + 8
-    subtree:add(fields.biz_id, buf(offset, 4))
+    subtree:add(fields.report_biz_id, buf(offset, 4))
     offset = offset + 4
-    subtree:add(fields.exec_type, buf(offset, 1))
+    subtree:add(fields.report_exec_type, buf(offset, 1))
     offset = offset + 1
-    subtree:add(fields.biz_pbu, buf(offset, 8))
+    subtree:add(fields.report_biz_pbu, buf(offset, 8))
     offset = offset + 8
-    subtree:add(fields.cl_ord_id, buf(offset, 10))
+    subtree:add(fields.report_cl_ord_id, buf(offset, 10))
     offset = offset + 10
-    subtree:add(fields.security_id, buf(offset, 12))
+    subtree:add(fields.report_security_id, buf(offset, 12))
     offset = offset + 12
-    subtree:add(fields.account, buf(offset, 13))
+    subtree:add(fields.report_account, buf(offset, 13))
     offset = offset + 13
-    subtree:add(fields.owner_type, buf(offset, 1))
+    subtree:add(fields.report_owner_type, buf(offset, 1))
     offset = offset + 1
-    subtree:add(fields.side, buf(offset, 1))
+    subtree:add(fields.report_side, buf(offset, 1))
     offset = offset + 1
-    subtree:add(fields.price, buf(offset, 8))
+    subtree:add(fields.report_price, buf(offset, 8))
     offset = offset + 8
-    subtree:add(fields.order_qty, buf(offset, 8))
+    subtree:add(fields.report_order_qty, buf(offset, 8))
     offset = offset + 8
-    subtree:add(fields.leaves_qty, buf(offset, 8))
+    subtree:add(fields.report_leaves_qty, buf(offset, 8))
     offset = offset + 8
-    subtree:add(fields.cxl_qty, buf(offset, 8))
+    subtree:add(fields.report_cxl_qty, buf(offset, 8))
     offset = offset + 8
-    subtree:add(fields.ord_type, buf(offset, 1))
+    subtree:add(fields.report_ord_type, buf(offset, 1))
     offset = offset + 1
-    subtree:add(fields.time_in_force, buf(offset, 1))
+    subtree:add(fields.report_time_in_force, buf(offset, 1))
     offset = offset + 1
-    subtree:add(fields.ord_status, buf(offset, 1))
+    subtree:add(fields.report_ord_status, buf(offset, 1))
     offset = offset + 1
-    subtree:add(fields.credit_tag, buf(offset, 2))
+    subtree:add(fields.report_credit_tag, buf(offset, 2))
     offset = offset + 2
-    subtree:add(fields.orig_cl_ord_id, buf(offset, 10))
+    subtree:add(fields.report_orig_cl_ord_id, buf(offset, 10))
     offset = offset + 10
-    subtree:add(fields.clearing_firm, buf(offset, 8))
+    subtree:add(fields.report_clearing_firm, buf(offset, 8))
     offset = offset + 8
-    subtree:add(fields.branch_id, buf(offset, 8))
+    subtree:add(fields.report_branch_id, buf(offset, 8))
     offset = offset + 8
-    subtree:add(fields.ord_rej_reason, buf(offset, 4))
+    subtree:add(fields.report_ord_rej_reason, buf(offset, 4))
     offset = offset + 4
-    subtree:add(fields.ord_cnfm_id, buf(offset, 16))
+    subtree:add(fields.report_ord_cnfm_id, buf(offset, 16))
     offset = offset + 16
-    subtree:add(fields.orig_ord_cnfm_id, buf(offset, 16))
+    subtree:add(fields.report_orig_ord_cnfm_id, buf(offset, 16))
     offset = offset + 16
-    subtree:add(fields.trade_date, buf(offset, 4))
+    subtree:add(fields.report_trade_date, buf(offset, 4))
     offset = offset + 4
-    subtree:add(fields.transact_time, buf(offset, 8))
+    subtree:add(fields.report_transact_time, buf(offset, 8))
     offset = offset + 8
-    subtree:add(fields.user_info, buf(offset, 32))
+    subtree:add(fields.report_user_info, buf(offset, 32))
     offset = offset + 32
     return offset
 end
@@ -421,21 +421,21 @@ end
 
 local function dissect_order_reject(buf, tree, offset)
     local subtree = tree:add(sse_binary_proto, buf(offset, 1), "OrderReject")
-    subtree:add(fields.biz_id, buf(offset, 4))
+    subtree:add(fields.order_reject_biz_id, buf(offset, 4))
     offset = offset + 4
-    subtree:add(fields.biz_pbu, buf(offset, 8))
+    subtree:add(fields.order_reject_biz_pbu, buf(offset, 8))
     offset = offset + 8
-    subtree:add(fields.cl_ord_id, buf(offset, 10))
+    subtree:add(fields.order_reject_cl_ord_id, buf(offset, 10))
     offset = offset + 10
-    subtree:add(fields.security_id, buf(offset, 12))
+    subtree:add(fields.order_reject_security_id, buf(offset, 12))
     offset = offset + 12
-    subtree:add(fields.ord_rej_reason, buf(offset, 4))
+    subtree:add(fields.order_reject_ord_rej_reason, buf(offset, 4))
     offset = offset + 4
-    subtree:add(fields.trade_date, buf(offset, 4))
+    subtree:add(fields.order_reject_trade_date, buf(offset, 4))
     offset = offset + 4
-    subtree:add(fields.transact_time, buf(offset, 8))
+    subtree:add(fields.order_reject_transact_time, buf(offset, 8))
     offset = offset + 8
-    subtree:add(fields.user_info, buf(offset, 32))
+    subtree:add(fields.order_reject_user_info, buf(offset, 32))
     offset = offset + 32
     return offset
 end
@@ -443,9 +443,9 @@ end
 
 local function dissect_platform_state(buf, tree, offset)
     local subtree = tree:add(sse_binary_proto, buf(offset, 1), "PlatformState")
-    subtree:add(fields.platform_id, buf(offset, 2))
+    subtree:add(fields.platform_state_platform_id, buf(offset, 2))
     offset = offset + 2
-    subtree:add(fields.platform_state, buf(offset, 2))
+    subtree:add(fields.platform_state_platform_state, buf(offset, 2))
     offset = offset + 2
     return offset
 end
@@ -453,11 +453,11 @@ end
 
 local function dissect_exec_rpt_info(buf, tree, offset)
     local subtree = tree:add(sse_binary_proto, buf(offset, 1), "ExecRptInfo")
-    subtree:add(fields.platform_id, buf(offset, 2))
+    subtree:add(fields.exec_rpt_info_platform_id, buf(offset, 2))
     offset = offset + 2
-    subtree:add(fields.pbu, buf(offset, 8))
+    subtree:add(fields.exec_rpt_info_pbu, buf(offset, 8))
     offset = offset + 8
-    subtree:add(fields.set_id, buf(offset, 4))
+    subtree:add(fields.exec_rpt_info_set_id, buf(offset, 4))
     offset = offset + 4
     return offset
 end
@@ -479,11 +479,11 @@ end
 
 local function dissect_exec_rpt_end_of_stream(buf, tree, offset)
     local subtree = tree:add(sse_binary_proto, buf(offset, 1), "ExecRptEndOfStream")
-    subtree:add(fields.pbu, buf(offset, 8))
+    subtree:add(fields.exec_rpt_end_of_stream_pbu, buf(offset, 8))
     offset = offset + 8
-    subtree:add(fields.set_id, buf(offset, 4))
+    subtree:add(fields.exec_rpt_end_of_stream_set_id, buf(offset, 4))
     offset = offset + 4
-    subtree:add(fields.end_report_index, buf(offset, 8))
+    subtree:add(fields.exec_rpt_end_of_stream_end_report_index, buf(offset, 8))
     offset = offset + 8
     return offset
 end
@@ -493,11 +493,11 @@ function sse_binary_proto.dissector(buf, pinfo, tree)
     pinfo.cols.protocol = "sse_binary"
     local offset = 0
     local msg_type = buf(offset, 4):uint()
-    tree:add(fields.msg_type, buf(offset, 4))
+    tree:add(fields.sse_binary_msg_type, buf(offset, 4))
     offset = offset + 4
-    tree:add(fields.msg_seq_num, buf(offset, 8))
+    tree:add(fields.sse_binary_msg_seq_num, buf(offset, 8))
     offset = offset + 8
-    tree:add(fields.msg_body_len, buf(offset, 4))
+    tree:add(fields.sse_binary_msg_body_len, buf(offset, 4))
     offset = offset + 4
     if msg_type == 33 then -- Heartbeat
         dissect_heartbeat(buf, tree, offset)
@@ -542,7 +542,7 @@ elseif msg_type == 210 then -- ExecRptEndOfStream
         dissect_exec_rpt_end_of_stream(buf, tree, offset)
         pinfo.cols.info:set("ExecRptEndOfStream")
     end
-    tree:add(fields.checksum, buf(offset, 4))
+    tree:add(fields.sse_binary_checksum, buf(offset, 4))
     offset = offset + 4
 end
 
