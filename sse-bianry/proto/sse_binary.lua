@@ -14,6 +14,15 @@ end
 
 local sse_binary_proto = Proto("SseBinary", "SseBinary Protocol")
 local fields = {
+    -- Field from SseBinary
+    msg_type = ProtoField.uint32("sse_binary.msg_type", "MsgType", base.DEC),
+    msg_seq_num = ProtoField.uint64("sse_binary.msg_seq_num", "MsgSeqNum", base.DEC),
+    msg_body_len = ProtoField.uint32("sse_binary.msg_body_len", "MsgBodyLen", base.DEC),
+    -- Unsupported type: match
+    checksum = ProtoField.uint32("sse_binary.checksum", "Checksum", base.DEC),
+    -- Field from Logout
+    session_status = ProtoField.uint32("logout.session_status", "SessionStatus", base.DEC),
+    text = ProtoField.string("logout.text", "Text"),
     -- Field from CancelReject
     pbu = ProtoField.string("cancel_reject.pbu", "Pbu"),
     set_id = ProtoField.uint32("cancel_reject.set_id", "SetID", base.DEC),
@@ -28,19 +37,15 @@ local fields = {
     trade_date = ProtoField.uint32("cancel_reject.trade_date", "TradeDate", base.DEC),
     transact_time = ProtoField.uint64("cancel_reject.transact_time", "TransactTime", base.DEC),
     user_info = ProtoField.string("cancel_reject.user_info", "UserInfo"),
-    -- Field from ExecRptInfo
-    platform_id = ProtoField.uint32("exec_rpt_info.platform_id", "PlatformID", base.DEC),
-    pbu = ProtoField.string("exec_rpt_info.pbu", "Pbu"),
-    set_id = ProtoField.uint32("exec_rpt_info.set_id", "SetID", base.DEC),
-    -- Field from ExecRptSyncRsp
-    -- Unsupported type: SubExecRptSyncRsp
-    -- Field from Logon
-    sender_comp_id = ProtoField.string("logon.sender_comp_id", "SenderCompID"),
-    target_comp_id = ProtoField.string("logon.target_comp_id", "TargetCompID"),
-    heart_bt_int = ProtoField.uint32("logon.heart_bt_int", "HeartBtInt", base.DEC),
-    prtcl_version = ProtoField.string("logon.prtcl_version", "PrtclVersion"),
-    trade_date = ProtoField.uint32("logon.trade_date", "TradeDate", base.DEC),
-    q_size = ProtoField.uint32("logon.q_size", "QSize", base.DEC),
+    -- Field from OrderReject
+    biz_id = ProtoField.uint32("order_reject.biz_id", "BizID", base.DEC),
+    biz_pbu = ProtoField.string("order_reject.biz_pbu", "BizPbu"),
+    cl_ord_id = ProtoField.string("order_reject.cl_ord_id", "ClOrdID"),
+    security_id = ProtoField.string("order_reject.security_id", "SecurityID"),
+    ord_rej_reason = ProtoField.uint32("order_reject.ord_rej_reason", "OrdRejReason", base.DEC),
+    trade_date = ProtoField.uint32("order_reject.trade_date", "TradeDate", base.DEC),
+    transact_time = ProtoField.uint64("order_reject.transact_time", "TransactTime", base.DEC),
+    user_info = ProtoField.string("order_reject.user_info", "UserInfo"),
     -- Field from NewOrderSingle
     biz_id = ProtoField.uint32("new_order_single.biz_id", "BizID", base.DEC),
     biz_pbu = ProtoField.string("new_order_single.biz_pbu", "BizPbu"),
@@ -58,6 +63,18 @@ local fields = {
     clearing_firm = ProtoField.string("new_order_single.clearing_firm", "ClearingFirm"),
     branch_id = ProtoField.string("new_order_single.branch_id", "BranchID"),
     user_info = ProtoField.string("new_order_single.user_info", "UserInfo"),
+    -- Field from OrderCancel
+    biz_id = ProtoField.uint32("order_cancel.biz_id", "BizID", base.DEC),
+    biz_pbu = ProtoField.string("order_cancel.biz_pbu", "BizPbu"),
+    cl_ord_id = ProtoField.string("order_cancel.cl_ord_id", "ClOrdID"),
+    security_id = ProtoField.string("order_cancel.security_id", "SecurityID"),
+    account = ProtoField.string("order_cancel.account", "Account"),
+    owner_type = ProtoField.uint32("order_cancel.owner_type", "OwnerType", base.DEC),
+    side = ProtoField.char("order_cancel.side", "Side", base.OCT),
+    orig_cl_ord_id = ProtoField.string("order_cancel.orig_cl_ord_id", "OrigClOrdID"),
+    transact_time = ProtoField.uint64("order_cancel.transact_time", "TransactTime", base.DEC),
+    branch_id = ProtoField.string("order_cancel.branch_id", "BranchID"),
+    user_info = ProtoField.string("order_cancel.user_info", "UserInfo"),
     -- Field from Confirm
     pbu = ProtoField.string("confirm.pbu", "Pbu"),
     set_id = ProtoField.uint32("confirm.set_id", "SetID", base.DEC),
@@ -116,51 +133,53 @@ local fields = {
     trade_date = ProtoField.uint32("report.trade_date", "TradeDate", base.DEC),
     transact_time = ProtoField.uint64("report.transact_time", "TransactTime", base.DEC),
     user_info = ProtoField.string("report.user_info", "UserInfo"),
+    -- Field from PlatformState
+    platform_id = ProtoField.uint32("platform_state.platform_id", "PlatformID", base.DEC),
+    platform_state = ProtoField.uint32("platform_state.platform_state", "PlatformState", base.DEC),
+    -- Field from ExecRptInfo
+    platform_id = ProtoField.uint32("exec_rpt_info.platform_id", "PlatformID", base.DEC),
+    pbu = ProtoField.string("exec_rpt_info.pbu", "Pbu"),
+    set_id = ProtoField.uint32("exec_rpt_info.set_id", "SetID", base.DEC),
     -- Field from ExecRptSync
     -- Unsupported type: SubExecRptSync
+    -- Field from Logon
+    sender_comp_id = ProtoField.string("logon.sender_comp_id", "SenderCompID"),
+    target_comp_id = ProtoField.string("logon.target_comp_id", "TargetCompID"),
+    heart_bt_int = ProtoField.uint32("logon.heart_bt_int", "HeartBtInt", base.DEC),
+    prtcl_version = ProtoField.string("logon.prtcl_version", "PrtclVersion"),
+    trade_date = ProtoField.uint32("logon.trade_date", "TradeDate", base.DEC),
+    q_size = ProtoField.uint32("logon.q_size", "QSize", base.DEC),
+    -- Field from Heartbeat
+    -- Field from ExecRptSyncRsp
+    -- Unsupported type: SubExecRptSyncRsp
     -- Field from ExecRptEndOfStream
     pbu = ProtoField.string("exec_rpt_end_of_stream.pbu", "Pbu"),
     set_id = ProtoField.uint32("exec_rpt_end_of_stream.set_id", "SetID", base.DEC),
     end_report_index = ProtoField.uint64("exec_rpt_end_of_stream.end_report_index", "EndReportIndex", base.DEC),
-    -- Field from SseBinary
-    msg_type = ProtoField.uint32("sse_binary.msg_type", "MsgType", base.DEC),
-    msg_seq_num = ProtoField.uint64("sse_binary.msg_seq_num", "MsgSeqNum", base.DEC),
-    msg_body_len = ProtoField.uint32("sse_binary.msg_body_len", "MsgBodyLen", base.DEC),
-    -- Unsupported type: match
-    checksum = ProtoField.uint32("sse_binary.checksum", "Checksum", base.DEC),
-    -- Field from Heartbeat
-    -- Field from Logout
-    session_status = ProtoField.uint32("logout.session_status", "SessionStatus", base.DEC),
-    text = ProtoField.string("logout.text", "Text"),
-    -- Field from OrderReject
-    biz_id = ProtoField.uint32("order_reject.biz_id", "BizID", base.DEC),
-    biz_pbu = ProtoField.string("order_reject.biz_pbu", "BizPbu"),
-    cl_ord_id = ProtoField.string("order_reject.cl_ord_id", "ClOrdID"),
-    security_id = ProtoField.string("order_reject.security_id", "SecurityID"),
-    ord_rej_reason = ProtoField.uint32("order_reject.ord_rej_reason", "OrdRejReason", base.DEC),
-    trade_date = ProtoField.uint32("order_reject.trade_date", "TradeDate", base.DEC),
-    transact_time = ProtoField.uint64("order_reject.transact_time", "TransactTime", base.DEC),
-    user_info = ProtoField.string("order_reject.user_info", "UserInfo"),
-    -- Field from PlatformState
-    platform_id = ProtoField.uint32("platform_state.platform_id", "PlatformID", base.DEC),
-    platform_state = ProtoField.uint32("platform_state.platform_state", "PlatformState", base.DEC),
-    -- Field from OrderCancel
-    biz_id = ProtoField.uint32("order_cancel.biz_id", "BizID", base.DEC),
-    biz_pbu = ProtoField.string("order_cancel.biz_pbu", "BizPbu"),
-    cl_ord_id = ProtoField.string("order_cancel.cl_ord_id", "ClOrdID"),
-    security_id = ProtoField.string("order_cancel.security_id", "SecurityID"),
-    account = ProtoField.string("order_cancel.account", "Account"),
-    owner_type = ProtoField.uint32("order_cancel.owner_type", "OwnerType", base.DEC),
-    side = ProtoField.char("order_cancel.side", "Side", base.OCT),
-    orig_cl_ord_id = ProtoField.string("order_cancel.orig_cl_ord_id", "OrigClOrdID"),
-    transact_time = ProtoField.uint64("order_cancel.transact_time", "TransactTime", base.DEC),
-    branch_id = ProtoField.string("order_cancel.branch_id", "BranchID"),
-    user_info = ProtoField.string("order_cancel.user_info", "UserInfo"),
 }
 
 for _, field in pairs(fields) do
     sse_binary_proto.fields[field] = field
 end
+
+local function dissect_exec_rpt_info(buf, tree, offset)
+    local subtree = tree:add(sse_binary_proto, buf(offset, 1), "ExecRptInfo")
+    subtree:add(fields.platform_id, buf(offset, 2))
+    offset = offset + 2
+    subtree:add(fields.pbu, buf(offset, 8))
+    offset = offset + 8
+    subtree:add(fields.set_id, buf(offset, 4))
+    offset = offset + 4
+    return offset
+end
+
+
+local function dissect_exec_rpt_sync(buf, tree, offset)
+    local subtree = tree:add(sse_binary_proto, buf(offset, 1), "ExecRptSync")
+-- unsupported type: SubExecRptSync
+    return offset
+end
+
 
 local function dissect_logon(buf, tree, offset)
     local subtree = tree:add(sse_binary_proto, buf(offset, 1), "Logon")
@@ -176,6 +195,97 @@ local function dissect_logon(buf, tree, offset)
     offset = offset + 4
     subtree:add(fields.q_size, buf(offset, 4))
     offset = offset + 4
+    return offset
+end
+
+
+local function dissect_heartbeat(buf, tree, offset)
+    local subtree = tree:add(sse_binary_proto, buf(offset, 1), "Heartbeat")
+subtree:append_text(" (No Body)")
+    return offset
+end
+
+
+local function dissect_exec_rpt_sync_rsp(buf, tree, offset)
+    local subtree = tree:add(sse_binary_proto, buf(offset, 1), "ExecRptSyncRsp")
+-- unsupported type: SubExecRptSyncRsp
+    return offset
+end
+
+
+local function dissect_exec_rpt_end_of_stream(buf, tree, offset)
+    local subtree = tree:add(sse_binary_proto, buf(offset, 1), "ExecRptEndOfStream")
+    subtree:add(fields.pbu, buf(offset, 8))
+    offset = offset + 8
+    subtree:add(fields.set_id, buf(offset, 4))
+    offset = offset + 4
+    subtree:add(fields.end_report_index, buf(offset, 8))
+    offset = offset + 8
+    return offset
+end
+
+
+local function dissect_logout(buf, tree, offset)
+    local subtree = tree:add(sse_binary_proto, buf(offset, 1), "Logout")
+    subtree:add(fields.session_status, buf(offset, 4))
+    offset = offset + 4
+    subtree:add(fields.text, buf(offset, 64))
+    offset = offset + 64
+    return offset
+end
+
+
+local function dissect_cancel_reject(buf, tree, offset)
+    local subtree = tree:add(sse_binary_proto, buf(offset, 1), "CancelReject")
+    subtree:add(fields.pbu, buf(offset, 8))
+    offset = offset + 8
+    subtree:add(fields.set_id, buf(offset, 4))
+    offset = offset + 4
+    subtree:add(fields.report_index, buf(offset, 8))
+    offset = offset + 8
+    subtree:add(fields.biz_id, buf(offset, 4))
+    offset = offset + 4
+    subtree:add(fields.biz_pbu, buf(offset, 8))
+    offset = offset + 8
+    subtree:add(fields.cl_ord_id, buf(offset, 10))
+    offset = offset + 10
+    subtree:add(fields.security_id, buf(offset, 12))
+    offset = offset + 12
+    subtree:add(fields.orig_cl_ord_id, buf(offset, 10))
+    offset = offset + 10
+    subtree:add(fields.branch_id, buf(offset, 8))
+    offset = offset + 8
+    subtree:add(fields.cxl_rej_reason, buf(offset, 4))
+    offset = offset + 4
+    subtree:add(fields.trade_date, buf(offset, 4))
+    offset = offset + 4
+    subtree:add(fields.transact_time, buf(offset, 8))
+    offset = offset + 8
+    subtree:add(fields.user_info, buf(offset, 32))
+    offset = offset + 32
+    return offset
+end
+
+
+local function dissect_order_reject(buf, tree, offset)
+    local subtree = tree:add(sse_binary_proto, buf(offset, 1), "OrderReject")
+    subtree:add(fields.biz_id, buf(offset, 4))
+    offset = offset + 4
+    subtree:add(fields.biz_pbu, buf(offset, 8))
+    offset = offset + 8
+    subtree:add(fields.cl_ord_id, buf(offset, 10))
+    offset = offset + 10
+    subtree:add(fields.security_id, buf(offset, 12))
+    offset = offset + 12
+    subtree:add(fields.ord_rej_reason, buf(offset, 4))
+    offset = offset + 4
+    subtree:add(fields.trade_date, buf(offset, 4))
+    offset = offset + 4
+    subtree:add(fields.transact_time, buf(offset, 8))
+    offset = offset + 8
+    subtree:add(fields.user_info, buf(offset, 32))
+    offset = offset + 32
+    return offset
 end
 
 
@@ -213,6 +323,35 @@ local function dissect_new_order_single(buf, tree, offset)
     offset = offset + 8
     subtree:add(fields.user_info, buf(offset, 32))
     offset = offset + 32
+    return offset
+end
+
+
+local function dissect_order_cancel(buf, tree, offset)
+    local subtree = tree:add(sse_binary_proto, buf(offset, 1), "OrderCancel")
+    subtree:add(fields.biz_id, buf(offset, 4))
+    offset = offset + 4
+    subtree:add(fields.biz_pbu, buf(offset, 8))
+    offset = offset + 8
+    subtree:add(fields.cl_ord_id, buf(offset, 10))
+    offset = offset + 10
+    subtree:add(fields.security_id, buf(offset, 12))
+    offset = offset + 12
+    subtree:add(fields.account, buf(offset, 13))
+    offset = offset + 13
+    subtree:add(fields.owner_type, buf(offset, 1))
+    offset = offset + 1
+    subtree:add(fields.side, buf(offset, 1))
+    offset = offset + 1
+    subtree:add(fields.orig_cl_ord_id, buf(offset, 10))
+    offset = offset + 10
+    subtree:add(fields.transact_time, buf(offset, 8))
+    offset = offset + 8
+    subtree:add(fields.branch_id, buf(offset, 8))
+    offset = offset + 8
+    subtree:add(fields.user_info, buf(offset, 32))
+    offset = offset + 32
+    return offset
 end
 
 
@@ -274,6 +413,7 @@ local function dissect_confirm(buf, tree, offset)
     offset = offset + 8
     subtree:add(fields.user_info, buf(offset, 32))
     offset = offset + 32
+    return offset
 end
 
 
@@ -335,58 +475,7 @@ local function dissect_report(buf, tree, offset)
     offset = offset + 8
     subtree:add(fields.user_info, buf(offset, 32))
     offset = offset + 32
-end
-
-
-local function dissect_exec_rpt_sync(buf, tree, offset)
-    local subtree = tree:add(sse_binary_proto, buf(offset, 1), "ExecRptSync")
-    -- unsupported type: SubExecRptSync
-end
-
-
-local function dissect_exec_rpt_end_of_stream(buf, tree, offset)
-    local subtree = tree:add(sse_binary_proto, buf(offset, 1), "ExecRptEndOfStream")
-    subtree:add(fields.pbu, buf(offset, 8))
-    offset = offset + 8
-    subtree:add(fields.set_id, buf(offset, 4))
-    offset = offset + 4
-    subtree:add(fields.end_report_index, buf(offset, 8))
-    offset = offset + 8
-end
-
-
-local function dissect_heartbeat(buf, tree, offset)
-    local subtree = tree:add(sse_binary_proto, buf(offset, 1), "Heartbeat")
-end
-
-
-local function dissect_logout(buf, tree, offset)
-    local subtree = tree:add(sse_binary_proto, buf(offset, 1), "Logout")
-    subtree:add(fields.session_status, buf(offset, 4))
-    offset = offset + 4
-    subtree:add(fields.text, buf(offset, 64))
-    offset = offset + 64
-end
-
-
-local function dissect_order_reject(buf, tree, offset)
-    local subtree = tree:add(sse_binary_proto, buf(offset, 1), "OrderReject")
-    subtree:add(fields.biz_id, buf(offset, 4))
-    offset = offset + 4
-    subtree:add(fields.biz_pbu, buf(offset, 8))
-    offset = offset + 8
-    subtree:add(fields.cl_ord_id, buf(offset, 10))
-    offset = offset + 10
-    subtree:add(fields.security_id, buf(offset, 12))
-    offset = offset + 12
-    subtree:add(fields.ord_rej_reason, buf(offset, 4))
-    offset = offset + 4
-    subtree:add(fields.trade_date, buf(offset, 4))
-    offset = offset + 4
-    subtree:add(fields.transact_time, buf(offset, 8))
-    offset = offset + 8
-    subtree:add(fields.user_info, buf(offset, 32))
-    offset = offset + 32
+    return offset
 end
 
 
@@ -396,81 +485,7 @@ local function dissect_platform_state(buf, tree, offset)
     offset = offset + 2
     subtree:add(fields.platform_state, buf(offset, 2))
     offset = offset + 2
-end
-
-
-local function dissect_order_cancel(buf, tree, offset)
-    local subtree = tree:add(sse_binary_proto, buf(offset, 1), "OrderCancel")
-    subtree:add(fields.biz_id, buf(offset, 4))
-    offset = offset + 4
-    subtree:add(fields.biz_pbu, buf(offset, 8))
-    offset = offset + 8
-    subtree:add(fields.cl_ord_id, buf(offset, 10))
-    offset = offset + 10
-    subtree:add(fields.security_id, buf(offset, 12))
-    offset = offset + 12
-    subtree:add(fields.account, buf(offset, 13))
-    offset = offset + 13
-    subtree:add(fields.owner_type, buf(offset, 1))
-    offset = offset + 1
-    subtree:add(fields.side, buf(offset, 1))
-    offset = offset + 1
-    subtree:add(fields.orig_cl_ord_id, buf(offset, 10))
-    offset = offset + 10
-    subtree:add(fields.transact_time, buf(offset, 8))
-    offset = offset + 8
-    subtree:add(fields.branch_id, buf(offset, 8))
-    offset = offset + 8
-    subtree:add(fields.user_info, buf(offset, 32))
-    offset = offset + 32
-end
-
-
-local function dissect_cancel_reject(buf, tree, offset)
-    local subtree = tree:add(sse_binary_proto, buf(offset, 1), "CancelReject")
-    subtree:add(fields.pbu, buf(offset, 8))
-    offset = offset + 8
-    subtree:add(fields.set_id, buf(offset, 4))
-    offset = offset + 4
-    subtree:add(fields.report_index, buf(offset, 8))
-    offset = offset + 8
-    subtree:add(fields.biz_id, buf(offset, 4))
-    offset = offset + 4
-    subtree:add(fields.biz_pbu, buf(offset, 8))
-    offset = offset + 8
-    subtree:add(fields.cl_ord_id, buf(offset, 10))
-    offset = offset + 10
-    subtree:add(fields.security_id, buf(offset, 12))
-    offset = offset + 12
-    subtree:add(fields.orig_cl_ord_id, buf(offset, 10))
-    offset = offset + 10
-    subtree:add(fields.branch_id, buf(offset, 8))
-    offset = offset + 8
-    subtree:add(fields.cxl_rej_reason, buf(offset, 4))
-    offset = offset + 4
-    subtree:add(fields.trade_date, buf(offset, 4))
-    offset = offset + 4
-    subtree:add(fields.transact_time, buf(offset, 8))
-    offset = offset + 8
-    subtree:add(fields.user_info, buf(offset, 32))
-    offset = offset + 32
-end
-
-
-local function dissect_exec_rpt_info(buf, tree, offset)
-    local subtree = tree:add(sse_binary_proto, buf(offset, 1), "ExecRptInfo")
-    subtree:add(fields.platform_id, buf(offset, 2))
-    offset = offset + 2
-    subtree:add(fields.pbu, buf(offset, 8))
-    offset = offset + 8
-    subtree:add(fields.set_id, buf(offset, 4))
-    offset = offset + 4
-end
-
-
-local function dissect_exec_rpt_sync_rsp(buf, tree, offset)
-    local subtree = tree:add(sse_binary_proto, buf(offset, 1), "ExecRptSyncRsp")
-    -- unsupported type: SubExecRptSyncRsp
+    return offset
 end
 
 
@@ -487,49 +502,50 @@ function sse_binary_proto.dissector(buf, pinfo, tree)
     if msg_type == 33 then -- Heartbeat
         dissect_heartbeat(buf, tree, offset)
         pinfo.cols.info:set("Heartbeat")
-    elseif msg_type == 40 then -- Logon
+elseif msg_type == 40 then -- Logon
         dissect_logon(buf, tree, offset)
         pinfo.cols.info:set("Logon")
-    elseif msg_type == 41 then -- Logout
+elseif msg_type == 41 then -- Logout
         dissect_logout(buf, tree, offset)
         pinfo.cols.info:set("Logout")
-    elseif msg_type == 58 then -- NewOrderSingle
+elseif msg_type == 58 then -- NewOrderSingle
         dissect_new_order_single(buf, tree, offset)
         pinfo.cols.info:set("NewOrderSingle")
-    elseif msg_type == 61 then -- OrderCancel
+elseif msg_type == 61 then -- OrderCancel
         dissect_order_cancel(buf, tree, offset)
         pinfo.cols.info:set("OrderCancel")
-    elseif msg_type == 32 then -- Confirm
+elseif msg_type == 32 then -- Confirm
         dissect_confirm(buf, tree, offset)
         pinfo.cols.info:set("Confirm")
-    elseif msg_type == 59 then -- CancelReject
+elseif msg_type == 59 then -- CancelReject
         dissect_cancel_reject(buf, tree, offset)
         pinfo.cols.info:set("CancelReject")
-    elseif msg_type == 103 then -- Report
+elseif msg_type == 103 then -- Report
         dissect_report(buf, tree, offset)
         pinfo.cols.info:set("Report")
-    elseif msg_type == 204 then -- OrderReject
+elseif msg_type == 204 then -- OrderReject
         dissect_order_reject(buf, tree, offset)
         pinfo.cols.info:set("OrderReject")
-    elseif msg_type == 209 then -- PlatformState
+elseif msg_type == 209 then -- PlatformState
         dissect_platform_state(buf, tree, offset)
         pinfo.cols.info:set("PlatformState")
-    elseif msg_type == 208 then -- ExecRptInfo
+elseif msg_type == 208 then -- ExecRptInfo
         dissect_exec_rpt_info(buf, tree, offset)
         pinfo.cols.info:set("ExecRptInfo")
-    elseif msg_type == 206 then -- ExecRptSync
+elseif msg_type == 206 then -- ExecRptSync
         dissect_exec_rpt_sync(buf, tree, offset)
         pinfo.cols.info:set("ExecRptSync")
-    elseif msg_type == 207 then -- ExecRptSyncRsp
+elseif msg_type == 207 then -- ExecRptSyncRsp
         dissect_exec_rpt_sync_rsp(buf, tree, offset)
         pinfo.cols.info:set("ExecRptSyncRsp")
-    elseif msg_type == 210 then -- ExecRptEndOfStream
+elseif msg_type == 210 then -- ExecRptEndOfStream
         dissect_exec_rpt_end_of_stream(buf, tree, offset)
         pinfo.cols.info:set("ExecRptEndOfStream")
     end
     tree:add(fields.checksum, buf(offset, 4))
     offset = offset + 4
 end
+
 
 local tcp_table = DissectorTable.get("tcp.port")
 tcp_table:add(8080, sse_binary_proto)
