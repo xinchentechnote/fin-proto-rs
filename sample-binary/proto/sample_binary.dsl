@@ -1,6 +1,7 @@
 options {
-	string_pre_fix_len_type = u16;
-	repeat_pre_fix_size_type = u16;
+    StringPreFixLenType = u16;
+	RepeatPreFixSizeType = u16;
+    LittileEndian = true;
 }
 
 packet SampleBinary {

@@ -1,4 +1,11 @@
 //base on reference/IS122_TDGW_Move_Binary_CV0.57_MTP_Test_20230926.pdf
+
+options {
+    StringPreFixLenType = u16;
+	RepeatPreFixSizeType = u16;
+    LittileEndian = false;
+}
+
 MetaData DataType {
     uint32 date `日期`,
     int64 price `价格`,
