@@ -58,7 +58,11 @@ end
 
 local function dissect_risk_control_request(buf, pinfo, tree, offset)
     local subtree = tree:add(sample_binary_proto, buf(offset, 1), "RiskControlRequest")
--- unsupported type: string
+    local risk_control_request_unique_order_id_len = buf(offset, 2):uint()
+    subtree:add("UniqueOrderId Len: ".. risk_control_request_unique_order_id_len, buf(offset, 2))
+    offset = offset + 2
+    subtree:add(fields.risk_control_request_unique_order_id, buf(offset, risk_control_request_unique_order_id_len))
+    offset = offset + risk_control_request_unique_order_id_len
     subtree:add(fields.risk_control_request_cl_ord_id, buf(offset, 16))
     offset = offset + 16
     subtree:add(fields.risk_control_request_market_id, buf(offset, 3))
@@ -76,10 +80,12 @@ local function dissect_risk_control_request(buf, pinfo, tree, offset)
     local risk_control_request_extra_info_size = buf(offset, 2):uint()
     subtree:add("ExtraInfo Size: ".. risk_control_request_extra_info_size, buf(offset, 2))
     offset = offset + 2
-
     for i=1,risk_control_request_extra_info_size do
-        offset = -- unsupported type: string
-
+        local risk_control_request_extra_info_len = buf(offset, 2):uint()
+        subtree:add("ExtraInfo Len: ".. risk_control_request_extra_info_len, buf(offset, 2))
+        offset = offset + 2
+        subtree:add(fields.risk_control_request_extra_info, buf(offset, risk_control_request_extra_info_len))
+        offset = offset + risk_control_request_extra_info_len
         pinfo.cols.info:append(" ExtraInfo["..i.."]")
     end
     dissect_sub_order(buf, pinfo, subtree, offset)
@@ -90,17 +96,29 @@ end
 
 local function dissect_risk_control_response(buf, pinfo, tree, offset)
     local subtree = tree:add(sample_binary_proto, buf(offset, 1), "RiskControlResponse")
--- unsupported type: string
+    local risk_control_response_unique_order_id_len = buf(offset, 2):uint()
+    subtree:add("UniqueOrderId Len: ".. risk_control_response_unique_order_id_len, buf(offset, 2))
+    offset = offset + 2
+    subtree:add(fields.risk_control_response_unique_order_id, buf(offset, risk_control_response_unique_order_id_len))
+    offset = offset + risk_control_response_unique_order_id_len
     subtree:add(fields.risk_control_response_status, buf(offset, 4))
     offset = offset + 4
--- unsupported type: string
+    local risk_control_response_msg_len = buf(offset, 2):uint()
+    subtree:add("Msg Len: ".. risk_control_response_msg_len, buf(offset, 2))
+    offset = offset + 2
+    subtree:add(fields.risk_control_response_msg, buf(offset, risk_control_response_msg_len))
+    offset = offset + risk_control_response_msg_len
     return offset
 end
 
 
 local function dissect_detail(buf, pinfo, tree, offset)
     local subtree = tree:add(sample_binary_proto, buf(offset, 1), "Detail")
--- unsupported type: string
+    local detail_rule_name_len = buf(offset, 2):uint()
+    subtree:add("RuleName Len: ".. detail_rule_name_len, buf(offset, 2))
+    offset = offset + 2
+    subtree:add(fields.detail_rule_name, buf(offset, detail_rule_name_len))
+    offset = offset + detail_rule_name_len
     subtree:add(fields.detail_code, buf(offset, 2))
     offset = offset + 2
     return offset
@@ -118,7 +136,7 @@ function sample_binary_proto.dissector(buf, pinfo, tree)
     if msg_type == 4 then -- RiskControlRequest
         dissect_risk_control_request(buf, pinfo, tree, offset)
         pinfo.cols.info:set("RiskControlRequest")
-elseif msg_type == 5 then -- RiskControlResponse
+    elseif msg_type == 5 then -- RiskControlResponse
         dissect_risk_control_response(buf, pinfo, tree, offset)
         pinfo.cols.info:set("RiskControlResponse")
     end

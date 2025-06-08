@@ -272,7 +272,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "sse-bianry"
+name = "sse-binary"
 version = "0.1.0"
 dependencies = [
  "anyhow",
