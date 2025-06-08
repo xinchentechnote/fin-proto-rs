@@ -149,9 +149,18 @@ local fields = {
     exec_rpt_info_pbu = ProtoField.string("exec_rpt_info.pbu", "Pbu"),
     exec_rpt_info_set_id = ProtoField.uint32("exec_rpt_info.set_id", "SetID", base.DEC),
     -- Field from ExecRptSync
-    -- Unsupported type: SubExecRptSync
+    -- Field from SubExecRptSync
+    sub_exec_rpt_sync_pbu = ProtoField.string("sub_exec_rpt_sync.pbu", "Pbu"),
+    sub_exec_rpt_sync_set_id = ProtoField.uint32("sub_exec_rpt_sync.set_id", "SetID", base.DEC),
+    sub_exec_rpt_sync_begin_report_index = ProtoField.uint64("sub_exec_rpt_sync.begin_report_index", "BeginReportIndex", base.DEC),
     -- Field from ExecRptSyncRsp
-    -- Unsupported type: SubExecRptSyncRsp
+    -- Field from SubExecRptSyncRsp
+    sub_exec_rpt_sync_rsp_pbu = ProtoField.string("sub_exec_rpt_sync_rsp.pbu", "Pbu"),
+    sub_exec_rpt_sync_rsp_set_id = ProtoField.uint32("sub_exec_rpt_sync_rsp.set_id", "SetID", base.DEC),
+    sub_exec_rpt_sync_rsp_begin_report_index = ProtoField.uint64("sub_exec_rpt_sync_rsp.begin_report_index", "BeginReportIndex", base.DEC),
+    sub_exec_rpt_sync_rsp_end_report_index = ProtoField.uint64("sub_exec_rpt_sync_rsp.end_report_index", "EndReportIndex", base.DEC),
+    sub_exec_rpt_sync_rsp_rej_reason = ProtoField.uint32("sub_exec_rpt_sync_rsp.rej_reason", "RejReason", base.DEC),
+    sub_exec_rpt_sync_rsp_text = ProtoField.string("sub_exec_rpt_sync_rsp.text", "Text"),
     -- Field from ExecRptEndOfStream
     exec_rpt_end_of_stream_pbu = ProtoField.string("exec_rpt_end_of_stream.pbu", "Pbu"),
     exec_rpt_end_of_stream_set_id = ProtoField.uint32("exec_rpt_end_of_stream.set_id", "SetID", base.DEC),
@@ -162,14 +171,14 @@ for _, field in pairs(fields) do
     sse_binary_proto.fields[field] = field
 end
 
-local function dissect_heartbeat(buf, tree, offset)
+local function dissect_heartbeat(buf, pinfo, tree, offset)
     local subtree = tree:add(sse_binary_proto, buf(offset, 1), "Heartbeat")
     subtree:append_text(" (No Body)")
     return offset
 end
 
 
-local function dissect_logon(buf, tree, offset)
+local function dissect_logon(buf, pinfo, tree, offset)
     local subtree = tree:add(sse_binary_proto, buf(offset, 1), "Logon")
     subtree:add(fields.logon_sender_comp_id, buf(offset, 32))
     offset = offset + 32
@@ -187,7 +196,7 @@ local function dissect_logon(buf, tree, offset)
 end
 
 
-local function dissect_logout(buf, tree, offset)
+local function dissect_logout(buf, pinfo, tree, offset)
     local subtree = tree:add(sse_binary_proto, buf(offset, 1), "Logout")
     subtree:add(fields.logout_session_status, buf(offset, 4))
     offset = offset + 4
@@ -197,7 +206,7 @@ local function dissect_logout(buf, tree, offset)
 end
 
 
-local function dissect_new_order_single(buf, tree, offset)
+local function dissect_new_order_single(buf, pinfo, tree, offset)
     local subtree = tree:add(sse_binary_proto, buf(offset, 1), "NewOrderSingle")
     subtree:add(fields.new_order_single_biz_id, buf(offset, 4))
     offset = offset + 4
@@ -235,7 +244,7 @@ local function dissect_new_order_single(buf, tree, offset)
 end
 
 
-local function dissect_order_cancel(buf, tree, offset)
+local function dissect_order_cancel(buf, pinfo, tree, offset)
     local subtree = tree:add(sse_binary_proto, buf(offset, 1), "OrderCancel")
     subtree:add(fields.order_cancel_biz_id, buf(offset, 4))
     offset = offset + 4
@@ -263,7 +272,7 @@ local function dissect_order_cancel(buf, tree, offset)
 end
 
 
-local function dissect_confirm(buf, tree, offset)
+local function dissect_confirm(buf, pinfo, tree, offset)
     local subtree = tree:add(sse_binary_proto, buf(offset, 1), "Confirm")
     subtree:add(fields.confirm_pbu, buf(offset, 8))
     offset = offset + 8
@@ -325,7 +334,7 @@ local function dissect_confirm(buf, tree, offset)
 end
 
 
-local function dissect_cancel_reject(buf, tree, offset)
+local function dissect_cancel_reject(buf, pinfo, tree, offset)
     local subtree = tree:add(sse_binary_proto, buf(offset, 1), "CancelReject")
     subtree:add(fields.cancel_reject_pbu, buf(offset, 8))
     offset = offset + 8
@@ -357,7 +366,7 @@ local function dissect_cancel_reject(buf, tree, offset)
 end
 
 
-local function dissect_report(buf, tree, offset)
+local function dissect_report(buf, pinfo, tree, offset)
     local subtree = tree:add(sse_binary_proto, buf(offset, 1), "Report")
     subtree:add(fields.report_pbu, buf(offset, 8))
     offset = offset + 8
@@ -419,7 +428,7 @@ local function dissect_report(buf, tree, offset)
 end
 
 
-local function dissect_order_reject(buf, tree, offset)
+local function dissect_order_reject(buf, pinfo, tree, offset)
     local subtree = tree:add(sse_binary_proto, buf(offset, 1), "OrderReject")
     subtree:add(fields.order_reject_biz_id, buf(offset, 4))
     offset = offset + 4
@@ -441,7 +450,7 @@ local function dissect_order_reject(buf, tree, offset)
 end
 
 
-local function dissect_platform_state(buf, tree, offset)
+local function dissect_platform_state(buf, pinfo, tree, offset)
     local subtree = tree:add(sse_binary_proto, buf(offset, 1), "PlatformState")
     subtree:add(fields.platform_state_platform_id, buf(offset, 2))
     offset = offset + 2
@@ -451,33 +460,93 @@ local function dissect_platform_state(buf, tree, offset)
 end
 
 
-local function dissect_exec_rpt_info(buf, tree, offset)
+local function dissect_exec_rpt_info(buf, pinfo, tree, offset)
     local subtree = tree:add(sse_binary_proto, buf(offset, 1), "ExecRptInfo")
     subtree:add(fields.exec_rpt_info_platform_id, buf(offset, 2))
     offset = offset + 2
-    subtree:add(fields.exec_rpt_info_pbu, buf(offset, 8))
+    local exec_rpt_info_pbu_size = buf(offset, 2):uint()
+    subtree:add("Pbu Size: ".. exec_rpt_info_pbu_size, buf(offset, 2))
+    offset = offset + 2
+
+    for i=1,exec_rpt_info_pbu_size do
+        offset =     subtree:add(fields.exec_rpt_info_pbu, buf(offset, 8))
     offset = offset + 8
-    subtree:add(fields.exec_rpt_info_set_id, buf(offset, 4))
+
+        pinfo.cols.info:append(" Pbu["..i.."]")
+    end
+    local exec_rpt_info_set_id_size = buf(offset, 2):uint()
+    subtree:add("SetID Size: ".. exec_rpt_info_set_id_size, buf(offset, 2))
+    offset = offset + 2
+
+    for i=1,exec_rpt_info_set_id_size do
+        offset =     subtree:add(fields.exec_rpt_info_set_id, buf(offset, 4))
     offset = offset + 4
+
+        pinfo.cols.info:append(" SetID["..i.."]")
+    end
     return offset
 end
 
 
-local function dissect_exec_rpt_sync(buf, tree, offset)
+local function dissect_sub_exec_rpt_sync(buf, pinfo, tree, offset)
+    local subtree = tree:add(sse_binary_proto, buf(offset, 1), "SubExecRptSync")
+    subtree:add(fields.sub_exec_rpt_sync_pbu, buf(offset, 8))
+    offset = offset + 8
+    subtree:add(fields.sub_exec_rpt_sync_set_id, buf(offset, 4))
+    offset = offset + 4
+    subtree:add(fields.sub_exec_rpt_sync_begin_report_index, buf(offset, 8))
+    offset = offset + 8
+    return offset
+end
+
+local function dissect_exec_rpt_sync(buf, pinfo, tree, offset)
     local subtree = tree:add(sse_binary_proto, buf(offset, 1), "ExecRptSync")
--- unsupported type: SubExecRptSync
+    local exec_rpt_sync_sub_exec_rpt_sync_size = buf(offset, 2):uint()
+    subtree:add("SubExecRptSync Size: ".. exec_rpt_sync_sub_exec_rpt_sync_size, buf(offset, 2))
+    offset = offset + 2
+
+    for i=1,exec_rpt_sync_sub_exec_rpt_sync_size do
+        offset =     dissect_sub_exec_rpt_sync(buf, pinfo, subtree, offset)
+
+        pinfo.cols.info:append(" SubExecRptSync["..i.."]")
+    end
     return offset
 end
 
 
-local function dissect_exec_rpt_sync_rsp(buf, tree, offset)
+local function dissect_sub_exec_rpt_sync_rsp(buf, pinfo, tree, offset)
+    local subtree = tree:add(sse_binary_proto, buf(offset, 1), "SubExecRptSyncRsp")
+    subtree:add(fields.sub_exec_rpt_sync_rsp_pbu, buf(offset, 8))
+    offset = offset + 8
+    subtree:add(fields.sub_exec_rpt_sync_rsp_set_id, buf(offset, 4))
+    offset = offset + 4
+    subtree:add(fields.sub_exec_rpt_sync_rsp_begin_report_index, buf(offset, 8))
+    offset = offset + 8
+    subtree:add(fields.sub_exec_rpt_sync_rsp_end_report_index, buf(offset, 8))
+    offset = offset + 8
+    subtree:add(fields.sub_exec_rpt_sync_rsp_rej_reason, buf(offset, 4))
+    offset = offset + 4
+    subtree:add(fields.sub_exec_rpt_sync_rsp_text, buf(offset, 64))
+    offset = offset + 64
+    return offset
+end
+
+local function dissect_exec_rpt_sync_rsp(buf, pinfo, tree, offset)
     local subtree = tree:add(sse_binary_proto, buf(offset, 1), "ExecRptSyncRsp")
--- unsupported type: SubExecRptSyncRsp
+    local exec_rpt_sync_rsp_sub_exec_rpt_sync_rsp_size = buf(offset, 2):uint()
+    subtree:add("SubExecRptSyncRsp Size: ".. exec_rpt_sync_rsp_sub_exec_rpt_sync_rsp_size, buf(offset, 2))
+    offset = offset + 2
+
+    for i=1,exec_rpt_sync_rsp_sub_exec_rpt_sync_rsp_size do
+        offset =     dissect_sub_exec_rpt_sync_rsp(buf, pinfo, subtree, offset)
+
+        pinfo.cols.info:append(" SubExecRptSyncRsp["..i.."]")
+    end
     return offset
 end
 
 
-local function dissect_exec_rpt_end_of_stream(buf, tree, offset)
+local function dissect_exec_rpt_end_of_stream(buf, pinfo, tree, offset)
     local subtree = tree:add(sse_binary_proto, buf(offset, 1), "ExecRptEndOfStream")
     subtree:add(fields.exec_rpt_end_of_stream_pbu, buf(offset, 8))
     offset = offset + 8
@@ -500,46 +569,46 @@ function sse_binary_proto.dissector(buf, pinfo, tree)
     tree:add(fields.sse_binary_msg_body_len, buf(offset, 4))
     offset = offset + 4
     if msg_type == 33 then -- Heartbeat
-        dissect_heartbeat(buf, tree, offset)
+        dissect_heartbeat(buf, pinfo, tree, offset)
         pinfo.cols.info:set("Heartbeat")
 elseif msg_type == 40 then -- Logon
-        dissect_logon(buf, tree, offset)
+        dissect_logon(buf, pinfo, tree, offset)
         pinfo.cols.info:set("Logon")
 elseif msg_type == 41 then -- Logout
-        dissect_logout(buf, tree, offset)
+        dissect_logout(buf, pinfo, tree, offset)
         pinfo.cols.info:set("Logout")
 elseif msg_type == 58 then -- NewOrderSingle
-        dissect_new_order_single(buf, tree, offset)
+        dissect_new_order_single(buf, pinfo, tree, offset)
         pinfo.cols.info:set("NewOrderSingle")
 elseif msg_type == 61 then -- OrderCancel
-        dissect_order_cancel(buf, tree, offset)
+        dissect_order_cancel(buf, pinfo, tree, offset)
         pinfo.cols.info:set("OrderCancel")
 elseif msg_type == 32 then -- Confirm
-        dissect_confirm(buf, tree, offset)
+        dissect_confirm(buf, pinfo, tree, offset)
         pinfo.cols.info:set("Confirm")
 elseif msg_type == 59 then -- CancelReject
-        dissect_cancel_reject(buf, tree, offset)
+        dissect_cancel_reject(buf, pinfo, tree, offset)
         pinfo.cols.info:set("CancelReject")
 elseif msg_type == 103 then -- Report
-        dissect_report(buf, tree, offset)
+        dissect_report(buf, pinfo, tree, offset)
         pinfo.cols.info:set("Report")
 elseif msg_type == 204 then -- OrderReject
-        dissect_order_reject(buf, tree, offset)
+        dissect_order_reject(buf, pinfo, tree, offset)
         pinfo.cols.info:set("OrderReject")
 elseif msg_type == 209 then -- PlatformState
-        dissect_platform_state(buf, tree, offset)
+        dissect_platform_state(buf, pinfo, tree, offset)
         pinfo.cols.info:set("PlatformState")
 elseif msg_type == 208 then -- ExecRptInfo
-        dissect_exec_rpt_info(buf, tree, offset)
+        dissect_exec_rpt_info(buf, pinfo, tree, offset)
         pinfo.cols.info:set("ExecRptInfo")
 elseif msg_type == 206 then -- ExecRptSync
-        dissect_exec_rpt_sync(buf, tree, offset)
+        dissect_exec_rpt_sync(buf, pinfo, tree, offset)
         pinfo.cols.info:set("ExecRptSync")
 elseif msg_type == 207 then -- ExecRptSyncRsp
-        dissect_exec_rpt_sync_rsp(buf, tree, offset)
+        dissect_exec_rpt_sync_rsp(buf, pinfo, tree, offset)
         pinfo.cols.info:set("ExecRptSyncRsp")
 elseif msg_type == 210 then -- ExecRptEndOfStream
-        dissect_exec_rpt_end_of_stream(buf, tree, offset)
+        dissect_exec_rpt_end_of_stream(buf, pinfo, tree, offset)
         pinfo.cols.info:set("ExecRptEndOfStream")
     end
     tree:add(fields.sse_binary_checksum, buf(offset, 4))
