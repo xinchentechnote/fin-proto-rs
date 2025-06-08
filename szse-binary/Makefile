@@ -10,6 +10,8 @@ BIN_DIR := ~/workspace/fin-protoc/bin/
 
 all: compile fmt test
 
+build: compile
+
 compile:
 	@echo "Compiling protocol..."
 	export PATH=$(BIN_DIR):$$PATH && \

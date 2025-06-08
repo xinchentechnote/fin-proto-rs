@@ -352,7 +352,7 @@ packet NewOrder {
         "410" : Extend104101,
         "417" : Extend104128,
         "470" : Extend104701,
-    }  `各业务扩展字段`
+    }
 }
 
 packet Extend100101 {
@@ -540,7 +540,7 @@ packet ExecutionConfirm {
         "410" : Extend204102,
         "417" : Extend204129,
         "470" : Extend204702,
-    } `各业务扩展字段`
+    }
 }
 
 packet Extend200102 {
@@ -728,7 +728,7 @@ packet ExecutionReport {
         ["410", "412", "413", "415", "416"] : Extend204115,
         "417" : Extend204130,
         "470" : Extend204715,
-    } `各业务扩展字段`
+    }
 }
 
 packet Extend200115 {
