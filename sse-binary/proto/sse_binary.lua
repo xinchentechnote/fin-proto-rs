@@ -467,21 +467,17 @@ local function dissect_exec_rpt_info(buf, pinfo, tree, offset)
     local exec_rpt_info_pbu_size = buf(offset, 2):uint()
     subtree:add("Pbu Size: ".. exec_rpt_info_pbu_size, buf(offset, 2))
     offset = offset + 2
-
     for i=1,exec_rpt_info_pbu_size do
-        offset =     subtree:add(fields.exec_rpt_info_pbu, buf(offset, 8))
-    offset = offset + 8
-
+        subtree:add(fields.exec_rpt_info_pbu, buf(offset, 8))
+        offset = offset + 8
         pinfo.cols.info:append(" Pbu["..i.."]")
     end
     local exec_rpt_info_set_id_size = buf(offset, 2):uint()
     subtree:add("SetID Size: ".. exec_rpt_info_set_id_size, buf(offset, 2))
     offset = offset + 2
-
     for i=1,exec_rpt_info_set_id_size do
-        offset =     subtree:add(fields.exec_rpt_info_set_id, buf(offset, 4))
-    offset = offset + 4
-
+        subtree:add(fields.exec_rpt_info_set_id, buf(offset, 4))
+        offset = offset + 4
         pinfo.cols.info:append(" SetID["..i.."]")
     end
     return offset
@@ -504,10 +500,8 @@ local function dissect_exec_rpt_sync(buf, pinfo, tree, offset)
     local exec_rpt_sync_sub_exec_rpt_sync_size = buf(offset, 2):uint()
     subtree:add("SubExecRptSync Size: ".. exec_rpt_sync_sub_exec_rpt_sync_size, buf(offset, 2))
     offset = offset + 2
-
     for i=1,exec_rpt_sync_sub_exec_rpt_sync_size do
-        offset =     dissect_sub_exec_rpt_sync(buf, pinfo, subtree, offset)
-
+        offset = dissect_sub_exec_rpt_sync(buf, pinfo, subtree, offset)
         pinfo.cols.info:append(" SubExecRptSync["..i.."]")
     end
     return offset
@@ -536,10 +530,8 @@ local function dissect_exec_rpt_sync_rsp(buf, pinfo, tree, offset)
     local exec_rpt_sync_rsp_sub_exec_rpt_sync_rsp_size = buf(offset, 2):uint()
     subtree:add("SubExecRptSyncRsp Size: ".. exec_rpt_sync_rsp_sub_exec_rpt_sync_rsp_size, buf(offset, 2))
     offset = offset + 2
-
     for i=1,exec_rpt_sync_rsp_sub_exec_rpt_sync_rsp_size do
-        offset =     dissect_sub_exec_rpt_sync_rsp(buf, pinfo, subtree, offset)
-
+        offset = dissect_sub_exec_rpt_sync_rsp(buf, pinfo, subtree, offset)
         pinfo.cols.info:append(" SubExecRptSyncRsp["..i.."]")
     end
     return offset
@@ -571,43 +563,43 @@ function sse_binary_proto.dissector(buf, pinfo, tree)
     if msg_type == 33 then -- Heartbeat
         dissect_heartbeat(buf, pinfo, tree, offset)
         pinfo.cols.info:set("Heartbeat")
-elseif msg_type == 40 then -- Logon
+    elseif msg_type == 40 then -- Logon
         dissect_logon(buf, pinfo, tree, offset)
         pinfo.cols.info:set("Logon")
-elseif msg_type == 41 then -- Logout
+    elseif msg_type == 41 then -- Logout
         dissect_logout(buf, pinfo, tree, offset)
         pinfo.cols.info:set("Logout")
-elseif msg_type == 58 then -- NewOrderSingle
+    elseif msg_type == 58 then -- NewOrderSingle
         dissect_new_order_single(buf, pinfo, tree, offset)
         pinfo.cols.info:set("NewOrderSingle")
-elseif msg_type == 61 then -- OrderCancel
+    elseif msg_type == 61 then -- OrderCancel
         dissect_order_cancel(buf, pinfo, tree, offset)
         pinfo.cols.info:set("OrderCancel")
-elseif msg_type == 32 then -- Confirm
+    elseif msg_type == 32 then -- Confirm
         dissect_confirm(buf, pinfo, tree, offset)
         pinfo.cols.info:set("Confirm")
-elseif msg_type == 59 then -- CancelReject
+    elseif msg_type == 59 then -- CancelReject
         dissect_cancel_reject(buf, pinfo, tree, offset)
         pinfo.cols.info:set("CancelReject")
-elseif msg_type == 103 then -- Report
+    elseif msg_type == 103 then -- Report
         dissect_report(buf, pinfo, tree, offset)
         pinfo.cols.info:set("Report")
-elseif msg_type == 204 then -- OrderReject
+    elseif msg_type == 204 then -- OrderReject
         dissect_order_reject(buf, pinfo, tree, offset)
         pinfo.cols.info:set("OrderReject")
-elseif msg_type == 209 then -- PlatformState
+    elseif msg_type == 209 then -- PlatformState
         dissect_platform_state(buf, pinfo, tree, offset)
         pinfo.cols.info:set("PlatformState")
-elseif msg_type == 208 then -- ExecRptInfo
+    elseif msg_type == 208 then -- ExecRptInfo
         dissect_exec_rpt_info(buf, pinfo, tree, offset)
         pinfo.cols.info:set("ExecRptInfo")
-elseif msg_type == 206 then -- ExecRptSync
+    elseif msg_type == 206 then -- ExecRptSync
         dissect_exec_rpt_sync(buf, pinfo, tree, offset)
         pinfo.cols.info:set("ExecRptSync")
-elseif msg_type == 207 then -- ExecRptSyncRsp
+    elseif msg_type == 207 then -- ExecRptSyncRsp
         dissect_exec_rpt_sync_rsp(buf, pinfo, tree, offset)
         pinfo.cols.info:set("ExecRptSyncRsp")
-elseif msg_type == 210 then -- ExecRptEndOfStream
+    elseif msg_type == 210 then -- ExecRptEndOfStream
         dissect_exec_rpt_end_of_stream(buf, pinfo, tree, offset)
         pinfo.cols.info:set("ExecRptEndOfStream")
     end

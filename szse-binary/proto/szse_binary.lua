@@ -501,85 +501,85 @@ local function dissect_new_order(buf, pinfo, tree, offset)
     if appl_id == "010" then -- Extend100101
         dissect_extend_100101(buf, pinfo, tree, offset)
         pinfo.cols.info:set("Extend100101")
-elseif appl_id == "020" then -- Extend100201
+    elseif appl_id == "020" then -- Extend100201
         dissect_extend_100201(buf, pinfo, tree, offset)
         pinfo.cols.info:set("Extend100201")
-elseif appl_id == "030" then -- Extend100301
+    elseif appl_id == "030" then -- Extend100301
         dissect_extend_100301(buf, pinfo, tree, offset)
         pinfo.cols.info:set("Extend100301")
-elseif appl_id == "051" then -- Extend100501
+    elseif appl_id == "051" then -- Extend100501
         dissect_extend_100501(buf, pinfo, tree, offset)
         pinfo.cols.info:set("Extend100501")
-elseif appl_id == "052" then -- Extend100501
+    elseif appl_id == "052" then -- Extend100501
         dissect_extend_100501(buf, pinfo, tree, offset)
         pinfo.cols.info:set("Extend100501")
-elseif appl_id == "060" then -- Extend100601
+    elseif appl_id == "060" then -- Extend100601
         dissect_extend_100601(buf, pinfo, tree, offset)
         pinfo.cols.info:set("Extend100601")
-elseif appl_id == "061" then -- Extend100601
+    elseif appl_id == "061" then -- Extend100601
         dissect_extend_100601(buf, pinfo, tree, offset)
         pinfo.cols.info:set("Extend100601")
-elseif appl_id == "070" then -- Extend100701
+    elseif appl_id == "070" then -- Extend100701
         dissect_extend_100701(buf, pinfo, tree, offset)
         pinfo.cols.info:set("Extend100701")
-elseif appl_id == "150" then -- Extend101501
+    elseif appl_id == "150" then -- Extend101501
         dissect_extend_101501(buf, pinfo, tree, offset)
         pinfo.cols.info:set("Extend101501")
-elseif appl_id == "151" then -- Extend101501
+    elseif appl_id == "151" then -- Extend101501
         dissect_extend_101501(buf, pinfo, tree, offset)
         pinfo.cols.info:set("Extend101501")
-elseif appl_id == "152" then -- Extend101501
+    elseif appl_id == "152" then -- Extend101501
         dissect_extend_101501(buf, pinfo, tree, offset)
         pinfo.cols.info:set("Extend101501")
-elseif appl_id == "160" then -- Extend101601
+    elseif appl_id == "160" then -- Extend101601
         dissect_extend_101601(buf, pinfo, tree, offset)
         pinfo.cols.info:set("Extend101601")
-elseif appl_id == "170" then -- Extend101701
+    elseif appl_id == "170" then -- Extend101701
         dissect_extend_101701(buf, pinfo, tree, offset)
         pinfo.cols.info:set("Extend101701")
-elseif appl_id == "180" then -- Extend101801
+    elseif appl_id == "180" then -- Extend101801
         dissect_extend_101801(buf, pinfo, tree, offset)
         pinfo.cols.info:set("Extend101801")
-elseif appl_id == "181" then -- Extend101801
+    elseif appl_id == "181" then -- Extend101801
         dissect_extend_101801(buf, pinfo, tree, offset)
         pinfo.cols.info:set("Extend101801")
-elseif appl_id == "270" then -- Extend102701
+    elseif appl_id == "270" then -- Extend102701
         dissect_extend_102701(buf, pinfo, tree, offset)
         pinfo.cols.info:set("Extend102701")
-elseif appl_id == "271" then -- Extend102701
+    elseif appl_id == "271" then -- Extend102701
         dissect_extend_102701(buf, pinfo, tree, offset)
         pinfo.cols.info:set("Extend102701")
-elseif appl_id == "280" then -- Extend102801
+    elseif appl_id == "280" then -- Extend102801
         dissect_extend_102801(buf, pinfo, tree, offset)
         pinfo.cols.info:set("Extend102801")
-elseif appl_id == "281" then -- Extend102801
+    elseif appl_id == "281" then -- Extend102801
         dissect_extend_102801(buf, pinfo, tree, offset)
         pinfo.cols.info:set("Extend102801")
-elseif appl_id == "290" then -- Extend102901
+    elseif appl_id == "290" then -- Extend102901
         dissect_extend_102901(buf, pinfo, tree, offset)
         pinfo.cols.info:set("Extend102901")
-elseif appl_id == "291" then -- Extend102901
+    elseif appl_id == "291" then -- Extend102901
         dissect_extend_102901(buf, pinfo, tree, offset)
         pinfo.cols.info:set("Extend102901")
-elseif appl_id == "630" then -- Extend106301
+    elseif appl_id == "630" then -- Extend106301
         dissect_extend_106301(buf, pinfo, tree, offset)
         pinfo.cols.info:set("Extend106301")
-elseif appl_id == "350" then -- Extend103501
+    elseif appl_id == "350" then -- Extend103501
         dissect_extend_103501(buf, pinfo, tree, offset)
         pinfo.cols.info:set("Extend103501")
-elseif appl_id == "351" then -- Extend103501
+    elseif appl_id == "351" then -- Extend103501
         dissect_extend_103501(buf, pinfo, tree, offset)
         pinfo.cols.info:set("Extend103501")
-elseif appl_id == "370" then -- Extend103701
+    elseif appl_id == "370" then -- Extend103701
         dissect_extend_103701(buf, pinfo, tree, offset)
         pinfo.cols.info:set("Extend103701")
-elseif appl_id == "410" then -- Extend104101
+    elseif appl_id == "410" then -- Extend104101
         dissect_extend_104101(buf, pinfo, tree, offset)
         pinfo.cols.info:set("Extend104101")
-elseif appl_id == "417" then -- Extend104128
+    elseif appl_id == "417" then -- Extend104128
         dissect_extend_104128(buf, pinfo, tree, offset)
         pinfo.cols.info:set("Extend104128")
-elseif appl_id == "470" then -- Extend104701
+    elseif appl_id == "470" then -- Extend104701
         dissect_extend_104701(buf, pinfo, tree, offset)
         pinfo.cols.info:set("Extend104701")
     end
@@ -903,85 +903,85 @@ local function dissect_execution_confirm(buf, pinfo, tree, offset)
     if appl_id == "010" then -- Extend200102
         dissect_extend_200102(buf, pinfo, tree, offset)
         pinfo.cols.info:set("Extend200102")
-elseif appl_id == "020" then -- Extend200202
+    elseif appl_id == "020" then -- Extend200202
         dissect_extend_200202(buf, pinfo, tree, offset)
         pinfo.cols.info:set("Extend200202")
-elseif appl_id == "030" then -- Extend200302
+    elseif appl_id == "030" then -- Extend200302
         dissect_extend_200302(buf, pinfo, tree, offset)
         pinfo.cols.info:set("Extend200302")
-elseif appl_id == "051" then -- Extend200502
+    elseif appl_id == "051" then -- Extend200502
         dissect_extend_200502(buf, pinfo, tree, offset)
         pinfo.cols.info:set("Extend200502")
-elseif appl_id == "052" then -- Extend200502
+    elseif appl_id == "052" then -- Extend200502
         dissect_extend_200502(buf, pinfo, tree, offset)
         pinfo.cols.info:set("Extend200502")
-elseif appl_id == "060" then -- Extend200602
+    elseif appl_id == "060" then -- Extend200602
         dissect_extend_200602(buf, pinfo, tree, offset)
         pinfo.cols.info:set("Extend200602")
-elseif appl_id == "061" then -- Extend200602
+    elseif appl_id == "061" then -- Extend200602
         dissect_extend_200602(buf, pinfo, tree, offset)
         pinfo.cols.info:set("Extend200602")
-elseif appl_id == "070" then -- Extend200702
+    elseif appl_id == "070" then -- Extend200702
         dissect_extend_200702(buf, pinfo, tree, offset)
         pinfo.cols.info:set("Extend200702")
-elseif appl_id == "150" then -- Extend201502
+    elseif appl_id == "150" then -- Extend201502
         dissect_extend_201502(buf, pinfo, tree, offset)
         pinfo.cols.info:set("Extend201502")
-elseif appl_id == "151" then -- Extend201502
+    elseif appl_id == "151" then -- Extend201502
         dissect_extend_201502(buf, pinfo, tree, offset)
         pinfo.cols.info:set("Extend201502")
-elseif appl_id == "152" then -- Extend201502
+    elseif appl_id == "152" then -- Extend201502
         dissect_extend_201502(buf, pinfo, tree, offset)
         pinfo.cols.info:set("Extend201502")
-elseif appl_id == "160" then -- Extend201602
+    elseif appl_id == "160" then -- Extend201602
         dissect_extend_201602(buf, pinfo, tree, offset)
         pinfo.cols.info:set("Extend201602")
-elseif appl_id == "170" then -- Extend201702
+    elseif appl_id == "170" then -- Extend201702
         dissect_extend_201702(buf, pinfo, tree, offset)
         pinfo.cols.info:set("Extend201702")
-elseif appl_id == "180" then -- Extend201802
+    elseif appl_id == "180" then -- Extend201802
         dissect_extend_201802(buf, pinfo, tree, offset)
         pinfo.cols.info:set("Extend201802")
-elseif appl_id == "181" then -- Extend201802
+    elseif appl_id == "181" then -- Extend201802
         dissect_extend_201802(buf, pinfo, tree, offset)
         pinfo.cols.info:set("Extend201802")
-elseif appl_id == "270" then -- Extend202702
+    elseif appl_id == "270" then -- Extend202702
         dissect_extend_202702(buf, pinfo, tree, offset)
         pinfo.cols.info:set("Extend202702")
-elseif appl_id == "271" then -- Extend202702
+    elseif appl_id == "271" then -- Extend202702
         dissect_extend_202702(buf, pinfo, tree, offset)
         pinfo.cols.info:set("Extend202702")
-elseif appl_id == "280" then -- Extend202802
+    elseif appl_id == "280" then -- Extend202802
         dissect_extend_202802(buf, pinfo, tree, offset)
         pinfo.cols.info:set("Extend202802")
-elseif appl_id == "281" then -- Extend202802
+    elseif appl_id == "281" then -- Extend202802
         dissect_extend_202802(buf, pinfo, tree, offset)
         pinfo.cols.info:set("Extend202802")
-elseif appl_id == "290" then -- Extend202902
+    elseif appl_id == "290" then -- Extend202902
         dissect_extend_202902(buf, pinfo, tree, offset)
         pinfo.cols.info:set("Extend202902")
-elseif appl_id == "291" then -- Extend202902
+    elseif appl_id == "291" then -- Extend202902
         dissect_extend_202902(buf, pinfo, tree, offset)
         pinfo.cols.info:set("Extend202902")
-elseif appl_id == "630" then -- Extend206302
+    elseif appl_id == "630" then -- Extend206302
         dissect_extend_206302(buf, pinfo, tree, offset)
         pinfo.cols.info:set("Extend206302")
-elseif appl_id == "350" then -- Extend203502
+    elseif appl_id == "350" then -- Extend203502
         dissect_extend_203502(buf, pinfo, tree, offset)
         pinfo.cols.info:set("Extend203502")
-elseif appl_id == "351" then -- Extend203502
+    elseif appl_id == "351" then -- Extend203502
         dissect_extend_203502(buf, pinfo, tree, offset)
         pinfo.cols.info:set("Extend203502")
-elseif appl_id == "370" then -- Extend203702
+    elseif appl_id == "370" then -- Extend203702
         dissect_extend_203702(buf, pinfo, tree, offset)
         pinfo.cols.info:set("Extend203702")
-elseif appl_id == "410" then -- Extend204102
+    elseif appl_id == "410" then -- Extend204102
         dissect_extend_204102(buf, pinfo, tree, offset)
         pinfo.cols.info:set("Extend204102")
-elseif appl_id == "417" then -- Extend204129
+    elseif appl_id == "417" then -- Extend204129
         dissect_extend_204129(buf, pinfo, tree, offset)
         pinfo.cols.info:set("Extend204129")
-elseif appl_id == "470" then -- Extend204702
+    elseif appl_id == "470" then -- Extend204702
         dissect_extend_204702(buf, pinfo, tree, offset)
         pinfo.cols.info:set("Extend204702")
     end
@@ -1197,7 +1197,11 @@ local function dissect_extend_206302(buf, pinfo, tree, offset)
     offset = offset + 1
     subtree:add(fields.extend_206302_imc_reject_text_len, buf(offset, 4))
     offset = offset + 4
--- unsupported type: string
+    local extend_206302_imc_reject_text_len = buf(offset, 2):uint()
+    subtree:add("IMCRejectText Len: ".. extend_206302_imc_reject_text_len, buf(offset, 2))
+    offset = offset + 2
+    subtree:add(fields.extend_206302_imc_reject_text, buf(offset, extend_206302_imc_reject_text_len))
+    offset = offset + extend_206302_imc_reject_text_len
     return offset
 end
 
@@ -1336,58 +1340,58 @@ local function dissect_execution_report(buf, pinfo, tree, offset)
     if appl_id == "010" then -- Extend200115
         dissect_extend_200115(buf, pinfo, tree, offset)
         pinfo.cols.info:set("Extend200115")
-elseif appl_id == "020" then -- Extend200215
+    elseif appl_id == "020" then -- Extend200215
         dissect_extend_200215(buf, pinfo, tree, offset)
         pinfo.cols.info:set("Extend200215")
-elseif appl_id == "030" then -- Extend200315
+    elseif appl_id == "030" then -- Extend200315
         dissect_extend_200315(buf, pinfo, tree, offset)
         pinfo.cols.info:set("Extend200315")
-elseif appl_id == "051" then -- Extend200515
+    elseif appl_id == "051" then -- Extend200515
         dissect_extend_200515(buf, pinfo, tree, offset)
         pinfo.cols.info:set("Extend200515")
-elseif appl_id == "052" then -- Extend200515
+    elseif appl_id == "052" then -- Extend200515
         dissect_extend_200515(buf, pinfo, tree, offset)
         pinfo.cols.info:set("Extend200515")
-elseif appl_id == "056" then -- Extend200515
+    elseif appl_id == "056" then -- Extend200515
         dissect_extend_200515(buf, pinfo, tree, offset)
         pinfo.cols.info:set("Extend200515")
-elseif appl_id == "057" then -- Extend200515
+    elseif appl_id == "057" then -- Extend200515
         dissect_extend_200515(buf, pinfo, tree, offset)
         pinfo.cols.info:set("Extend200515")
-elseif appl_id == "060" then -- Extend200615
+    elseif appl_id == "060" then -- Extend200615
         dissect_extend_200615(buf, pinfo, tree, offset)
         pinfo.cols.info:set("Extend200615")
-elseif appl_id == "061" then -- Extend200615
+    elseif appl_id == "061" then -- Extend200615
         dissect_extend_200615(buf, pinfo, tree, offset)
         pinfo.cols.info:set("Extend200615")
-elseif appl_id == "070" then -- Extend200715
+    elseif appl_id == "070" then -- Extend200715
         dissect_extend_200715(buf, pinfo, tree, offset)
         pinfo.cols.info:set("Extend200715")
-elseif appl_id == "630" then -- Extend206315
+    elseif appl_id == "630" then -- Extend206315
         dissect_extend_206315(buf, pinfo, tree, offset)
         pinfo.cols.info:set("Extend206315")
-elseif appl_id == "370" then -- Extend203715
+    elseif appl_id == "370" then -- Extend203715
         dissect_extend_203715(buf, pinfo, tree, offset)
         pinfo.cols.info:set("Extend203715")
-elseif appl_id == "410" then -- Extend204115
+    elseif appl_id == "410" then -- Extend204115
         dissect_extend_204115(buf, pinfo, tree, offset)
         pinfo.cols.info:set("Extend204115")
-elseif appl_id == "412" then -- Extend204115
+    elseif appl_id == "412" then -- Extend204115
         dissect_extend_204115(buf, pinfo, tree, offset)
         pinfo.cols.info:set("Extend204115")
-elseif appl_id == "413" then -- Extend204115
+    elseif appl_id == "413" then -- Extend204115
         dissect_extend_204115(buf, pinfo, tree, offset)
         pinfo.cols.info:set("Extend204115")
-elseif appl_id == "415" then -- Extend204115
+    elseif appl_id == "415" then -- Extend204115
         dissect_extend_204115(buf, pinfo, tree, offset)
         pinfo.cols.info:set("Extend204115")
-elseif appl_id == "416" then -- Extend204115
+    elseif appl_id == "416" then -- Extend204115
         dissect_extend_204115(buf, pinfo, tree, offset)
         pinfo.cols.info:set("Extend204115")
-elseif appl_id == "417" then -- Extend204130
+    elseif appl_id == "417" then -- Extend204130
         dissect_extend_204130(buf, pinfo, tree, offset)
         pinfo.cols.info:set("Extend204130")
-elseif appl_id == "470" then -- Extend204715
+    elseif appl_id == "470" then -- Extend204715
         dissect_extend_204715(buf, pinfo, tree, offset)
         pinfo.cols.info:set("Extend204715")
     end
@@ -1664,9 +1668,8 @@ local function dissect_report_synchronization(buf, pinfo, tree, offset)
     local report_synchronization_partition_report_size = buf(offset, 2):uint()
     subtree:add("PartitionReport Size: ".. report_synchronization_partition_report_size, buf(offset, 2))
     offset = offset + 2
-
     for i=1,report_synchronization_partition_report_size do
-        offset = -- unsupported type: PartitionReport
+        -- unsupported type: PartitionReport
 
         pinfo.cols.info:append(" PartitionReport["..i.."]")
     end
@@ -1715,9 +1718,8 @@ local function dissect_platform_info(buf, pinfo, tree, offset)
     local platform_info_platform_partition_size = buf(offset, 2):uint()
     subtree:add("PlatformPartition Size: ".. platform_info_platform_partition_size, buf(offset, 2))
     offset = offset + 2
-
     for i=1,platform_info_platform_partition_size do
-        offset = -- unsupported type: PlatformPartition
+        -- unsupported type: PlatformPartition
 
         pinfo.cols.info:append(" PlatformPartition["..i.."]")
     end
@@ -1764,262 +1766,262 @@ function szse_binary_proto.dissector(buf, pinfo, tree)
     if msg_type == 1 then -- Logon
         dissect_logon(buf, pinfo, tree, offset)
         pinfo.cols.info:set("Logon")
-elseif msg_type == 2 then -- Logout
+    elseif msg_type == 2 then -- Logout
         dissect_logout(buf, pinfo, tree, offset)
         pinfo.cols.info:set("Logout")
-elseif msg_type == 3 then -- Heartbeat
+    elseif msg_type == 3 then -- Heartbeat
         dissect_heartbeat(buf, pinfo, tree, offset)
         pinfo.cols.info:set("Heartbeat")
-elseif msg_type == 4 then -- BusinessReject
+    elseif msg_type == 4 then -- BusinessReject
         dissect_business_reject(buf, pinfo, tree, offset)
         pinfo.cols.info:set("BusinessReject")
-elseif msg_type == 5 then -- ReportSynchronization
+    elseif msg_type == 5 then -- ReportSynchronization
         dissect_report_synchronization(buf, pinfo, tree, offset)
         pinfo.cols.info:set("ReportSynchronization")
-elseif msg_type == 6 then -- PlatformStateInfo
+    elseif msg_type == 6 then -- PlatformStateInfo
         dissect_platform_state_info(buf, pinfo, tree, offset)
         pinfo.cols.info:set("PlatformStateInfo")
-elseif msg_type == 7 then -- ReportFinished
+    elseif msg_type == 7 then -- ReportFinished
         dissect_report_finished(buf, pinfo, tree, offset)
         pinfo.cols.info:set("ReportFinished")
-elseif msg_type == 9 then -- PlatformPartition
+    elseif msg_type == 9 then -- PlatformPartition
         dissect_platform_partition(buf, pinfo, tree, offset)
         pinfo.cols.info:set("PlatformPartition")
-elseif msg_type == 10 then -- TradingSessionStatus
+    elseif msg_type == 10 then -- TradingSessionStatus
         dissect_trading_session_status(buf, pinfo, tree, offset)
         pinfo.cols.info:set("TradingSessionStatus")
-elseif msg_type == 100101 then -- NewOrder
+    elseif msg_type == 100101 then -- NewOrder
         dissect_new_order(buf, pinfo, tree, offset)
         pinfo.cols.info:set("NewOrder")
-elseif msg_type == 100201 then -- NewOrder
+    elseif msg_type == 100201 then -- NewOrder
         dissect_new_order(buf, pinfo, tree, offset)
         pinfo.cols.info:set("NewOrder")
-elseif msg_type == 100301 then -- NewOrder
+    elseif msg_type == 100301 then -- NewOrder
         dissect_new_order(buf, pinfo, tree, offset)
         pinfo.cols.info:set("NewOrder")
-elseif msg_type == 100401 then -- NewOrder
+    elseif msg_type == 100401 then -- NewOrder
         dissect_new_order(buf, pinfo, tree, offset)
         pinfo.cols.info:set("NewOrder")
-elseif msg_type == 100501 then -- NewOrder
+    elseif msg_type == 100501 then -- NewOrder
         dissect_new_order(buf, pinfo, tree, offset)
         pinfo.cols.info:set("NewOrder")
-elseif msg_type == 100601 then -- NewOrder
+    elseif msg_type == 100601 then -- NewOrder
         dissect_new_order(buf, pinfo, tree, offset)
         pinfo.cols.info:set("NewOrder")
-elseif msg_type == 100701 then -- NewOrder
+    elseif msg_type == 100701 then -- NewOrder
         dissect_new_order(buf, pinfo, tree, offset)
         pinfo.cols.info:set("NewOrder")
-elseif msg_type == 101201 then -- NewOrder
+    elseif msg_type == 101201 then -- NewOrder
         dissect_new_order(buf, pinfo, tree, offset)
         pinfo.cols.info:set("NewOrder")
-elseif msg_type == 101301 then -- NewOrder
+    elseif msg_type == 101301 then -- NewOrder
         dissect_new_order(buf, pinfo, tree, offset)
         pinfo.cols.info:set("NewOrder")
-elseif msg_type == 101401 then -- NewOrder
+    elseif msg_type == 101401 then -- NewOrder
         dissect_new_order(buf, pinfo, tree, offset)
         pinfo.cols.info:set("NewOrder")
-elseif msg_type == 101501 then -- NewOrder
+    elseif msg_type == 101501 then -- NewOrder
         dissect_new_order(buf, pinfo, tree, offset)
         pinfo.cols.info:set("NewOrder")
-elseif msg_type == 101601 then -- NewOrder
+    elseif msg_type == 101601 then -- NewOrder
         dissect_new_order(buf, pinfo, tree, offset)
         pinfo.cols.info:set("NewOrder")
-elseif msg_type == 101701 then -- NewOrder
+    elseif msg_type == 101701 then -- NewOrder
         dissect_new_order(buf, pinfo, tree, offset)
         pinfo.cols.info:set("NewOrder")
-elseif msg_type == 101801 then -- NewOrder
+    elseif msg_type == 101801 then -- NewOrder
         dissect_new_order(buf, pinfo, tree, offset)
         pinfo.cols.info:set("NewOrder")
-elseif msg_type == 101901 then -- NewOrder
+    elseif msg_type == 101901 then -- NewOrder
         dissect_new_order(buf, pinfo, tree, offset)
         pinfo.cols.info:set("NewOrder")
-elseif msg_type == 102301 then -- NewOrder
+    elseif msg_type == 102301 then -- NewOrder
         dissect_new_order(buf, pinfo, tree, offset)
         pinfo.cols.info:set("NewOrder")
-elseif msg_type == 102701 then -- NewOrder
+    elseif msg_type == 102701 then -- NewOrder
         dissect_new_order(buf, pinfo, tree, offset)
         pinfo.cols.info:set("NewOrder")
-elseif msg_type == 102701 then -- NewOrder
+    elseif msg_type == 102701 then -- NewOrder
         dissect_new_order(buf, pinfo, tree, offset)
         pinfo.cols.info:set("NewOrder")
-elseif msg_type == 102801 then -- NewOrder
+    elseif msg_type == 102801 then -- NewOrder
         dissect_new_order(buf, pinfo, tree, offset)
         pinfo.cols.info:set("NewOrder")
-elseif msg_type == 102801 then -- NewOrder
+    elseif msg_type == 102801 then -- NewOrder
         dissect_new_order(buf, pinfo, tree, offset)
         pinfo.cols.info:set("NewOrder")
-elseif msg_type == 102901 then -- NewOrder
+    elseif msg_type == 102901 then -- NewOrder
         dissect_new_order(buf, pinfo, tree, offset)
         pinfo.cols.info:set("NewOrder")
-elseif msg_type == 102901 then -- NewOrder
+    elseif msg_type == 102901 then -- NewOrder
         dissect_new_order(buf, pinfo, tree, offset)
         pinfo.cols.info:set("NewOrder")
-elseif msg_type == 103101 then -- NewOrder
+    elseif msg_type == 103101 then -- NewOrder
         dissect_new_order(buf, pinfo, tree, offset)
         pinfo.cols.info:set("NewOrder")
-elseif msg_type == 103101 then -- NewOrder
+    elseif msg_type == 103101 then -- NewOrder
         dissect_new_order(buf, pinfo, tree, offset)
         pinfo.cols.info:set("NewOrder")
-elseif msg_type == 106301 then -- NewOrder
+    elseif msg_type == 106301 then -- NewOrder
         dissect_new_order(buf, pinfo, tree, offset)
         pinfo.cols.info:set("NewOrder")
-elseif msg_type == 103301 then -- NewOrder
+    elseif msg_type == 103301 then -- NewOrder
         dissect_new_order(buf, pinfo, tree, offset)
         pinfo.cols.info:set("NewOrder")
-elseif msg_type == 103501 then -- NewOrder
+    elseif msg_type == 103501 then -- NewOrder
         dissect_new_order(buf, pinfo, tree, offset)
         pinfo.cols.info:set("NewOrder")
-elseif msg_type == 103701 then -- NewOrder
+    elseif msg_type == 103701 then -- NewOrder
         dissect_new_order(buf, pinfo, tree, offset)
         pinfo.cols.info:set("NewOrder")
-elseif msg_type == 104101 then -- NewOrder
+    elseif msg_type == 104101 then -- NewOrder
         dissect_new_order(buf, pinfo, tree, offset)
         pinfo.cols.info:set("NewOrder")
-elseif msg_type == 104128 then -- NewOrder
+    elseif msg_type == 104128 then -- NewOrder
         dissect_new_order(buf, pinfo, tree, offset)
         pinfo.cols.info:set("NewOrder")
-elseif msg_type == 104701 then -- NewOrder
+    elseif msg_type == 104701 then -- NewOrder
         dissect_new_order(buf, pinfo, tree, offset)
         pinfo.cols.info:set("NewOrder")
-elseif msg_type == 200102 then -- ExecutionConfirm
+    elseif msg_type == 200102 then -- ExecutionConfirm
         dissect_execution_confirm(buf, pinfo, tree, offset)
         pinfo.cols.info:set("ExecutionConfirm")
-elseif msg_type == 200202 then -- ExecutionConfirm
+    elseif msg_type == 200202 then -- ExecutionConfirm
         dissect_execution_confirm(buf, pinfo, tree, offset)
         pinfo.cols.info:set("ExecutionConfirm")
-elseif msg_type == 200302 then -- ExecutionConfirm
+    elseif msg_type == 200302 then -- ExecutionConfirm
         dissect_execution_confirm(buf, pinfo, tree, offset)
         pinfo.cols.info:set("ExecutionConfirm")
-elseif msg_type == 200402 then -- ExecutionConfirm
+    elseif msg_type == 200402 then -- ExecutionConfirm
         dissect_execution_confirm(buf, pinfo, tree, offset)
         pinfo.cols.info:set("ExecutionConfirm")
-elseif msg_type == 200502 then -- ExecutionConfirm
+    elseif msg_type == 200502 then -- ExecutionConfirm
         dissect_execution_confirm(buf, pinfo, tree, offset)
         pinfo.cols.info:set("ExecutionConfirm")
-elseif msg_type == 200602 then -- ExecutionConfirm
+    elseif msg_type == 200602 then -- ExecutionConfirm
         dissect_execution_confirm(buf, pinfo, tree, offset)
         pinfo.cols.info:set("ExecutionConfirm")
-elseif msg_type == 200702 then -- ExecutionConfirm
+    elseif msg_type == 200702 then -- ExecutionConfirm
         dissect_execution_confirm(buf, pinfo, tree, offset)
         pinfo.cols.info:set("ExecutionConfirm")
-elseif msg_type == 201202 then -- ExecutionConfirm
+    elseif msg_type == 201202 then -- ExecutionConfirm
         dissect_execution_confirm(buf, pinfo, tree, offset)
         pinfo.cols.info:set("ExecutionConfirm")
-elseif msg_type == 201302 then -- ExecutionConfirm
+    elseif msg_type == 201302 then -- ExecutionConfirm
         dissect_execution_confirm(buf, pinfo, tree, offset)
         pinfo.cols.info:set("ExecutionConfirm")
-elseif msg_type == 201402 then -- ExecutionConfirm
+    elseif msg_type == 201402 then -- ExecutionConfirm
         dissect_execution_confirm(buf, pinfo, tree, offset)
         pinfo.cols.info:set("ExecutionConfirm")
-elseif msg_type == 201502 then -- ExecutionConfirm
+    elseif msg_type == 201502 then -- ExecutionConfirm
         dissect_execution_confirm(buf, pinfo, tree, offset)
         pinfo.cols.info:set("ExecutionConfirm")
-elseif msg_type == 201602 then -- ExecutionConfirm
+    elseif msg_type == 201602 then -- ExecutionConfirm
         dissect_execution_confirm(buf, pinfo, tree, offset)
         pinfo.cols.info:set("ExecutionConfirm")
-elseif msg_type == 201702 then -- ExecutionConfirm
+    elseif msg_type == 201702 then -- ExecutionConfirm
         dissect_execution_confirm(buf, pinfo, tree, offset)
         pinfo.cols.info:set("ExecutionConfirm")
-elseif msg_type == 201802 then -- ExecutionConfirm
+    elseif msg_type == 201802 then -- ExecutionConfirm
         dissect_execution_confirm(buf, pinfo, tree, offset)
         pinfo.cols.info:set("ExecutionConfirm")
-elseif msg_type == 201902 then -- ExecutionConfirm
+    elseif msg_type == 201902 then -- ExecutionConfirm
         dissect_execution_confirm(buf, pinfo, tree, offset)
         pinfo.cols.info:set("ExecutionConfirm")
-elseif msg_type == 202202 then -- ExecutionConfirm
+    elseif msg_type == 202202 then -- ExecutionConfirm
         dissect_execution_confirm(buf, pinfo, tree, offset)
         pinfo.cols.info:set("ExecutionConfirm")
-elseif msg_type == 202302 then -- ExecutionConfirm
+    elseif msg_type == 202302 then -- ExecutionConfirm
         dissect_execution_confirm(buf, pinfo, tree, offset)
         pinfo.cols.info:set("ExecutionConfirm")
-elseif msg_type == 202702 then -- ExecutionConfirm
+    elseif msg_type == 202702 then -- ExecutionConfirm
         dissect_execution_confirm(buf, pinfo, tree, offset)
         pinfo.cols.info:set("ExecutionConfirm")
-elseif msg_type == 202702 then -- ExecutionConfirm
+    elseif msg_type == 202702 then -- ExecutionConfirm
         dissect_execution_confirm(buf, pinfo, tree, offset)
         pinfo.cols.info:set("ExecutionConfirm")
-elseif msg_type == 202802 then -- ExecutionConfirm
+    elseif msg_type == 202802 then -- ExecutionConfirm
         dissect_execution_confirm(buf, pinfo, tree, offset)
         pinfo.cols.info:set("ExecutionConfirm")
-elseif msg_type == 202802 then -- ExecutionConfirm
+    elseif msg_type == 202802 then -- ExecutionConfirm
         dissect_execution_confirm(buf, pinfo, tree, offset)
         pinfo.cols.info:set("ExecutionConfirm")
-elseif msg_type == 202902 then -- ExecutionConfirm
+    elseif msg_type == 202902 then -- ExecutionConfirm
         dissect_execution_confirm(buf, pinfo, tree, offset)
         pinfo.cols.info:set("ExecutionConfirm")
-elseif msg_type == 202902 then -- ExecutionConfirm
+    elseif msg_type == 202902 then -- ExecutionConfirm
         dissect_execution_confirm(buf, pinfo, tree, offset)
         pinfo.cols.info:set("ExecutionConfirm")
-elseif msg_type == 203102 then -- ExecutionConfirm
+    elseif msg_type == 203102 then -- ExecutionConfirm
         dissect_execution_confirm(buf, pinfo, tree, offset)
         pinfo.cols.info:set("ExecutionConfirm")
-elseif msg_type == 203102 then -- ExecutionConfirm
+    elseif msg_type == 203102 then -- ExecutionConfirm
         dissect_execution_confirm(buf, pinfo, tree, offset)
         pinfo.cols.info:set("ExecutionConfirm")
-elseif msg_type == 206302 then -- ExecutionConfirm
+    elseif msg_type == 206302 then -- ExecutionConfirm
         dissect_execution_confirm(buf, pinfo, tree, offset)
         pinfo.cols.info:set("ExecutionConfirm")
-elseif msg_type == 203302 then -- ExecutionConfirm
+    elseif msg_type == 203302 then -- ExecutionConfirm
         dissect_execution_confirm(buf, pinfo, tree, offset)
         pinfo.cols.info:set("ExecutionConfirm")
-elseif msg_type == 203302 then -- ExecutionConfirm
+    elseif msg_type == 203302 then -- ExecutionConfirm
         dissect_execution_confirm(buf, pinfo, tree, offset)
         pinfo.cols.info:set("ExecutionConfirm")
-elseif msg_type == 203502 then -- ExecutionConfirm
+    elseif msg_type == 203502 then -- ExecutionConfirm
         dissect_execution_confirm(buf, pinfo, tree, offset)
         pinfo.cols.info:set("ExecutionConfirm")
-elseif msg_type == 203502 then -- ExecutionConfirm
+    elseif msg_type == 203502 then -- ExecutionConfirm
         dissect_execution_confirm(buf, pinfo, tree, offset)
         pinfo.cols.info:set("ExecutionConfirm")
-elseif msg_type == 203702 then -- ExecutionConfirm
+    elseif msg_type == 203702 then -- ExecutionConfirm
         dissect_execution_confirm(buf, pinfo, tree, offset)
         pinfo.cols.info:set("ExecutionConfirm")
-elseif msg_type == 204102 then -- ExecutionConfirm
+    elseif msg_type == 204102 then -- ExecutionConfirm
         dissect_execution_confirm(buf, pinfo, tree, offset)
         pinfo.cols.info:set("ExecutionConfirm")
-elseif msg_type == 204129 then -- ExecutionConfirm
+    elseif msg_type == 204129 then -- ExecutionConfirm
         dissect_execution_confirm(buf, pinfo, tree, offset)
         pinfo.cols.info:set("ExecutionConfirm")
-elseif msg_type == 204702 then -- ExecutionConfirm
+    elseif msg_type == 204702 then -- ExecutionConfirm
         dissect_execution_confirm(buf, pinfo, tree, offset)
         pinfo.cols.info:set("ExecutionConfirm")
-elseif msg_type == 200115 then -- ExecutionReport
+    elseif msg_type == 200115 then -- ExecutionReport
         dissect_execution_report(buf, pinfo, tree, offset)
         pinfo.cols.info:set("ExecutionReport")
-elseif msg_type == 200215 then -- ExecutionReport
+    elseif msg_type == 200215 then -- ExecutionReport
         dissect_execution_report(buf, pinfo, tree, offset)
         pinfo.cols.info:set("ExecutionReport")
-elseif msg_type == 200315 then -- ExecutionReport
+    elseif msg_type == 200315 then -- ExecutionReport
         dissect_execution_report(buf, pinfo, tree, offset)
         pinfo.cols.info:set("ExecutionReport")
-elseif msg_type == 200415 then -- ExecutionReport
+    elseif msg_type == 200415 then -- ExecutionReport
         dissect_execution_report(buf, pinfo, tree, offset)
         pinfo.cols.info:set("ExecutionReport")
-elseif msg_type == 200515 then -- ExecutionReport
+    elseif msg_type == 200515 then -- ExecutionReport
         dissect_execution_report(buf, pinfo, tree, offset)
         pinfo.cols.info:set("ExecutionReport")
-elseif msg_type == 200615 then -- ExecutionReport
+    elseif msg_type == 200615 then -- ExecutionReport
         dissect_execution_report(buf, pinfo, tree, offset)
         pinfo.cols.info:set("ExecutionReport")
-elseif msg_type == 200715 then -- ExecutionReport
+    elseif msg_type == 200715 then -- ExecutionReport
         dissect_execution_report(buf, pinfo, tree, offset)
         pinfo.cols.info:set("ExecutionReport")
-elseif msg_type == 206315 then -- ExecutionReport
+    elseif msg_type == 206315 then -- ExecutionReport
         dissect_execution_report(buf, pinfo, tree, offset)
         pinfo.cols.info:set("ExecutionReport")
-elseif msg_type == 203715 then -- ExecutionReport
+    elseif msg_type == 203715 then -- ExecutionReport
         dissect_execution_report(buf, pinfo, tree, offset)
         pinfo.cols.info:set("ExecutionReport")
-elseif msg_type == 204115 then -- ExecutionReport
+    elseif msg_type == 204115 then -- ExecutionReport
         dissect_execution_report(buf, pinfo, tree, offset)
         pinfo.cols.info:set("ExecutionReport")
-elseif msg_type == 204130 then -- ExecutionReport
+    elseif msg_type == 204130 then -- ExecutionReport
         dissect_execution_report(buf, pinfo, tree, offset)
         pinfo.cols.info:set("ExecutionReport")
-elseif msg_type == 190007 then -- OrderCancelRequest
+    elseif msg_type == 190007 then -- OrderCancelRequest
         dissect_order_cancel_request(buf, pinfo, tree, offset)
         pinfo.cols.info:set("OrderCancelRequest")
-elseif msg_type == 290008 then -- CancelReject
+    elseif msg_type == 290008 then -- CancelReject
         dissect_cancel_reject(buf, pinfo, tree, offset)
         pinfo.cols.info:set("CancelReject")
     end
