@@ -4,7 +4,7 @@ options {
     LittileEndian = true;
 }
 
-packet SampleBinary {
+root packet SampleBinary {
     uint16 MsgType `消息类型`,
     u16 BodyLength `消息体长度`,
     match MsgType {
