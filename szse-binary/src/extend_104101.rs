@@ -56,7 +56,6 @@ mod extend_104101_tests {
         let mut bytes = buf.freeze();
 
         let decoded = Extend104101::decode(&mut bytes).unwrap();
-
         assert_eq!(original, decoded);
     }
 }

@@ -34,7 +34,6 @@ mod extend_200315_tests {
         let mut bytes = buf.freeze();
 
         let decoded = Extend200315::decode(&mut bytes).unwrap();
-
         assert_eq!(original, decoded);
     }
 }

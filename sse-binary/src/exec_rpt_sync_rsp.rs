@@ -61,7 +61,6 @@ mod sub_exec_rpt_sync_rsp_tests {
         let mut bytes = buf.freeze();
 
         let decoded = SubExecRptSyncRsp::decode(&mut bytes).unwrap();
-
         assert_eq!(original, decoded);
     }
 }
@@ -100,7 +99,6 @@ mod exec_rpt_sync_rsp_tests {
         let mut bytes = buf.freeze();
 
         let decoded = ExecRptSyncRsp::decode(&mut bytes).unwrap();
-
         assert_eq!(original, decoded);
     }
 }

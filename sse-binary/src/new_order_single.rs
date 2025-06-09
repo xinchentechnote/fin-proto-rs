@@ -111,7 +111,6 @@ mod new_order_single_tests {
         let mut bytes = buf.freeze();
 
         let decoded = NewOrderSingle::decode(&mut bytes).unwrap();
-
         assert_eq!(original, decoded);
     }
 }

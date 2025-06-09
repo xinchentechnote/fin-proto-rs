@@ -41,7 +41,6 @@ mod partition_report_tests {
         let mut bytes = buf.freeze();
 
         let decoded = PartitionReport::decode(&mut bytes).unwrap();
-
         assert_eq!(original, decoded);
     }
 }

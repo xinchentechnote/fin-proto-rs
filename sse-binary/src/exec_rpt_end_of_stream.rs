@@ -46,7 +46,6 @@ mod exec_rpt_end_of_stream_tests {
         let mut bytes = buf.freeze();
 
         let decoded = ExecRptEndOfStream::decode(&mut bytes).unwrap();
-
         assert_eq!(original, decoded);
     }
 }

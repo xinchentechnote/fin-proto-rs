@@ -43,7 +43,6 @@ mod report_synchronization_tests {
         let mut bytes = buf.freeze();
 
         let decoded = ReportSynchronization::decode(&mut bytes).unwrap();
-
         assert_eq!(original, decoded);
     }
 }

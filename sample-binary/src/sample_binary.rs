@@ -77,7 +77,6 @@ mod sample_binary_tests {
         let mut bytes = buf.freeze();
 
         let decoded = SampleBinary::decode(&mut bytes).unwrap();
-
         assert_eq!(original, decoded);
     }
 }

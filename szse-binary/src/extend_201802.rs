@@ -34,7 +34,6 @@ mod extend_201802_tests {
         let mut bytes = buf.freeze();
 
         let decoded = Extend201802::decode(&mut bytes).unwrap();
-
         assert_eq!(original, decoded);
     }
 }

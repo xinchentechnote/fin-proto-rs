@@ -46,7 +46,6 @@ mod sub_exec_rpt_sync_tests {
         let mut bytes = buf.freeze();
 
         let decoded = SubExecRptSync::decode(&mut bytes).unwrap();
-
         assert_eq!(original, decoded);
     }
 }
@@ -83,7 +82,6 @@ mod exec_rpt_sync_tests {
         let mut bytes = buf.freeze();
 
         let decoded = ExecRptSync::decode(&mut bytes).unwrap();
-
         assert_eq!(original, decoded);
     }
 }

@@ -215,7 +215,6 @@ mod new_order_tests {
         let mut bytes = buf.freeze();
 
         let decoded = NewOrder::decode(&mut bytes).unwrap();
-
         assert_eq!(original, decoded);
     }
 }
