@@ -15,13 +15,13 @@ impl BinaryCodec for PlatformInfo {
     fn encode(&self, buf: &mut BytesMut) {
         buf.put_u16(self.platform_id);
         buf.put_u32(self.no_partitions);
-        put_list::<PlatformPartition, u16>(buf, &self.platform_partition);
+        put_object_list::<PlatformPartition, u32>(buf, &self.platform_partition);
     }
 
     fn decode(buf: &mut Bytes) -> Option<PlatformInfo> {
         let platform_id = buf.get_u16();
         let no_partitions = buf.get_u32();
-        let platform_partition = get_list::<PlatformPartition, u16>(buf)?;
+        let platform_partition = get_object_list::<PlatformPartition, u32>(buf)?;
         Some(Self {
             platform_id,
             no_partitions,

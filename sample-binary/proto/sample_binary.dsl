@@ -1,7 +1,7 @@
 options {
     StringPreFixLenType = u16;
 	RepeatPreFixSizeType = u16;
-    LittileEndian = true;
+    LittleEndian = true;
 }
 
 root packet SampleBinary {

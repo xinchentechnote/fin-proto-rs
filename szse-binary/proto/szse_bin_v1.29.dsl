@@ -3,7 +3,7 @@
 options {
 	StringPreFixLenType = u32;
 	RepeatPreFixSizeType = u32;
-  LittileEndian = false;
+  LittleEndian = false;
 }
 
 MetaData DataType {

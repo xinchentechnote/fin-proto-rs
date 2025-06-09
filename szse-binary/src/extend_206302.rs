@@ -23,7 +23,7 @@ impl BinaryCodec for Extend206302 {
         put_char(buf, self.time_in_force);
         put_char(buf, self.lot_type);
         buf.put_u32(self.imc_reject_text_len);
-        put_string(buf, &self.imc_reject_text);
+        put_string::<u32>(buf, &self.imc_reject_text);
     }
 
     fn decode(buf: &mut Bytes) -> Option<Extend206302> {
@@ -34,7 +34,7 @@ impl BinaryCodec for Extend206302 {
         let time_in_force = get_char(buf)?;
         let lot_type = get_char(buf)?;
         let imc_reject_text_len = buf.get_u32();
-        let imc_reject_text = get_string(buf)?;
+        let imc_reject_text = get_string::<u32>(buf)?;
         Some(Self {
             reject_text,
             stop_px,

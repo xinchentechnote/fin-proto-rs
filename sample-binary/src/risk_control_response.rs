@@ -11,15 +11,15 @@ pub struct RiskControlResponse {
 
 impl BinaryCodec for RiskControlResponse {
     fn encode(&self, buf: &mut BytesMut) {
-        put_string(buf, &self.unique_order_id);
-        buf.put_i32(self.status);
-        put_string(buf, &self.msg);
+        put_string_le::<u16>(buf, &self.unique_order_id);
+        buf.put_i32_le(self.status);
+        put_string_le::<u16>(buf, &self.msg);
     }
 
     fn decode(buf: &mut Bytes) -> Option<RiskControlResponse> {
-        let unique_order_id = get_string(buf)?;
-        let status = buf.get_i32();
-        let msg = get_string(buf)?;
+        let unique_order_id = get_string_le::<u16>(buf)?;
+        let status = buf.get_i32_le();
+        let msg = get_string_le::<u16>(buf)?;
         Some(Self {
             unique_order_id,
             status,
