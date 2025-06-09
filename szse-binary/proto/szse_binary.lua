@@ -1197,9 +1197,9 @@ local function dissect_extend_206302(buf, pinfo, tree, offset)
     offset = offset + 1
     subtree:add(fields.extend_206302_imc_reject_text_len, buf(offset, 4))
     offset = offset + 4
-    local extend_206302_imc_reject_text_len = buf(offset, 2):uint()
-    subtree:add("IMCRejectText Len: ".. extend_206302_imc_reject_text_len, buf(offset, 2))
-    offset = offset + 2
+    local extend_206302_imc_reject_text_len = buf(offset, 4):uint()
+    subtree:add("IMCRejectText Len: ".. extend_206302_imc_reject_text_len, buf(offset, 4))
+    offset = offset + 4
     subtree:add(fields.extend_206302_imc_reject_text, buf(offset, extend_206302_imc_reject_text_len))
     offset = offset + extend_206302_imc_reject_text_len
     return offset
@@ -1665,9 +1665,9 @@ local function dissect_report_synchronization(buf, pinfo, tree, offset)
     local subtree = tree:add(szse_binary_proto, buf(offset, 1), "ReportSynchronization")
     subtree:add(fields.report_synchronization_no_partitions, buf(offset, 4))
     offset = offset + 4
-    local report_synchronization_partition_report_size = buf(offset, 2):uint()
-    subtree:add("PartitionReport Size: ".. report_synchronization_partition_report_size, buf(offset, 2))
-    offset = offset + 2
+    local report_synchronization_partition_report_size = buf(offset, 4):uint()
+    subtree:add("PartitionReport Size: ".. report_synchronization_partition_report_size, buf(offset, 4))
+    offset = offset + 4
     for i=1,report_synchronization_partition_report_size do
         -- unsupported type: PartitionReport
 
@@ -1715,9 +1715,9 @@ local function dissect_platform_info(buf, pinfo, tree, offset)
     offset = offset + 2
     subtree:add(fields.platform_info_no_partitions, buf(offset, 4))
     offset = offset + 4
-    local platform_info_platform_partition_size = buf(offset, 2):uint()
-    subtree:add("PlatformPartition Size: ".. platform_info_platform_partition_size, buf(offset, 2))
-    offset = offset + 2
+    local platform_info_platform_partition_size = buf(offset, 4):uint()
+    subtree:add("PlatformPartition Size: ".. platform_info_platform_partition_size, buf(offset, 4))
+    offset = offset + 4
     for i=1,platform_info_platform_partition_size do
         -- unsupported type: PlatformPartition
 

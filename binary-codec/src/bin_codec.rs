@@ -5,168 +5,151 @@ pub trait BinaryCodec: Sized {
     fn decode(buf: &mut Bytes) -> Option<Self>;
 }
 
+pub trait BasicTypeCodec: Sized {
+    fn encode(&self, buf: &mut BytesMut, little_endian: bool);
+    fn decode(buf: &mut Bytes, little_endian: bool) -> Option<Self>;
+}
+
 pub trait LengthPrefix: Sized {
-    fn read(buf: &mut Bytes) -> Option<usize>;
-    fn write(len: usize, buf: &mut BytesMut);
+    fn read(buf: &mut Bytes, little_endian: bool) -> Option<usize>;
+    fn write(len: usize, buf: &mut BytesMut, little_endian: bool);
 }
 
 impl LengthPrefix for u8 {
-    fn read(buf: &mut Bytes) -> Option<usize> {
+    fn read(buf: &mut Bytes, _little_endian: bool) -> Option<usize> {
         if buf.remaining() >= 1 {
             Some(buf.get_u8() as usize)
         } else {
             None
         }
     }
-    fn write(len: usize, buf: &mut BytesMut) {
+    fn write(len: usize, buf: &mut BytesMut, _little_endian: bool) {
         buf.put_u8(len as u8);
     }
 }
 
 impl LengthPrefix for u16 {
-    fn read(buf: &mut Bytes) -> Option<usize> {
+    fn read(buf: &mut Bytes, little_endian: bool) -> Option<usize> {
         if buf.remaining() >= 2 {
-            Some(buf.get_u16() as usize)
+            if little_endian {
+                Some(buf.get_u16_le() as usize)
+            } else {
+                Some(buf.get_u16() as usize)
+            }
         } else {
             None
         }
     }
-    fn write(len: usize, buf: &mut BytesMut) {
-        buf.put_u16(len as u16);
+    fn write(len: usize, buf: &mut BytesMut, little_endian: bool) {
+        if little_endian {
+            buf.put_u16_le(len as u16);
+        } else {
+            buf.put_u16(len as u16);
+        }
     }
 }
 
 impl LengthPrefix for u32 {
-    fn read(buf: &mut Bytes) -> Option<usize> {
+    fn read(buf: &mut Bytes, little_endian: bool) -> Option<usize> {
         if buf.remaining() >= 4 {
-            Some(buf.get_u32() as usize)
+            if little_endian {
+                Some(buf.get_u32_le() as usize)
+            } else {
+                Some(buf.get_u32() as usize)
+            }
         } else {
             None
         }
     }
-    fn write(len: usize, buf: &mut BytesMut) {
-        buf.put_u32(len as u32);
-    }
-}
-
-impl BinaryCodec for u8 {
-    fn encode(&self, buf: &mut BytesMut) {
-        buf.put_u8(*self);
-    }
-    fn decode(buf: &mut Bytes) -> Option<Self> {
-        if buf.remaining() >= 1 {
-            Some(buf.get_u8())
+    fn write(len: usize, buf: &mut BytesMut, little_endian: bool) {
+        if little_endian {
+            buf.put_u32_le(len as u32);
         } else {
-            None
+            buf.put_u32(len as u32);
         }
     }
 }
 
-impl BinaryCodec for u16 {
-    fn encode(&self, buf: &mut BytesMut) {
-        buf.put_u16(*self);
-    }
-    fn decode(buf: &mut Bytes) -> Option<Self> {
-        if buf.remaining() >= 2 {
-            Some(buf.get_u16())
-        } else {
-            None
+// Implement BasicTypeCodec for numeric types with endianness support
+macro_rules! impl_basic_type_codec_numeric {
+    ($type:ty, $put:ident, $put_le:ident, $get:ident, $get_le:ident) => {
+        impl BasicTypeCodec for $type {
+            fn encode(&self, buf: &mut BytesMut, little_endian: bool) {
+                if little_endian {
+                    buf.$put_le(*self);
+                } else {
+                    buf.$put(*self);
+                }
+            }
+            fn decode(buf: &mut Bytes, little_endian: bool) -> Option<Self> {
+                if buf.remaining() >= std::mem::size_of::<$type>() {
+                    if little_endian {
+                        Some(buf.$get_le())
+                    } else {
+                        Some(buf.$get())
+                    }
+                } else {
+                    None
+                }
+            }
         }
-    }
-}
-impl BinaryCodec for u32 {
-    fn encode(&self, buf: &mut BytesMut) {
-        buf.put_u32(*self);
-    }
-    fn decode(buf: &mut Bytes) -> Option<Self> {
-        if buf.remaining() >= 4 {
-            Some(buf.get_u32())
-        } else {
-            None
-        }
-    }
-}
-impl BinaryCodec for u64 {
-    fn encode(&self, buf: &mut BytesMut) {
-        buf.put_u64(*self);
-    }
-    fn decode(buf: &mut Bytes) -> Option<Self> {
-        if buf.remaining() >= 8 {
-            Some(buf.get_u64())
-        } else {
-            None
-        }
-    }
+    };
 }
 
-impl BinaryCodec for i8 {
-    fn encode(&self, buf: &mut BytesMut) {
-        buf.put_i8(*self);
-    }
-    fn decode(buf: &mut Bytes) -> Option<Self> {
-        if buf.remaining() >= 1 {
-            Some(buf.get_i8())
-        } else {
-            None
-        }
-    }
-}
-
-impl BinaryCodec for i16 {
-    fn encode(&self, buf: &mut BytesMut) {
-        buf.put_i16(*self);
-    }
-    fn decode(buf: &mut Bytes) -> Option<Self> {
-        if buf.remaining() >= 2 {
-            Some(buf.get_i16())
-        } else {
-            None
-        }
-    }
-}
-
-impl BinaryCodec for i32 {
-    fn encode(&self, buf: &mut BytesMut) {
-        buf.put_i32(*self);
-    }
-    fn decode(buf: &mut Bytes) -> Option<Self> {
-        if buf.remaining() >= 4 {
-            Some(buf.get_i32())
-        } else {
-            None
-        }
-    }
-}
-
-impl BinaryCodec for i64 {
-    fn encode(&self, buf: &mut BytesMut) {
-        buf.put_i64(*self);
-    }
-    fn decode(buf: &mut Bytes) -> Option<Self> {
-        if buf.remaining() >= 8 {
-            Some(buf.get_i64())
-        } else {
-            None
-        }
-    }
-}
-
-impl BinaryCodec for String {
-    fn encode(&self, buf: &mut BytesMut) {
-        put_string(buf, self);
-    }
-
-    fn decode(buf: &mut Bytes) -> Option<Self> {
-        get_string(buf)
-    }
-}
+impl_basic_type_codec_numeric!(u8, put_u8, put_u8, get_u8, get_u8);
+impl_basic_type_codec_numeric!(u16, put_u16, put_u16_le, get_u16, get_u16_le);
+impl_basic_type_codec_numeric!(u32, put_u32, put_u32_le, get_u32, get_u32_le);
+impl_basic_type_codec_numeric!(u64, put_u64, put_u64_le, get_u64, get_u64_le);
+impl_basic_type_codec_numeric!(i8, put_i8, put_i8, get_i8, get_i8);
+impl_basic_type_codec_numeric!(i16, put_i16, put_i16_le, get_i16, get_i16_le);
+impl_basic_type_codec_numeric!(i32, put_i32, put_i32_le, get_i32, get_i32_le);
+impl_basic_type_codec_numeric!(i64, put_i64, put_i64_le, get_i64, get_i64_le);
 
 pub fn get_list<T, L>(buf: &mut Bytes) -> Option<Vec<T>>
+where
+    T: BasicTypeCodec,
+    L: LengthPrefix,
+{
+    let len = L::read(buf, false)?;
+    let mut result = Vec::with_capacity(len);
+    for _ in 0..len {
+        result.push(T::decode(buf, false)?);
+    }
+    Some(result)
+}
+
+pub fn get_list_le<T, L>(buf: &mut Bytes) -> Option<Vec<T>>
+where
+    T: BasicTypeCodec,
+    L: LengthPrefix,
+{
+    let len = L::read(buf, true)?;
+    let mut result = Vec::with_capacity(len);
+    for _ in 0..len {
+        result.push(T::decode(buf, true)?);
+    }
+    Some(result)
+}
+
+pub fn get_object_list<T, L>(buf: &mut Bytes) -> Option<Vec<T>>
 where
     T: BinaryCodec,
     L: LengthPrefix,
 {
-    let len = L::read(buf)?;
+    let len = L::read(buf, false)?;
+    let mut result = Vec::with_capacity(len);
+    for _ in 0..len {
+        result.push(T::decode(buf)?);
+    }
+    Some(result)
+}
+
+pub fn get_object_list_le<T, L>(buf: &mut Bytes) -> Option<Vec<T>>
+where
+    T: BinaryCodec,
+    L: LengthPrefix,
+{
+    let len = L::read(buf, true)?;
     let mut result = Vec::with_capacity(len);
     for _ in 0..len {
         result.push(T::decode(buf)?);
@@ -179,12 +162,31 @@ where
     L1: LengthPrefix,
     L2: LengthPrefix,
 {
-    let len = L1::read(buf)?;
+    let len = L1::read(buf, false)?;
     let mut result = Vec::with_capacity(len);
     for _ in 0..len {
-        let str_len = L2::read(buf)?;
+        let str_len = L2::read(buf, false)?;
         if buf.remaining() < str_len {
-            return None; // Not enough bytes for the string
+            return None;
+        }
+        let bytes = buf.copy_to_bytes(str_len);
+        let s = String::from_utf8(bytes.to_vec()).ok()?;
+        result.push(s);
+    }
+    Some(result)
+}
+
+pub fn get_string_list_le<L1, L2>(buf: &mut Bytes) -> Option<Vec<String>>
+where
+    L1: LengthPrefix,
+    L2: LengthPrefix,
+{
+    let len = L1::read(buf, true)?;
+    let mut result = Vec::with_capacity(len);
+    for _ in 0..len {
+        let str_len = L2::read(buf, true)?;
+        if buf.remaining() < str_len {
+            return None;
         }
         let bytes = buf.copy_to_bytes(str_len);
         let s = String::from_utf8(bytes.to_vec()).ok()?;
@@ -197,11 +199,28 @@ pub fn get_fixed_string_list<L>(buf: &mut Bytes, fixed_length: usize) -> Option<
 where
     L: LengthPrefix,
 {
-    let len = L::read(buf)?;
+    let len = L::read(buf, false)?;
     let mut result = Vec::with_capacity(len);
     for _ in 0..len {
         if buf.remaining() < fixed_length {
-            return None; // Not enough bytes for the fixed-length string
+            return None;
+        }
+        let bytes = buf.copy_to_bytes(fixed_length);
+        let s = String::from_utf8(bytes.to_vec()).ok()?;
+        result.push(s.trim_end_matches('\0').to_string());
+    }
+    Some(result)
+}
+
+pub fn get_fixed_string_list_le<L>(buf: &mut Bytes, fixed_length: usize) -> Option<Vec<String>>
+where
+    L: LengthPrefix,
+{
+    let len = L::read(buf, true)?;
+    let mut result = Vec::with_capacity(len);
+    for _ in 0..len {
+        if buf.remaining() < fixed_length {
+            return None;
         }
         let bytes = buf.copy_to_bytes(fixed_length);
         let s = String::from_utf8(bytes.to_vec()).ok()?;
@@ -215,10 +234,23 @@ where
     L1: LengthPrefix,
     L2: LengthPrefix,
 {
-    L1::write(items.len(), buf);
+    L1::write(items.len(), buf, false);
     for item in items {
         let bytes = item.as_bytes();
-        L2::write(bytes.len(), buf);
+        L2::write(bytes.len(), buf, false);
+        buf.extend_from_slice(bytes);
+    }
+}
+
+pub fn put_string_list_le<L1, L2>(buf: &mut BytesMut, items: &[String])
+where
+    L1: LengthPrefix,
+    L2: LengthPrefix,
+{
+    L1::write(items.len(), buf, true);
+    for item in items {
+        let bytes = item.as_bytes();
+        L2::write(bytes.len(), buf, true);
         buf.extend_from_slice(bytes);
     }
 }
@@ -227,7 +259,22 @@ pub fn put_fixed_string_list<L>(buf: &mut BytesMut, items: &[String], fixed_leng
 where
     L: LengthPrefix,
 {
-    L::write(items.len(), buf);
+    L::write(items.len(), buf, false);
+    for item in items {
+        let bytes = item.as_bytes();
+        let len = bytes.len().min(fixed_length);
+        buf.extend_from_slice(&bytes[..len]);
+        if len < fixed_length {
+            buf.extend_from_slice(&vec![0; fixed_length - len]);
+        }
+    }
+}
+
+pub fn put_fixed_string_list_le<L>(buf: &mut BytesMut, items: &[String], fixed_length: usize)
+where
+    L: LengthPrefix,
+{
+    L::write(items.len(), buf, true);
     for item in items {
         let bytes = item.as_bytes();
         let len = bytes.len().min(fixed_length);
@@ -240,22 +287,86 @@ where
 
 pub fn put_list<T, L>(buf: &mut BytesMut, items: &[T])
 where
+    T: BasicTypeCodec,
+    L: LengthPrefix,
+{
+    L::write(items.len(), buf, false);
+    for item in items {
+        item.encode(buf, false);
+    }
+}
+
+pub fn put_list_le<T, L>(buf: &mut BytesMut, items: &[T])
+where
+    T: BasicTypeCodec,
+    L: LengthPrefix,
+{
+    L::write(items.len(), buf, true);
+    for item in items {
+        item.encode(buf, true);
+    }
+}
+
+pub fn put_object_list<T, L>(buf: &mut BytesMut, items: &[T])
+where
     T: BinaryCodec,
     L: LengthPrefix,
 {
-    L::write(items.len(), buf);
+    L::write(items.len(), buf, false);
     for item in items {
         item.encode(buf);
     }
 }
 
-// Utility Functions
-pub fn put_string(buf: &mut BytesMut, s: &str) {
-    buf.put_u16(s.len() as u16);
+pub fn put_object_list_le<T, L>(buf: &mut BytesMut, items: &[T])
+where
+    T: BinaryCodec,
+    L: LengthPrefix,
+{
+    L::write(items.len(), buf, true);
+    for item in items {
+        item.encode(buf);
+    }
+}
+
+pub fn put_string<L>(buf: &mut BytesMut, s: &str)
+where
+    L: LengthPrefix,
+{
+    L::write(s.len(), buf, false);
     buf.extend_from_slice(s.as_bytes());
 }
 
-// put_char_array writes a fixed-length string to the buffer, padding with zeros if necessary.
+pub fn put_string_le<L>(buf: &mut BytesMut, s: &str)
+where
+    L: LengthPrefix,
+{
+    L::write(s.len(), buf, true);
+    buf.extend_from_slice(s.as_bytes());
+}
+
+pub fn get_string<L>(buf: &mut Bytes) -> Option<String>
+where
+    L: LengthPrefix,
+{
+    let len = L::read(buf, false)?;
+    if buf.remaining() < len {
+        return None;
+    }
+    String::from_utf8(buf.copy_to_bytes(len).to_vec()).ok()
+}
+
+pub fn get_string_le<L>(buf: &mut Bytes) -> Option<String>
+where
+    L: LengthPrefix,
+{
+    let len = L::read(buf, true)?;
+    if buf.remaining() < len {
+        return None;
+    }
+    String::from_utf8(buf.copy_to_bytes(len).to_vec()).ok()
+}
+
 pub fn put_char_array(buf: &mut BytesMut, s: &str, fixed_length: usize) {
     let bytes = s.as_bytes();
     let len = bytes.len().min(fixed_length);
@@ -265,25 +376,13 @@ pub fn put_char_array(buf: &mut BytesMut, s: &str, fixed_length: usize) {
     }
 }
 
-// get_char_array retrieves a fixed-length string from the buffer.
-pub fn get_char_array(buf: &mut Bytes, fixed_length: usize) -> Option<String> {
-    if buf.remaining() < fixed_length {
-        return None;
-    }
-    let bytes = buf.copy_to_bytes(fixed_length);
-    let s = String::from_utf8(bytes.to_vec()).ok()?;
-    Some(s.trim_end_matches('\0').to_string())
-}
-
-pub fn get_string(buf: &mut Bytes) -> Option<String> {
-    if buf.remaining() < 2 {
-        return None;
-    }
-    let len = buf.get_u16() as usize;
+pub fn get_char_array(buf: &mut Bytes, len: usize) -> Option<String> {
     if buf.remaining() < len {
         return None;
     }
-    String::from_utf8(buf.copy_to_bytes(len).to_vec()).ok()
+    let bytes = buf.copy_to_bytes(len);
+    let s = String::from_utf8(bytes.to_vec()).ok()?;
+    Some(s.trim_end_matches('\0').to_string())
 }
 
 pub fn put_char(buf: &mut BytesMut, c: char) {
@@ -306,10 +405,10 @@ mod tests {
     fn test_put_get_string() {
         let mut buf = BytesMut::new();
         let original = "Hello, Rust!";
-        put_string(&mut buf, original);
+        put_string::<u8>(&mut buf, original);
 
         let mut bytes = buf.freeze();
-        let decoded = get_string(&mut bytes);
+        let decoded = get_string::<u8>(&mut bytes);
 
         assert_eq!(decoded, Some(original.to_string()));
     }
@@ -317,13 +416,13 @@ mod tests {
     #[test]
     fn test_get_string_insufficient_length() {
         let mut buf = Bytes::from_static(&[0x00]); // less than 2 bytes for length
-        assert_eq!(get_string(&mut buf), None);
+        assert_eq!(get_string::<u16>(&mut buf), None);
     }
 
     #[test]
     fn test_get_string_incomplete_string() {
         let mut buf = Bytes::from_static(&[0x00, 0x05, b'H', b'e']); // len = 5, but only 2 bytes
-        assert_eq!(get_string(&mut buf), None);
+        assert_eq!(get_string::<u16>(&mut buf), None);
     }
 
     #[test]
@@ -353,11 +452,11 @@ mod tests {
 
         impl BinaryCodec for MyMessage {
             fn encode(&self, buf: &mut BytesMut) {
-                put_string(buf, &self.msg);
+                put_string::<u32>(buf, &self.msg);
             }
 
             fn decode(buf: &mut Bytes) -> Option<Self> {
-                let msg = get_string(buf)?;
+                let msg = get_string::<u32>(buf)?;
                 Some(MyMessage { msg })
             }
         }

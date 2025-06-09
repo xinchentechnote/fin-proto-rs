@@ -20,8 +20,8 @@ pub struct SampleBinary {
 
 impl BinaryCodec for SampleBinary {
     fn encode(&self, buf: &mut BytesMut) {
-        buf.put_u16(self.msg_type);
-        buf.put_u16(self.body_length);
+        buf.put_u16_le(self.msg_type);
+        buf.put_u16_le(self.body_length);
         match &self.msg_type_body {
             SampleBinaryMsgTypeEnum::RiskControlRequest(msg) => msg.encode(buf),
             SampleBinaryMsgTypeEnum::RiskControlResponse(msg) => msg.encode(buf),
@@ -29,8 +29,8 @@ impl BinaryCodec for SampleBinary {
     }
 
     fn decode(buf: &mut Bytes) -> Option<SampleBinary> {
-        let msg_type = buf.get_u16();
-        let body_length = buf.get_u16();
+        let msg_type = buf.get_u16_le();
+        let body_length = buf.get_u16_le();
         let msg_type_body = match msg_type {
             4 => SampleBinaryMsgTypeEnum::RiskControlRequest(RiskControlRequest::decode(buf)?),
             5 => SampleBinaryMsgTypeEnum::RiskControlResponse(RiskControlResponse::decode(buf)?),

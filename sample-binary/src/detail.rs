@@ -10,13 +10,13 @@ pub struct Detail {
 
 impl BinaryCodec for Detail {
     fn encode(&self, buf: &mut BytesMut) {
-        put_string(buf, &self.rule_name);
-        buf.put_u16(self.code);
+        put_string_le::<u16>(buf, &self.rule_name);
+        buf.put_u16_le(self.code);
     }
 
     fn decode(buf: &mut Bytes) -> Option<Detail> {
-        let rule_name = get_string(buf)?;
-        let code = buf.get_u16();
+        let rule_name = get_string_le::<u16>(buf)?;
+        let code = buf.get_u16_le();
         Some(Self { rule_name, code })
     }
 }

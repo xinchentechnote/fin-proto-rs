@@ -12,14 +12,14 @@ pub struct SubOrder {
 impl BinaryCodec for SubOrder {
     fn encode(&self, buf: &mut BytesMut) {
         put_char_array(buf, &self.cl_ord_id, 16);
-        buf.put_u64(self.price);
-        buf.put_u32(self.qty);
+        buf.put_u64_le(self.price);
+        buf.put_u32_le(self.qty);
     }
 
     fn decode(buf: &mut Bytes) -> Option<SubOrder> {
         let cl_ord_id = get_char_array(buf, 16)?;
-        let price = buf.get_u64();
-        let qty = buf.get_u32();
+        let price = buf.get_u64_le();
+        let qty = buf.get_u32_le();
         Some(Self {
             cl_ord_id,
             price,
@@ -66,28 +66,28 @@ pub struct RiskControlRequest {
 
 impl BinaryCodec for RiskControlRequest {
     fn encode(&self, buf: &mut BytesMut) {
-        put_string(buf, &self.unique_order_id);
+        put_string_le::<u16>(buf, &self.unique_order_id);
         put_char_array(buf, &self.cl_ord_id, 16);
         put_char_array(buf, &self.market_id, 3);
         put_char_array(buf, &self.security_id, 12);
         put_char(buf, self.side);
         put_char(buf, self.order_type);
-        buf.put_u64(self.price);
-        buf.put_u32(self.qty);
-        put_string_list::<u16, u16>(buf, &self.extra_info);
+        buf.put_u64_le(self.price);
+        buf.put_u32_le(self.qty);
+        put_string_list_le::<u16, u16>(buf, &self.extra_info);
         self.sub_order.encode(buf);
     }
 
     fn decode(buf: &mut Bytes) -> Option<RiskControlRequest> {
-        let unique_order_id = get_string(buf)?;
+        let unique_order_id = get_string_le::<u16>(buf)?;
         let cl_ord_id = get_char_array(buf, 16)?;
         let market_id = get_char_array(buf, 3)?;
         let security_id = get_char_array(buf, 12)?;
         let side = get_char(buf)?;
         let order_type = get_char(buf)?;
-        let price = buf.get_u64();
-        let qty = buf.get_u32();
-        let extra_info = get_string_list::<u16, u16>(buf)?;
+        let price = buf.get_u64_le();
+        let qty = buf.get_u32_le();
+        let extra_info = get_string_list_le::<u16, u16>(buf)?;
         let sub_order = SubOrder::decode(buf)?;
         Some(Self {
             unique_order_id,

@@ -57,11 +57,11 @@ pub struct ExecRptSync {
 
 impl BinaryCodec for ExecRptSync {
     fn encode(&self, buf: &mut BytesMut) {
-        put_list::<SubExecRptSync, u16>(buf, &self.sub_exec_rpt_sync);
+        put_object_list::<SubExecRptSync, u16>(buf, &self.sub_exec_rpt_sync);
     }
 
     fn decode(buf: &mut Bytes) -> Option<ExecRptSync> {
-        let sub_exec_rpt_sync = get_list::<SubExecRptSync, u16>(buf)?;
+        let sub_exec_rpt_sync = get_object_list::<SubExecRptSync, u16>(buf)?;
         Some(Self { sub_exec_rpt_sync })
     }
 }
