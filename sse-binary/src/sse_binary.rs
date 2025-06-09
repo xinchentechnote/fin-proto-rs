@@ -120,7 +120,6 @@ mod sse_binary_tests {
         let mut bytes = buf.freeze();
 
         let decoded = SseBinary::decode(&mut bytes).unwrap();
-
         assert_eq!(original, decoded);
     }
 }

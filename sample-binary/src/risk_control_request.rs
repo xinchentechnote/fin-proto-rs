@@ -46,7 +46,6 @@ mod sub_order_tests {
         let mut bytes = buf.freeze();
 
         let decoded = SubOrder::decode(&mut bytes).unwrap();
-
         assert_eq!(original, decoded);
     }
 }
@@ -134,7 +133,6 @@ mod risk_control_request_tests {
         let mut bytes = buf.freeze();
 
         let decoded = RiskControlRequest::decode(&mut bytes).unwrap();
-
         assert_eq!(original, decoded);
     }
 }

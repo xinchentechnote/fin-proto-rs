@@ -121,7 +121,6 @@ mod cancel_reject_tests {
         let mut bytes = buf.freeze();
 
         let decoded = CancelReject::decode(&mut bytes).unwrap();
-
         assert_eq!(original, decoded);
     }
 }

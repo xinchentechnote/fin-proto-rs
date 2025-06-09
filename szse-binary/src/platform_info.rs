@@ -48,7 +48,6 @@ mod platform_info_tests {
         let mut bytes = buf.freeze();
 
         let decoded = PlatformInfo::decode(&mut bytes).unwrap();
-
         assert_eq!(original, decoded);
     }
 }

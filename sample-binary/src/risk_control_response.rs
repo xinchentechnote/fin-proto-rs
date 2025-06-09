@@ -46,7 +46,6 @@ mod risk_control_response_tests {
         let mut bytes = buf.freeze();
 
         let decoded = RiskControlResponse::decode(&mut bytes).unwrap();
-
         assert_eq!(original, decoded);
     }
 }

@@ -46,7 +46,6 @@ mod report_finished_tests {
         let mut bytes = buf.freeze();
 
         let decoded = ReportFinished::decode(&mut bytes).unwrap();
-
         assert_eq!(original, decoded);
     }
 }

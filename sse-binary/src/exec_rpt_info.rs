@@ -46,7 +46,6 @@ mod exec_rpt_info_tests {
         let mut bytes = buf.freeze();
 
         let decoded = ExecRptInfo::decode(&mut bytes).unwrap();
-
         assert_eq!(original, decoded);
     }
 }

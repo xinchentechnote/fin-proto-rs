@@ -66,7 +66,6 @@ mod trading_session_status_tests {
         let mut bytes = buf.freeze();
 
         let decoded = TradingSessionStatus::decode(&mut bytes).unwrap();
-
         assert_eq!(original, decoded);
     }
 }
