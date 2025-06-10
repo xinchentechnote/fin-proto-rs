@@ -1,42 +1,42 @@
 //base on reference/IS122_TDGW_Move_Binary_CV0.57_MTP_Test_20230926.pdf
-
 options {
-    StringPreFixLenType = u16;
+	StringPreFixLenType = u16;
 	RepeatPreFixSizeType = u16;
-    LittleEndian = false;
+	LittleEndian = false;
 }
 
 MetaData DataType {
-    uint32 date `日期`,
-    int64 price `价格`,
-    int64 quantity `数量`,
-    uint64 ntime `时间`,
+	uint32 date `日期`,
+	int64 price `价格`,
+	int64 quantity `数量`,
+	uint64 ntime `时间`,
 }
 
-root packet SseBinary{
+root packet SseBinary {
     uint32 MsgType `消息类型`,
     uint64 MsgSeqNum `消息序列号`,
     uint32 MsgBodyLen `消息体长度`,
     match MsgType {
-        33: Heartbeat,
-        40: Logon,
-        41: Logout,
-        58: NewOrderSingle,
-        61: OrderCancel,
-        32: Confirm,
-        59: CancelReject,
-        103: Report,
-        204: OrderReject,
-        209: PlatformState,
-        208: ExecRptInfo,
-        206: ExecRptSync,
-        207: ExecRptSyncRsp,
-        210: ExecRptEndOfStream,
-    }
+		33 : Heartbeat,
+		40 : Logon,
+		41 : Logout,
+		58 : NewOrderSingle,
+		61 : OrderCancel,
+		32 : Confirm,
+		59 : CancelReject,
+		103 : Report,
+		204 : OrderReject,
+		209 : PlatformState,
+		208 : ExecRptInfo,
+		206 : ExecRptSync,
+		207 : ExecRptSyncRsp,
+		210 : ExecRptEndOfStream,
+	}
     uint32 Checksum `校验和`,
 }
 
-packet Heartbeat {}
+packet Heartbeat {
+}
 
 packet Logon {
     char[32] SenderCompID `发送方代码`,
@@ -51,7 +51,6 @@ packet Logout {
     uint32 SessionStatus `注销状态码`,
     char[64] Text `文本描述`
 }
-
 
 packet NewOrderSingle {
     uint32 BizID `业务编号`,
@@ -182,27 +181,27 @@ packet PlatformState {
 
 packet ExecRptInfo {
     uint16 PlatformID `平台标识 0=竞价平台`,
-    repeat char[8] Pbu `登录或订阅 PBU`, //size uint16
-    repeat uint32 SetID `平台内分区号` //size uint16
+    repeat char[8] Pbu `登录或订阅 PBU`,//size uint16
+    repeat uint32 SetID `平台内分区号`//size uint16
 }
 
 packet ExecRptSync {
     repeat SubExecRptSync {
-        char[8] Pbu `登录或订阅 PBU`,
-        uint32 SetID `平台内分区号`,
-        uint64 BeginReportIndex `分区预期回报序号，暂不支持2^32及更大取值`
-    } //size uint16
+		char[8] Pbu `登录或订阅 PBU`,
+		uint32 SetID `平台内分区号`,
+		uint64 BeginReportIndex `分区预期回报序号，暂不支持2^32及更大取值`
+	}//size uint16
 }
 
 packet ExecRptSyncRsp {
     repeat SubExecRptSyncRsp {
-        char[8] Pbu `登录或订阅 PBU`,
-        uint32 SetID `平台内分区号`,
-        uint64 BeginReportIndex `分区回报序号起点`,
-        uint64 EndReportIndex `分区最大回报序号`,
-        uint32 RejReason `拒绝码`,
-        char[64] Text `描述`
-    }
+		char[8] Pbu `登录或订阅 PBU`,
+		uint32 SetID `平台内分区号`,
+		uint64 BeginReportIndex `分区回报序号起点`,
+		uint64 EndReportIndex `分区最大回报序号`,
+		uint32 RejReason `拒绝码`,
+		char[64] Text `描述`
+	}
 }
 
 packet ExecRptEndOfStream {
