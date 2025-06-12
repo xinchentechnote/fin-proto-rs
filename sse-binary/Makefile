@@ -12,12 +12,15 @@ all: compile fmt test
 
 build: compile
 
-compile:
+set_env:
+	export PATH=$(BIN_DIR):$$PATH
+
+compile: set_env
 	@echo "Compiling protocol..."
-	export PATH=$(BIN_DIR):$$PATH && \
+	export PATH=$(BIN_DIR):$$PATH
 	fin-protoc compile -f $(PROTO_DSL) -l $(PROTO_DIR) -r $(OUTPUT_DIR)
 
-fmt: fix
+fmt: set_env fix
 	@echo "Formatting code..."
 	cargo fmt
 	fin-protoc format -f $(PROTO_DSL)
