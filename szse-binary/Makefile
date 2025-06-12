@@ -20,7 +20,7 @@ compile:
 fmt: fix
 	@echo "Formatting code..."
 	cargo fmt
-	fin-protoc format -f $(PROTO_DSL)
+	export PATH=$(BIN_DIR):$$PATH && fin-protoc format -f $(PROTO_DSL)
 
 fix:
 	@echo "Applying fixes..."
