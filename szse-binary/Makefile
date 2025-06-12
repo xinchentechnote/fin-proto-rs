@@ -14,13 +14,12 @@ build: compile
 
 compile:
 	@echo "Compiling protocol..."
-	export PATH=$(BIN_DIR):$$PATH && \
-	fin-protoc compile -f $(PROTO_DSL) -l $(PROTO_DIR) -r $(OUTPUT_DIR)
+	$(BIN_DIR)/fin-protoc compile -f $(PROTO_DSL) -l $(PROTO_DIR) -r $(OUTPUT_DIR)
 
 fmt: fix
 	@echo "Formatting code..."
 	cargo fmt
-	export PATH=$(BIN_DIR):$$PATH && fin-protoc format -f $(PROTO_DSL)
+	$(BIN_DIR)/fin-protoc format -f $(PROTO_DSL)
 
 fix:
 	@echo "Applying fixes..."
