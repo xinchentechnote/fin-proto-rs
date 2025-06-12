@@ -15,15 +15,14 @@ build: compile
 set_env:
 	export PATH=$(BIN_DIR):$$PATH
 
-compile: set_env
+compile:
 	@echo "Compiling protocol..."
-	export PATH=$(BIN_DIR):$$PATH
-	fin-protoc compile -f $(PROTO_DSL) -l $(PROTO_DIR) -r $(OUTPUT_DIR)
+	$(BIN_DIR)/fin-protoc compile -f $(PROTO_DSL) -l $(PROTO_DIR) -r $(OUTPUT_DIR)
 
-fmt: set_env fix
+fmt: fix
 	@echo "Formatting code..."
 	cargo fmt
-	fin-protoc format -f $(PROTO_DSL)
+	$(BIN_DIR)/fin-protoc format -f $(PROTO_DSL)
 
 fix:
 	@echo "Applying fixes..."
