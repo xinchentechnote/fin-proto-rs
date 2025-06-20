@@ -1,0 +1,14 @@
+[package]
+name = "binary-codec-macro"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+proc-macro2 = "1.0.95"
+quote = "1.0.40"
+syn = "2.0.103"
+
+[lib]
+name = "binary_codec_macro"
+path = "src/lib.rs"
+proc-macro = true
