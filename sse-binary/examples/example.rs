@@ -11,7 +11,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
         msg_seq_num: 123456789,
         msg_body_len: 123456,
         msg_type: 33,
-        msg_type_body: SseBinaryMsgTypeEnum::Heartbeat(Heartbeat {}),
+        body: SseBinaryBodyEnum::Heartbeat(Heartbeat {}),
         checksum: 123456,
     };
 

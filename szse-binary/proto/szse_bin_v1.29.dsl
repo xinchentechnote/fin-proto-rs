@@ -250,7 +250,7 @@ MetaData BusinessField {
 root packet SzseBinary {
     MsgType,
     BodyLength,
-    match MsgType {
+    match MsgType as Body {
         1 : Logon,
         2 : Logout,
         3 : Heartbeat,
@@ -323,7 +323,7 @@ packet NewOrder {
     OrderQty `订单数量`,
     Price `价格`,
     //010,020,030,040,051,052,060,061,070,120,130,140,150,151,152,160,170,180,181,190,191,230,270,271,280,281,290,291,310,311,630,330,331,350,351,370,410,417,470
-    match ApplID {
+    match ApplID as ApplExtend {
         "010" : Extend100101,
         "020" : Extend100201,
         "030" : Extend100301,
@@ -510,7 +510,7 @@ packet ExecutionConfirm {
     AccountID `证券账户`,
     BranchID `营业部代码`,
     OrderRestrictions `订单限定`,
-    match ApplID {
+    match ApplID as ApplExtend {
         "010" : Extend200102,
         "020" : Extend200202,
         "030" : Extend200302,
@@ -714,7 +714,7 @@ packet ExecutionReport {
     Side `买卖方向`,
     AccountID `证券账户`,
     BranchID `营业部代码`,
-    match ApplID {
+    match ApplID as ApplExtend {
         "010" : Extend200115,
         "020" : Extend200215,
         "030" : Extend200315,
