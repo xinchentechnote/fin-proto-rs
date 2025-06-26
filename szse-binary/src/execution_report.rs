@@ -15,7 +15,7 @@ use crate::extend_204715::*;
 use crate::extend_206315::*;
 
 #[derive(Debug, Clone, PartialEq)]
-pub enum ExecutionReportApplIDEnum {
+pub enum ExecutionReportApplExtendEnum {
     Extend200115(Extend200115),
     Extend200215(Extend200215),
     Extend200315(Extend200315),
@@ -55,7 +55,7 @@ pub struct ExecutionReport {
     pub side: char,
     pub account_id: String,
     pub branch_id: String,
-    pub appl_id_body: ExecutionReportApplIDEnum,
+    pub appl_extend: ExecutionReportApplExtendEnum,
 }
 
 impl BinaryCodec for ExecutionReport {
@@ -84,18 +84,18 @@ impl BinaryCodec for ExecutionReport {
         put_char(buf, self.side);
         put_char_array(buf, &self.account_id, 12);
         put_char_array(buf, &self.branch_id, 4);
-        match &self.appl_id_body {
-            ExecutionReportApplIDEnum::Extend200115(msg) => msg.encode(buf),
-            ExecutionReportApplIDEnum::Extend200215(msg) => msg.encode(buf),
-            ExecutionReportApplIDEnum::Extend200315(msg) => msg.encode(buf),
-            ExecutionReportApplIDEnum::Extend200515(msg) => msg.encode(buf),
-            ExecutionReportApplIDEnum::Extend200615(msg) => msg.encode(buf),
-            ExecutionReportApplIDEnum::Extend200715(msg) => msg.encode(buf),
-            ExecutionReportApplIDEnum::Extend206315(msg) => msg.encode(buf),
-            ExecutionReportApplIDEnum::Extend203715(msg) => msg.encode(buf),
-            ExecutionReportApplIDEnum::Extend204115(msg) => msg.encode(buf),
-            ExecutionReportApplIDEnum::Extend204130(msg) => msg.encode(buf),
-            ExecutionReportApplIDEnum::Extend204715(msg) => msg.encode(buf),
+        match &self.appl_extend {
+            ExecutionReportApplExtendEnum::Extend200115(msg) => msg.encode(buf),
+            ExecutionReportApplExtendEnum::Extend200215(msg) => msg.encode(buf),
+            ExecutionReportApplExtendEnum::Extend200315(msg) => msg.encode(buf),
+            ExecutionReportApplExtendEnum::Extend200515(msg) => msg.encode(buf),
+            ExecutionReportApplExtendEnum::Extend200615(msg) => msg.encode(buf),
+            ExecutionReportApplExtendEnum::Extend200715(msg) => msg.encode(buf),
+            ExecutionReportApplExtendEnum::Extend206315(msg) => msg.encode(buf),
+            ExecutionReportApplExtendEnum::Extend203715(msg) => msg.encode(buf),
+            ExecutionReportApplExtendEnum::Extend204115(msg) => msg.encode(buf),
+            ExecutionReportApplExtendEnum::Extend204130(msg) => msg.encode(buf),
+            ExecutionReportApplExtendEnum::Extend204715(msg) => msg.encode(buf),
         }
     }
 
@@ -124,26 +124,26 @@ impl BinaryCodec for ExecutionReport {
         let side = get_char(buf)?;
         let account_id = get_char_array(buf, 12)?;
         let branch_id = get_char_array(buf, 4)?;
-        let appl_id_body = match appl_id.as_str() {
-            "010" => ExecutionReportApplIDEnum::Extend200115(Extend200115::decode(buf)?),
-            "020" => ExecutionReportApplIDEnum::Extend200215(Extend200215::decode(buf)?),
-            "030" => ExecutionReportApplIDEnum::Extend200315(Extend200315::decode(buf)?),
-            "051" => ExecutionReportApplIDEnum::Extend200515(Extend200515::decode(buf)?),
-            "052" => ExecutionReportApplIDEnum::Extend200515(Extend200515::decode(buf)?),
-            "056" => ExecutionReportApplIDEnum::Extend200515(Extend200515::decode(buf)?),
-            "057" => ExecutionReportApplIDEnum::Extend200515(Extend200515::decode(buf)?),
-            "060" => ExecutionReportApplIDEnum::Extend200615(Extend200615::decode(buf)?),
-            "061" => ExecutionReportApplIDEnum::Extend200615(Extend200615::decode(buf)?),
-            "070" => ExecutionReportApplIDEnum::Extend200715(Extend200715::decode(buf)?),
-            "630" => ExecutionReportApplIDEnum::Extend206315(Extend206315::decode(buf)?),
-            "370" => ExecutionReportApplIDEnum::Extend203715(Extend203715::decode(buf)?),
-            "410" => ExecutionReportApplIDEnum::Extend204115(Extend204115::decode(buf)?),
-            "412" => ExecutionReportApplIDEnum::Extend204115(Extend204115::decode(buf)?),
-            "413" => ExecutionReportApplIDEnum::Extend204115(Extend204115::decode(buf)?),
-            "415" => ExecutionReportApplIDEnum::Extend204115(Extend204115::decode(buf)?),
-            "416" => ExecutionReportApplIDEnum::Extend204115(Extend204115::decode(buf)?),
-            "417" => ExecutionReportApplIDEnum::Extend204130(Extend204130::decode(buf)?),
-            "470" => ExecutionReportApplIDEnum::Extend204715(Extend204715::decode(buf)?),
+        let appl_extend = match appl_id.as_str() {
+            "010" => ExecutionReportApplExtendEnum::Extend200115(Extend200115::decode(buf)?),
+            "020" => ExecutionReportApplExtendEnum::Extend200215(Extend200215::decode(buf)?),
+            "030" => ExecutionReportApplExtendEnum::Extend200315(Extend200315::decode(buf)?),
+            "051" => ExecutionReportApplExtendEnum::Extend200515(Extend200515::decode(buf)?),
+            "052" => ExecutionReportApplExtendEnum::Extend200515(Extend200515::decode(buf)?),
+            "056" => ExecutionReportApplExtendEnum::Extend200515(Extend200515::decode(buf)?),
+            "057" => ExecutionReportApplExtendEnum::Extend200515(Extend200515::decode(buf)?),
+            "060" => ExecutionReportApplExtendEnum::Extend200615(Extend200615::decode(buf)?),
+            "061" => ExecutionReportApplExtendEnum::Extend200615(Extend200615::decode(buf)?),
+            "070" => ExecutionReportApplExtendEnum::Extend200715(Extend200715::decode(buf)?),
+            "630" => ExecutionReportApplExtendEnum::Extend206315(Extend206315::decode(buf)?),
+            "370" => ExecutionReportApplExtendEnum::Extend203715(Extend203715::decode(buf)?),
+            "410" => ExecutionReportApplExtendEnum::Extend204115(Extend204115::decode(buf)?),
+            "412" => ExecutionReportApplExtendEnum::Extend204115(Extend204115::decode(buf)?),
+            "413" => ExecutionReportApplExtendEnum::Extend204115(Extend204115::decode(buf)?),
+            "415" => ExecutionReportApplExtendEnum::Extend204115(Extend204115::decode(buf)?),
+            "416" => ExecutionReportApplExtendEnum::Extend204115(Extend204115::decode(buf)?),
+            "417" => ExecutionReportApplExtendEnum::Extend204130(Extend204130::decode(buf)?),
+            "470" => ExecutionReportApplExtendEnum::Extend204715(Extend204715::decode(buf)?),
             _ => return None,
         };
         Some(Self {
@@ -171,7 +171,7 @@ impl BinaryCodec for ExecutionReport {
             side,
             account_id,
             branch_id,
-            appl_id_body,
+            appl_extend,
         })
     }
 }
@@ -208,7 +208,7 @@ mod execution_report_tests {
             account_id: vec!['a'; 12].into_iter().collect::<String>(),
             branch_id: vec!['a'; 4].into_iter().collect::<String>(),
             appl_id: "010".to_string(),
-            appl_id_body: ExecutionReportApplIDEnum::Extend200115(Extend200115 {
+            appl_extend: ExecutionReportApplExtendEnum::Extend200115(Extend200115 {
                 cash_margin: 'a',
             }),
         };

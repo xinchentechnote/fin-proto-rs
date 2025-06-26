@@ -23,7 +23,7 @@ use crate::extend_204702::*;
 use crate::extend_206302::*;
 
 #[derive(Debug, Clone, PartialEq)]
-pub enum ExecutionConfirmApplIDEnum {
+pub enum ExecutionConfirmApplExtendEnum {
     Extend200102(Extend200102),
     Extend200202(Extend200202),
     Extend200302(Extend200302),
@@ -75,7 +75,7 @@ pub struct ExecutionConfirm {
     pub account_id: String,
     pub branch_id: String,
     pub order_restrictions: String,
-    pub appl_id_body: ExecutionConfirmApplIDEnum,
+    pub appl_extend: ExecutionConfirmApplExtendEnum,
 }
 
 impl BinaryCodec for ExecutionConfirm {
@@ -108,26 +108,26 @@ impl BinaryCodec for ExecutionConfirm {
         put_char_array(buf, &self.account_id, 12);
         put_char_array(buf, &self.branch_id, 4);
         put_char_array(buf, &self.order_restrictions, 4);
-        match &self.appl_id_body {
-            ExecutionConfirmApplIDEnum::Extend200102(msg) => msg.encode(buf),
-            ExecutionConfirmApplIDEnum::Extend200202(msg) => msg.encode(buf),
-            ExecutionConfirmApplIDEnum::Extend200302(msg) => msg.encode(buf),
-            ExecutionConfirmApplIDEnum::Extend200502(msg) => msg.encode(buf),
-            ExecutionConfirmApplIDEnum::Extend200602(msg) => msg.encode(buf),
-            ExecutionConfirmApplIDEnum::Extend200702(msg) => msg.encode(buf),
-            ExecutionConfirmApplIDEnum::Extend201502(msg) => msg.encode(buf),
-            ExecutionConfirmApplIDEnum::Extend201602(msg) => msg.encode(buf),
-            ExecutionConfirmApplIDEnum::Extend201702(msg) => msg.encode(buf),
-            ExecutionConfirmApplIDEnum::Extend201802(msg) => msg.encode(buf),
-            ExecutionConfirmApplIDEnum::Extend202702(msg) => msg.encode(buf),
-            ExecutionConfirmApplIDEnum::Extend202802(msg) => msg.encode(buf),
-            ExecutionConfirmApplIDEnum::Extend202902(msg) => msg.encode(buf),
-            ExecutionConfirmApplIDEnum::Extend206302(msg) => msg.encode(buf),
-            ExecutionConfirmApplIDEnum::Extend203502(msg) => msg.encode(buf),
-            ExecutionConfirmApplIDEnum::Extend203702(msg) => msg.encode(buf),
-            ExecutionConfirmApplIDEnum::Extend204102(msg) => msg.encode(buf),
-            ExecutionConfirmApplIDEnum::Extend204129(msg) => msg.encode(buf),
-            ExecutionConfirmApplIDEnum::Extend204702(msg) => msg.encode(buf),
+        match &self.appl_extend {
+            ExecutionConfirmApplExtendEnum::Extend200102(msg) => msg.encode(buf),
+            ExecutionConfirmApplExtendEnum::Extend200202(msg) => msg.encode(buf),
+            ExecutionConfirmApplExtendEnum::Extend200302(msg) => msg.encode(buf),
+            ExecutionConfirmApplExtendEnum::Extend200502(msg) => msg.encode(buf),
+            ExecutionConfirmApplExtendEnum::Extend200602(msg) => msg.encode(buf),
+            ExecutionConfirmApplExtendEnum::Extend200702(msg) => msg.encode(buf),
+            ExecutionConfirmApplExtendEnum::Extend201502(msg) => msg.encode(buf),
+            ExecutionConfirmApplExtendEnum::Extend201602(msg) => msg.encode(buf),
+            ExecutionConfirmApplExtendEnum::Extend201702(msg) => msg.encode(buf),
+            ExecutionConfirmApplExtendEnum::Extend201802(msg) => msg.encode(buf),
+            ExecutionConfirmApplExtendEnum::Extend202702(msg) => msg.encode(buf),
+            ExecutionConfirmApplExtendEnum::Extend202802(msg) => msg.encode(buf),
+            ExecutionConfirmApplExtendEnum::Extend202902(msg) => msg.encode(buf),
+            ExecutionConfirmApplExtendEnum::Extend206302(msg) => msg.encode(buf),
+            ExecutionConfirmApplExtendEnum::Extend203502(msg) => msg.encode(buf),
+            ExecutionConfirmApplExtendEnum::Extend203702(msg) => msg.encode(buf),
+            ExecutionConfirmApplExtendEnum::Extend204102(msg) => msg.encode(buf),
+            ExecutionConfirmApplExtendEnum::Extend204129(msg) => msg.encode(buf),
+            ExecutionConfirmApplExtendEnum::Extend204702(msg) => msg.encode(buf),
         }
     }
 
@@ -160,35 +160,35 @@ impl BinaryCodec for ExecutionConfirm {
         let account_id = get_char_array(buf, 12)?;
         let branch_id = get_char_array(buf, 4)?;
         let order_restrictions = get_char_array(buf, 4)?;
-        let appl_id_body = match appl_id.as_str() {
-            "010" => ExecutionConfirmApplIDEnum::Extend200102(Extend200102::decode(buf)?),
-            "020" => ExecutionConfirmApplIDEnum::Extend200202(Extend200202::decode(buf)?),
-            "030" => ExecutionConfirmApplIDEnum::Extend200302(Extend200302::decode(buf)?),
-            "051" => ExecutionConfirmApplIDEnum::Extend200502(Extend200502::decode(buf)?),
-            "052" => ExecutionConfirmApplIDEnum::Extend200502(Extend200502::decode(buf)?),
-            "060" => ExecutionConfirmApplIDEnum::Extend200602(Extend200602::decode(buf)?),
-            "061" => ExecutionConfirmApplIDEnum::Extend200602(Extend200602::decode(buf)?),
-            "070" => ExecutionConfirmApplIDEnum::Extend200702(Extend200702::decode(buf)?),
-            "150" => ExecutionConfirmApplIDEnum::Extend201502(Extend201502::decode(buf)?),
-            "151" => ExecutionConfirmApplIDEnum::Extend201502(Extend201502::decode(buf)?),
-            "152" => ExecutionConfirmApplIDEnum::Extend201502(Extend201502::decode(buf)?),
-            "160" => ExecutionConfirmApplIDEnum::Extend201602(Extend201602::decode(buf)?),
-            "170" => ExecutionConfirmApplIDEnum::Extend201702(Extend201702::decode(buf)?),
-            "180" => ExecutionConfirmApplIDEnum::Extend201802(Extend201802::decode(buf)?),
-            "181" => ExecutionConfirmApplIDEnum::Extend201802(Extend201802::decode(buf)?),
-            "270" => ExecutionConfirmApplIDEnum::Extend202702(Extend202702::decode(buf)?),
-            "271" => ExecutionConfirmApplIDEnum::Extend202702(Extend202702::decode(buf)?),
-            "280" => ExecutionConfirmApplIDEnum::Extend202802(Extend202802::decode(buf)?),
-            "281" => ExecutionConfirmApplIDEnum::Extend202802(Extend202802::decode(buf)?),
-            "290" => ExecutionConfirmApplIDEnum::Extend202902(Extend202902::decode(buf)?),
-            "291" => ExecutionConfirmApplIDEnum::Extend202902(Extend202902::decode(buf)?),
-            "630" => ExecutionConfirmApplIDEnum::Extend206302(Extend206302::decode(buf)?),
-            "350" => ExecutionConfirmApplIDEnum::Extend203502(Extend203502::decode(buf)?),
-            "351" => ExecutionConfirmApplIDEnum::Extend203502(Extend203502::decode(buf)?),
-            "370" => ExecutionConfirmApplIDEnum::Extend203702(Extend203702::decode(buf)?),
-            "410" => ExecutionConfirmApplIDEnum::Extend204102(Extend204102::decode(buf)?),
-            "417" => ExecutionConfirmApplIDEnum::Extend204129(Extend204129::decode(buf)?),
-            "470" => ExecutionConfirmApplIDEnum::Extend204702(Extend204702::decode(buf)?),
+        let appl_extend = match appl_id.as_str() {
+            "010" => ExecutionConfirmApplExtendEnum::Extend200102(Extend200102::decode(buf)?),
+            "020" => ExecutionConfirmApplExtendEnum::Extend200202(Extend200202::decode(buf)?),
+            "030" => ExecutionConfirmApplExtendEnum::Extend200302(Extend200302::decode(buf)?),
+            "051" => ExecutionConfirmApplExtendEnum::Extend200502(Extend200502::decode(buf)?),
+            "052" => ExecutionConfirmApplExtendEnum::Extend200502(Extend200502::decode(buf)?),
+            "060" => ExecutionConfirmApplExtendEnum::Extend200602(Extend200602::decode(buf)?),
+            "061" => ExecutionConfirmApplExtendEnum::Extend200602(Extend200602::decode(buf)?),
+            "070" => ExecutionConfirmApplExtendEnum::Extend200702(Extend200702::decode(buf)?),
+            "150" => ExecutionConfirmApplExtendEnum::Extend201502(Extend201502::decode(buf)?),
+            "151" => ExecutionConfirmApplExtendEnum::Extend201502(Extend201502::decode(buf)?),
+            "152" => ExecutionConfirmApplExtendEnum::Extend201502(Extend201502::decode(buf)?),
+            "160" => ExecutionConfirmApplExtendEnum::Extend201602(Extend201602::decode(buf)?),
+            "170" => ExecutionConfirmApplExtendEnum::Extend201702(Extend201702::decode(buf)?),
+            "180" => ExecutionConfirmApplExtendEnum::Extend201802(Extend201802::decode(buf)?),
+            "181" => ExecutionConfirmApplExtendEnum::Extend201802(Extend201802::decode(buf)?),
+            "270" => ExecutionConfirmApplExtendEnum::Extend202702(Extend202702::decode(buf)?),
+            "271" => ExecutionConfirmApplExtendEnum::Extend202702(Extend202702::decode(buf)?),
+            "280" => ExecutionConfirmApplExtendEnum::Extend202802(Extend202802::decode(buf)?),
+            "281" => ExecutionConfirmApplExtendEnum::Extend202802(Extend202802::decode(buf)?),
+            "290" => ExecutionConfirmApplExtendEnum::Extend202902(Extend202902::decode(buf)?),
+            "291" => ExecutionConfirmApplExtendEnum::Extend202902(Extend202902::decode(buf)?),
+            "630" => ExecutionConfirmApplExtendEnum::Extend206302(Extend206302::decode(buf)?),
+            "350" => ExecutionConfirmApplExtendEnum::Extend203502(Extend203502::decode(buf)?),
+            "351" => ExecutionConfirmApplExtendEnum::Extend203502(Extend203502::decode(buf)?),
+            "370" => ExecutionConfirmApplExtendEnum::Extend203702(Extend203702::decode(buf)?),
+            "410" => ExecutionConfirmApplExtendEnum::Extend204102(Extend204102::decode(buf)?),
+            "417" => ExecutionConfirmApplExtendEnum::Extend204129(Extend204129::decode(buf)?),
+            "470" => ExecutionConfirmApplExtendEnum::Extend204702(Extend204702::decode(buf)?),
             _ => return None,
         };
         Some(Self {
@@ -220,7 +220,7 @@ impl BinaryCodec for ExecutionConfirm {
             account_id,
             branch_id,
             order_restrictions,
-            appl_id_body,
+            appl_extend,
         })
     }
 }
@@ -261,7 +261,7 @@ mod execution_confirm_tests {
             branch_id: vec!['a'; 4].into_iter().collect::<String>(),
             order_restrictions: vec!['a'; 4].into_iter().collect::<String>(),
             appl_id: "010".to_string(),
-            appl_id_body: ExecutionConfirmApplIDEnum::Extend200102(Extend200102 {
+            appl_extend: ExecutionConfirmApplExtendEnum::Extend200102(Extend200102 {
                 stop_px: -123456789,
                 min_qty: -123456789,
                 max_price_levels: 1234,

@@ -23,7 +23,7 @@ use crate::extend_104701::*;
 use crate::extend_106301::*;
 
 #[derive(Debug, Clone, PartialEq)]
-pub enum NewOrderApplIDEnum {
+pub enum NewOrderApplExtendEnum {
     Extend100101(Extend100101),
     Extend100201(Extend100201),
     Extend100301(Extend100301),
@@ -63,7 +63,7 @@ pub struct NewOrder {
     pub ord_type: char,
     pub order_qty: i64,
     pub price: i64,
-    pub appl_id_body: NewOrderApplIDEnum,
+    pub appl_extend: NewOrderApplExtendEnum,
 }
 
 impl BinaryCodec for NewOrder {
@@ -84,26 +84,26 @@ impl BinaryCodec for NewOrder {
         put_char(buf, self.ord_type);
         buf.put_i64(self.order_qty);
         buf.put_i64(self.price);
-        match &self.appl_id_body {
-            NewOrderApplIDEnum::Extend100101(msg) => msg.encode(buf),
-            NewOrderApplIDEnum::Extend100201(msg) => msg.encode(buf),
-            NewOrderApplIDEnum::Extend100301(msg) => msg.encode(buf),
-            NewOrderApplIDEnum::Extend100501(msg) => msg.encode(buf),
-            NewOrderApplIDEnum::Extend100601(msg) => msg.encode(buf),
-            NewOrderApplIDEnum::Extend100701(msg) => msg.encode(buf),
-            NewOrderApplIDEnum::Extend101501(msg) => msg.encode(buf),
-            NewOrderApplIDEnum::Extend101601(msg) => msg.encode(buf),
-            NewOrderApplIDEnum::Extend101701(msg) => msg.encode(buf),
-            NewOrderApplIDEnum::Extend101801(msg) => msg.encode(buf),
-            NewOrderApplIDEnum::Extend102701(msg) => msg.encode(buf),
-            NewOrderApplIDEnum::Extend102801(msg) => msg.encode(buf),
-            NewOrderApplIDEnum::Extend102901(msg) => msg.encode(buf),
-            NewOrderApplIDEnum::Extend106301(msg) => msg.encode(buf),
-            NewOrderApplIDEnum::Extend103501(msg) => msg.encode(buf),
-            NewOrderApplIDEnum::Extend103701(msg) => msg.encode(buf),
-            NewOrderApplIDEnum::Extend104101(msg) => msg.encode(buf),
-            NewOrderApplIDEnum::Extend104128(msg) => msg.encode(buf),
-            NewOrderApplIDEnum::Extend104701(msg) => msg.encode(buf),
+        match &self.appl_extend {
+            NewOrderApplExtendEnum::Extend100101(msg) => msg.encode(buf),
+            NewOrderApplExtendEnum::Extend100201(msg) => msg.encode(buf),
+            NewOrderApplExtendEnum::Extend100301(msg) => msg.encode(buf),
+            NewOrderApplExtendEnum::Extend100501(msg) => msg.encode(buf),
+            NewOrderApplExtendEnum::Extend100601(msg) => msg.encode(buf),
+            NewOrderApplExtendEnum::Extend100701(msg) => msg.encode(buf),
+            NewOrderApplExtendEnum::Extend101501(msg) => msg.encode(buf),
+            NewOrderApplExtendEnum::Extend101601(msg) => msg.encode(buf),
+            NewOrderApplExtendEnum::Extend101701(msg) => msg.encode(buf),
+            NewOrderApplExtendEnum::Extend101801(msg) => msg.encode(buf),
+            NewOrderApplExtendEnum::Extend102701(msg) => msg.encode(buf),
+            NewOrderApplExtendEnum::Extend102801(msg) => msg.encode(buf),
+            NewOrderApplExtendEnum::Extend102901(msg) => msg.encode(buf),
+            NewOrderApplExtendEnum::Extend106301(msg) => msg.encode(buf),
+            NewOrderApplExtendEnum::Extend103501(msg) => msg.encode(buf),
+            NewOrderApplExtendEnum::Extend103701(msg) => msg.encode(buf),
+            NewOrderApplExtendEnum::Extend104101(msg) => msg.encode(buf),
+            NewOrderApplExtendEnum::Extend104128(msg) => msg.encode(buf),
+            NewOrderApplExtendEnum::Extend104701(msg) => msg.encode(buf),
         }
     }
 
@@ -124,35 +124,35 @@ impl BinaryCodec for NewOrder {
         let ord_type = get_char(buf)?;
         let order_qty = buf.get_i64();
         let price = buf.get_i64();
-        let appl_id_body = match appl_id.as_str() {
-            "010" => NewOrderApplIDEnum::Extend100101(Extend100101::decode(buf)?),
-            "020" => NewOrderApplIDEnum::Extend100201(Extend100201::decode(buf)?),
-            "030" => NewOrderApplIDEnum::Extend100301(Extend100301::decode(buf)?),
-            "051" => NewOrderApplIDEnum::Extend100501(Extend100501::decode(buf)?),
-            "052" => NewOrderApplIDEnum::Extend100501(Extend100501::decode(buf)?),
-            "060" => NewOrderApplIDEnum::Extend100601(Extend100601::decode(buf)?),
-            "061" => NewOrderApplIDEnum::Extend100601(Extend100601::decode(buf)?),
-            "070" => NewOrderApplIDEnum::Extend100701(Extend100701::decode(buf)?),
-            "150" => NewOrderApplIDEnum::Extend101501(Extend101501::decode(buf)?),
-            "151" => NewOrderApplIDEnum::Extend101501(Extend101501::decode(buf)?),
-            "152" => NewOrderApplIDEnum::Extend101501(Extend101501::decode(buf)?),
-            "160" => NewOrderApplIDEnum::Extend101601(Extend101601::decode(buf)?),
-            "170" => NewOrderApplIDEnum::Extend101701(Extend101701::decode(buf)?),
-            "180" => NewOrderApplIDEnum::Extend101801(Extend101801::decode(buf)?),
-            "181" => NewOrderApplIDEnum::Extend101801(Extend101801::decode(buf)?),
-            "270" => NewOrderApplIDEnum::Extend102701(Extend102701::decode(buf)?),
-            "271" => NewOrderApplIDEnum::Extend102701(Extend102701::decode(buf)?),
-            "280" => NewOrderApplIDEnum::Extend102801(Extend102801::decode(buf)?),
-            "281" => NewOrderApplIDEnum::Extend102801(Extend102801::decode(buf)?),
-            "290" => NewOrderApplIDEnum::Extend102901(Extend102901::decode(buf)?),
-            "291" => NewOrderApplIDEnum::Extend102901(Extend102901::decode(buf)?),
-            "630" => NewOrderApplIDEnum::Extend106301(Extend106301::decode(buf)?),
-            "350" => NewOrderApplIDEnum::Extend103501(Extend103501::decode(buf)?),
-            "351" => NewOrderApplIDEnum::Extend103501(Extend103501::decode(buf)?),
-            "370" => NewOrderApplIDEnum::Extend103701(Extend103701::decode(buf)?),
-            "410" => NewOrderApplIDEnum::Extend104101(Extend104101::decode(buf)?),
-            "417" => NewOrderApplIDEnum::Extend104128(Extend104128::decode(buf)?),
-            "470" => NewOrderApplIDEnum::Extend104701(Extend104701::decode(buf)?),
+        let appl_extend = match appl_id.as_str() {
+            "010" => NewOrderApplExtendEnum::Extend100101(Extend100101::decode(buf)?),
+            "020" => NewOrderApplExtendEnum::Extend100201(Extend100201::decode(buf)?),
+            "030" => NewOrderApplExtendEnum::Extend100301(Extend100301::decode(buf)?),
+            "051" => NewOrderApplExtendEnum::Extend100501(Extend100501::decode(buf)?),
+            "052" => NewOrderApplExtendEnum::Extend100501(Extend100501::decode(buf)?),
+            "060" => NewOrderApplExtendEnum::Extend100601(Extend100601::decode(buf)?),
+            "061" => NewOrderApplExtendEnum::Extend100601(Extend100601::decode(buf)?),
+            "070" => NewOrderApplExtendEnum::Extend100701(Extend100701::decode(buf)?),
+            "150" => NewOrderApplExtendEnum::Extend101501(Extend101501::decode(buf)?),
+            "151" => NewOrderApplExtendEnum::Extend101501(Extend101501::decode(buf)?),
+            "152" => NewOrderApplExtendEnum::Extend101501(Extend101501::decode(buf)?),
+            "160" => NewOrderApplExtendEnum::Extend101601(Extend101601::decode(buf)?),
+            "170" => NewOrderApplExtendEnum::Extend101701(Extend101701::decode(buf)?),
+            "180" => NewOrderApplExtendEnum::Extend101801(Extend101801::decode(buf)?),
+            "181" => NewOrderApplExtendEnum::Extend101801(Extend101801::decode(buf)?),
+            "270" => NewOrderApplExtendEnum::Extend102701(Extend102701::decode(buf)?),
+            "271" => NewOrderApplExtendEnum::Extend102701(Extend102701::decode(buf)?),
+            "280" => NewOrderApplExtendEnum::Extend102801(Extend102801::decode(buf)?),
+            "281" => NewOrderApplExtendEnum::Extend102801(Extend102801::decode(buf)?),
+            "290" => NewOrderApplExtendEnum::Extend102901(Extend102901::decode(buf)?),
+            "291" => NewOrderApplExtendEnum::Extend102901(Extend102901::decode(buf)?),
+            "630" => NewOrderApplExtendEnum::Extend106301(Extend106301::decode(buf)?),
+            "350" => NewOrderApplExtendEnum::Extend103501(Extend103501::decode(buf)?),
+            "351" => NewOrderApplExtendEnum::Extend103501(Extend103501::decode(buf)?),
+            "370" => NewOrderApplExtendEnum::Extend103701(Extend103701::decode(buf)?),
+            "410" => NewOrderApplExtendEnum::Extend104101(Extend104101::decode(buf)?),
+            "417" => NewOrderApplExtendEnum::Extend104128(Extend104128::decode(buf)?),
+            "470" => NewOrderApplExtendEnum::Extend104701(Extend104701::decode(buf)?),
             _ => return None,
         };
         Some(Self {
@@ -172,7 +172,7 @@ impl BinaryCodec for NewOrder {
             ord_type,
             order_qty,
             price,
-            appl_id_body,
+            appl_extend,
         })
     }
 }
@@ -201,7 +201,7 @@ mod new_order_tests {
             order_qty: -123456789,
             price: -123456789,
             appl_id: "010".to_string(),
-            appl_id_body: NewOrderApplIDEnum::Extend100101(Extend100101 {
+            appl_extend: NewOrderApplExtendEnum::Extend100101(Extend100101 {
                 stop_px: -123456789,
                 min_qty: -123456789,
                 max_price_levels: 1234,

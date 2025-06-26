@@ -18,7 +18,7 @@ use crate::platform_state::*;
 use crate::report::*;
 
 #[derive(Debug, Clone, PartialEq)]
-pub enum SseBinaryMsgTypeEnum {
+pub enum SseBinaryBodyEnum {
     Heartbeat(Heartbeat),
     Logon(Logon),
     Logout(Logout),
@@ -40,7 +40,7 @@ pub struct SseBinary {
     pub msg_type: u32,
     pub msg_seq_num: u64,
     pub msg_body_len: u32,
-    pub msg_type_body: SseBinaryMsgTypeEnum,
+    pub body: SseBinaryBodyEnum,
     pub checksum: u32,
 }
 
@@ -49,21 +49,21 @@ impl BinaryCodec for SseBinary {
         buf.put_u32(self.msg_type);
         buf.put_u64(self.msg_seq_num);
         buf.put_u32(self.msg_body_len);
-        match &self.msg_type_body {
-            SseBinaryMsgTypeEnum::Heartbeat(msg) => msg.encode(buf),
-            SseBinaryMsgTypeEnum::Logon(msg) => msg.encode(buf),
-            SseBinaryMsgTypeEnum::Logout(msg) => msg.encode(buf),
-            SseBinaryMsgTypeEnum::NewOrderSingle(msg) => msg.encode(buf),
-            SseBinaryMsgTypeEnum::OrderCancel(msg) => msg.encode(buf),
-            SseBinaryMsgTypeEnum::Confirm(msg) => msg.encode(buf),
-            SseBinaryMsgTypeEnum::CancelReject(msg) => msg.encode(buf),
-            SseBinaryMsgTypeEnum::Report(msg) => msg.encode(buf),
-            SseBinaryMsgTypeEnum::OrderReject(msg) => msg.encode(buf),
-            SseBinaryMsgTypeEnum::PlatformState(msg) => msg.encode(buf),
-            SseBinaryMsgTypeEnum::ExecRptInfo(msg) => msg.encode(buf),
-            SseBinaryMsgTypeEnum::ExecRptSync(msg) => msg.encode(buf),
-            SseBinaryMsgTypeEnum::ExecRptSyncRsp(msg) => msg.encode(buf),
-            SseBinaryMsgTypeEnum::ExecRptEndOfStream(msg) => msg.encode(buf),
+        match &self.body {
+            SseBinaryBodyEnum::Heartbeat(msg) => msg.encode(buf),
+            SseBinaryBodyEnum::Logon(msg) => msg.encode(buf),
+            SseBinaryBodyEnum::Logout(msg) => msg.encode(buf),
+            SseBinaryBodyEnum::NewOrderSingle(msg) => msg.encode(buf),
+            SseBinaryBodyEnum::OrderCancel(msg) => msg.encode(buf),
+            SseBinaryBodyEnum::Confirm(msg) => msg.encode(buf),
+            SseBinaryBodyEnum::CancelReject(msg) => msg.encode(buf),
+            SseBinaryBodyEnum::Report(msg) => msg.encode(buf),
+            SseBinaryBodyEnum::OrderReject(msg) => msg.encode(buf),
+            SseBinaryBodyEnum::PlatformState(msg) => msg.encode(buf),
+            SseBinaryBodyEnum::ExecRptInfo(msg) => msg.encode(buf),
+            SseBinaryBodyEnum::ExecRptSync(msg) => msg.encode(buf),
+            SseBinaryBodyEnum::ExecRptSyncRsp(msg) => msg.encode(buf),
+            SseBinaryBodyEnum::ExecRptEndOfStream(msg) => msg.encode(buf),
         }
         buf.put_u32(self.checksum);
     }
@@ -72,21 +72,21 @@ impl BinaryCodec for SseBinary {
         let msg_type = buf.get_u32();
         let msg_seq_num = buf.get_u64();
         let msg_body_len = buf.get_u32();
-        let msg_type_body = match msg_type {
-            33 => SseBinaryMsgTypeEnum::Heartbeat(Heartbeat::decode(buf)?),
-            40 => SseBinaryMsgTypeEnum::Logon(Logon::decode(buf)?),
-            41 => SseBinaryMsgTypeEnum::Logout(Logout::decode(buf)?),
-            58 => SseBinaryMsgTypeEnum::NewOrderSingle(NewOrderSingle::decode(buf)?),
-            61 => SseBinaryMsgTypeEnum::OrderCancel(OrderCancel::decode(buf)?),
-            32 => SseBinaryMsgTypeEnum::Confirm(Confirm::decode(buf)?),
-            59 => SseBinaryMsgTypeEnum::CancelReject(CancelReject::decode(buf)?),
-            103 => SseBinaryMsgTypeEnum::Report(Report::decode(buf)?),
-            204 => SseBinaryMsgTypeEnum::OrderReject(OrderReject::decode(buf)?),
-            209 => SseBinaryMsgTypeEnum::PlatformState(PlatformState::decode(buf)?),
-            208 => SseBinaryMsgTypeEnum::ExecRptInfo(ExecRptInfo::decode(buf)?),
-            206 => SseBinaryMsgTypeEnum::ExecRptSync(ExecRptSync::decode(buf)?),
-            207 => SseBinaryMsgTypeEnum::ExecRptSyncRsp(ExecRptSyncRsp::decode(buf)?),
-            210 => SseBinaryMsgTypeEnum::ExecRptEndOfStream(ExecRptEndOfStream::decode(buf)?),
+        let body = match msg_type {
+            33 => SseBinaryBodyEnum::Heartbeat(Heartbeat::decode(buf)?),
+            40 => SseBinaryBodyEnum::Logon(Logon::decode(buf)?),
+            41 => SseBinaryBodyEnum::Logout(Logout::decode(buf)?),
+            58 => SseBinaryBodyEnum::NewOrderSingle(NewOrderSingle::decode(buf)?),
+            61 => SseBinaryBodyEnum::OrderCancel(OrderCancel::decode(buf)?),
+            32 => SseBinaryBodyEnum::Confirm(Confirm::decode(buf)?),
+            59 => SseBinaryBodyEnum::CancelReject(CancelReject::decode(buf)?),
+            103 => SseBinaryBodyEnum::Report(Report::decode(buf)?),
+            204 => SseBinaryBodyEnum::OrderReject(OrderReject::decode(buf)?),
+            209 => SseBinaryBodyEnum::PlatformState(PlatformState::decode(buf)?),
+            208 => SseBinaryBodyEnum::ExecRptInfo(ExecRptInfo::decode(buf)?),
+            206 => SseBinaryBodyEnum::ExecRptSync(ExecRptSync::decode(buf)?),
+            207 => SseBinaryBodyEnum::ExecRptSyncRsp(ExecRptSyncRsp::decode(buf)?),
+            210 => SseBinaryBodyEnum::ExecRptEndOfStream(ExecRptEndOfStream::decode(buf)?),
             _ => return None,
         };
         let checksum = buf.get_u32();
@@ -94,7 +94,7 @@ impl BinaryCodec for SseBinary {
             msg_type,
             msg_seq_num,
             msg_body_len,
-            msg_type_body,
+            body,
             checksum,
         })
     }
@@ -111,7 +111,7 @@ mod sse_binary_tests {
             msg_seq_num: 123456789,
             msg_body_len: 123456,
             msg_type: 33,
-            msg_type_body: SseBinaryMsgTypeEnum::Heartbeat(Heartbeat {}),
+            body: SseBinaryBodyEnum::Heartbeat(Heartbeat {}),
             checksum: 123456,
         };
 

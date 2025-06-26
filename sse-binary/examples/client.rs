@@ -27,7 +27,7 @@ async fn main() -> anyhow::Result<()> {
         msg_seq_num: 1,
         msg_body_len: 123456,
         msg_type: 40,
-        msg_type_body: SseBinaryMsgTypeEnum::Logon(Logon {
+        body: SseBinaryBodyEnum::Logon(Logon {
             sender_comp_id: "sender".to_string(),
             target_comp_id: "target".to_string(),
             heart_bt_int: 12,
@@ -43,7 +43,7 @@ async fn main() -> anyhow::Result<()> {
         msg_seq_num: 2,
         msg_body_len: 123456,
         msg_type: 33,
-        msg_type_body: SseBinaryMsgTypeEnum::Heartbeat(Heartbeat {}),
+        body: SseBinaryBodyEnum::Heartbeat(Heartbeat {}),
         checksum: 123456,
     };
     let _ = send_message(&mut stream, &heartbeat).await;
@@ -52,7 +52,7 @@ async fn main() -> anyhow::Result<()> {
         msg_seq_num: 3,
         msg_body_len: 123456,
         msg_type: 41,
-        msg_type_body: SseBinaryMsgTypeEnum::Logout(Logout {
+        body: SseBinaryBodyEnum::Logout(Logout {
             session_status: 1,
             text: "hello".to_string(),
         }),
@@ -64,7 +64,7 @@ async fn main() -> anyhow::Result<()> {
         msg_seq_num: 3,
         msg_body_len: 123456,
         msg_type: 58,
-        msg_type_body: SseBinaryMsgTypeEnum::NewOrderSingle(NewOrderSingle {
+        body: SseBinaryBodyEnum::NewOrderSingle(NewOrderSingle {
             biz_id: 1,
             biz_pbu: "2".to_string(),
             cl_ord_id: "3".to_string(),
@@ -96,7 +96,7 @@ async fn main() -> anyhow::Result<()> {
         msg_seq_num: 3,
         msg_body_len: 123456,
         msg_type: 206,
-        msg_type_body: SseBinaryMsgTypeEnum::ExecRptSync(ExecRptSync {
+        body: SseBinaryBodyEnum::ExecRptSync(ExecRptSync {
             sub_exec_rpt_sync: sub_exec_rpt_syncs,
         }),
         checksum: 123456,
