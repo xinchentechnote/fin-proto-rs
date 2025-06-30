@@ -34,6 +34,7 @@ help:
 	@echo "Available targets:"
 	@echo "  all       - Run compile, format and fix (default)"
 	@echo "  compile   - Compile the protocol definitions"
+	@echo "  build   - Compile the protocol definitions"
 	@echo "  fmt       - Format the code using cargo fmt"
 	@echo "  fix       - Apply automatic fixes using cargo fix"
 	@echo "  help      - Show this help message"
