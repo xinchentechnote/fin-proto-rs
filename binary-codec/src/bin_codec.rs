@@ -104,6 +104,9 @@ impl_basic_type_codec_numeric!(i8, put_i8, put_i8, get_i8, get_i8);
 impl_basic_type_codec_numeric!(i16, put_i16, put_i16_le, get_i16, get_i16_le);
 impl_basic_type_codec_numeric!(i32, put_i32, put_i32_le, get_i32, get_i32_le);
 impl_basic_type_codec_numeric!(i64, put_i64, put_i64_le, get_i64, get_i64_le);
+// impl_basic_type_codec_numeric!(char, put_u8, put_u8, get_u8, get_u8);
+impl_basic_type_codec_numeric!(f32, put_f32, put_f32_le, get_f32, get_f32_le);
+impl_basic_type_codec_numeric!(f64, put_f64, put_f64_le, get_f64, get_f64_le);
 
 pub fn get_list<T, L>(buf: &mut Bytes) -> Option<Vec<T>>
 where

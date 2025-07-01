@@ -1,7 +1,7 @@
 # Makefile for fin-protoc project
 
 # Variables
-PROTO_DSL := proto/szse_bin_v1.29.dsl
+PROTO_DSL := ../submodules/fin-proto/szse/binary/szse_bin_v1.29.pdsl
 PROTO_DIR := proto/
 OUTPUT_DIR := src/
 BIN_DIR := ~/workspace/fin-protoc/bin/
@@ -14,12 +14,11 @@ build: compile
 
 compile:
 	@echo "Compiling protocol..."
-	$(BIN_DIR)/fin-protoc compile -f $(PROTO_DSL) -l $(PROTO_DIR) -r $(OUTPUT_DIR)
+	$(BIN_DIR)/fin-protoc compile -f $(PROTO_DSL) -r $(OUTPUT_DIR)
 
 fmt: fix
 	@echo "Formatting code..."
 	cargo fmt
-	$(BIN_DIR)/fin-protoc format -f $(PROTO_DSL)
 
 fix:
 	@echo "Applying fixes..."

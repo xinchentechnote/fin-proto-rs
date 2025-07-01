@@ -7,24 +7,20 @@ use crate::platform_partition::*;
 #[derive(Debug, Clone, PartialEq)]
 pub struct PlatformInfo {
     pub platform_id: u16,
-    pub no_partitions: u32,
     pub platform_partition: Vec<PlatformPartition>,
 }
 
 impl BinaryCodec for PlatformInfo {
     fn encode(&self, buf: &mut BytesMut) {
         buf.put_u16(self.platform_id);
-        buf.put_u32(self.no_partitions);
         put_object_list::<PlatformPartition, u32>(buf, &self.platform_partition);
     }
 
     fn decode(buf: &mut Bytes) -> Option<PlatformInfo> {
         let platform_id = buf.get_u16();
-        let no_partitions = buf.get_u32();
         let platform_partition = get_object_list::<PlatformPartition, u32>(buf)?;
         Some(Self {
             platform_id,
-            no_partitions,
             platform_partition,
         })
     }
@@ -39,7 +35,6 @@ mod platform_info_tests {
     fn test_platform_info_codec() {
         let original = PlatformInfo {
             platform_id: 1234,
-            no_partitions: 123456,
             platform_partition: vec![],
         };
 
