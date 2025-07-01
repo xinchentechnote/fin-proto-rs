@@ -1,6 +1,6 @@
 [workspace]
 members = [
-    "binary-codec", "binary-codec-macro",  # 核心 trait 定义
+    "binary-codec", "binary-codec-macro", "risk-binary",  # 核心 trait 定义
     "sample-binary", "sse-binary", "szse-binary",
 ]
 resolver = "2"

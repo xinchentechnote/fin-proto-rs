@@ -199,6 +199,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "risk-binary"
+version = "0.1.0"
+dependencies = [
+ "binary-codec",
+ "bytes",
+]
+
+[[package]]
 name = "rustc-demangle"
 version = "0.1.24"
 source = "registry+https://github.com/rust-lang/crates.io-index"
