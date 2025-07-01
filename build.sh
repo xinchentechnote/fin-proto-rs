@@ -4,17 +4,11 @@ cargo build
 cargo fmt
 cargo nextest run
 cd sample-binary
-make build
-make fmt
-make test
+make
 cd -
 cd szse-binary
-make build
-make fmt
-make test
+make
 cd -
 cd sse-binary
-make build
-make fmt
-make test
+make
 cd -
