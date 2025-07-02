@@ -46,23 +46,27 @@ pub struct SzseBinary {
 impl BinaryCodec for SzseBinary {
     fn encode(&self, buf: &mut BytesMut) {
         buf.put_u32(self.msg_type);
-        buf.put_u32(self.body_length);
+        let mut body_buf = BytesMut::new();
         match &self.body {
-            SzseBinaryBodyEnum::Logon(msg) => msg.encode(buf),
-            SzseBinaryBodyEnum::Logout(msg) => msg.encode(buf),
-            SzseBinaryBodyEnum::Heartbeat(msg) => msg.encode(buf),
-            SzseBinaryBodyEnum::BusinessReject(msg) => msg.encode(buf),
-            SzseBinaryBodyEnum::ReportSynchronization(msg) => msg.encode(buf),
-            SzseBinaryBodyEnum::PlatformStateInfo(msg) => msg.encode(buf),
-            SzseBinaryBodyEnum::ReportFinished(msg) => msg.encode(buf),
-            SzseBinaryBodyEnum::PlatformPartition(msg) => msg.encode(buf),
-            SzseBinaryBodyEnum::TradingSessionStatus(msg) => msg.encode(buf),
-            SzseBinaryBodyEnum::NewOrder(msg) => msg.encode(buf),
-            SzseBinaryBodyEnum::ExecutionConfirm(msg) => msg.encode(buf),
-            SzseBinaryBodyEnum::ExecutionReport(msg) => msg.encode(buf),
-            SzseBinaryBodyEnum::OrderCancelRequest(msg) => msg.encode(buf),
-            SzseBinaryBodyEnum::CancelReject(msg) => msg.encode(buf),
+            SzseBinaryBodyEnum::Logon(msg) => msg.encode(&mut body_buf),
+            SzseBinaryBodyEnum::Logout(msg) => msg.encode(&mut body_buf),
+            SzseBinaryBodyEnum::Heartbeat(msg) => msg.encode(&mut body_buf),
+            SzseBinaryBodyEnum::BusinessReject(msg) => msg.encode(&mut body_buf),
+            SzseBinaryBodyEnum::ReportSynchronization(msg) => msg.encode(&mut body_buf),
+            SzseBinaryBodyEnum::PlatformStateInfo(msg) => msg.encode(&mut body_buf),
+            SzseBinaryBodyEnum::ReportFinished(msg) => msg.encode(&mut body_buf),
+            SzseBinaryBodyEnum::PlatformPartition(msg) => msg.encode(&mut body_buf),
+            SzseBinaryBodyEnum::TradingSessionStatus(msg) => msg.encode(&mut body_buf),
+            SzseBinaryBodyEnum::NewOrder(msg) => msg.encode(&mut body_buf),
+            SzseBinaryBodyEnum::ExecutionConfirm(msg) => msg.encode(&mut body_buf),
+            SzseBinaryBodyEnum::ExecutionReport(msg) => msg.encode(&mut body_buf),
+            SzseBinaryBodyEnum::OrderCancelRequest(msg) => msg.encode(&mut body_buf),
+            SzseBinaryBodyEnum::CancelReject(msg) => msg.encode(&mut body_buf),
         }
+        buf.put_u32(body_buf.len() as u32);
+
+        buf.extend_from_slice(&body_buf);
+
         buf.put_i32(self.checksum);
     }
 
@@ -166,8 +170,8 @@ mod szse_binary_tests {
 
     #[test]
     fn test_szse_binary_codec() {
-        let original = SzseBinary {
-            body_length: 123456,
+        let mut original = SzseBinary {
+            body_length: 0,
             msg_type: 1,
             body: SzseBinaryBodyEnum::Logon(Logon {
                 sender_comp_id: vec!['a'; 20].into_iter().collect::<String>(),
@@ -184,6 +188,7 @@ mod szse_binary_tests {
         let mut bytes = buf.freeze();
 
         let decoded = SzseBinary::decode(&mut bytes).unwrap();
+        original.body_length = decoded.body_length;
         assert_eq!(original, decoded);
     }
 }

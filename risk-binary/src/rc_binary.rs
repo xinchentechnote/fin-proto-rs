@@ -29,14 +29,17 @@ impl BinaryCodec for RcBinary {
     fn encode(&self, buf: &mut BytesMut) {
         buf.put_u32(self.msg_type);
         buf.put_u32(self.version);
-        buf.put_u32(self.msg_body_len);
+        let mut body_buf = BytesMut::new();
         match &self.body {
-            RcBinaryBodyEnum::NewOrder(msg) => msg.encode(buf),
-            RcBinaryBodyEnum::OrderConfirm(msg) => msg.encode(buf),
-            RcBinaryBodyEnum::ExecutionReport(msg) => msg.encode(buf),
-            RcBinaryBodyEnum::OrderCancel(msg) => msg.encode(buf),
-            RcBinaryBodyEnum::CancelReject(msg) => msg.encode(buf),
+            RcBinaryBodyEnum::NewOrder(msg) => msg.encode(&mut body_buf),
+            RcBinaryBodyEnum::OrderConfirm(msg) => msg.encode(&mut body_buf),
+            RcBinaryBodyEnum::ExecutionReport(msg) => msg.encode(&mut body_buf),
+            RcBinaryBodyEnum::OrderCancel(msg) => msg.encode(&mut body_buf),
+            RcBinaryBodyEnum::CancelReject(msg) => msg.encode(&mut body_buf),
         }
+        buf.put_u32(body_buf.len() as u32);
+
+        buf.extend_from_slice(&body_buf);
     }
 
     fn decode(buf: &mut Bytes) -> Option<RcBinary> {
@@ -67,9 +70,9 @@ mod rc_binary_tests {
 
     #[test]
     fn test_rc_binary_codec() {
-        let original = RcBinary {
+        let mut original = RcBinary {
             version: 123456,
-            msg_body_len: 123456,
+            msg_body_len: 0,
             msg_type: 100101,
             body: RcBinaryBodyEnum::NewOrder(NewOrder {
                 cl_ord_id: "example".to_string(),
@@ -87,6 +90,7 @@ mod rc_binary_tests {
         let mut bytes = buf.freeze();
 
         let decoded = RcBinary::decode(&mut bytes).unwrap();
+        original.msg_body_len = decoded.msg_body_len;
         assert_eq!(original, decoded);
     }
 }
