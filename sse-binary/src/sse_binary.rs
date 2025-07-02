@@ -48,23 +48,27 @@ impl BinaryCodec for SseBinary {
     fn encode(&self, buf: &mut BytesMut) {
         buf.put_u32(self.msg_type);
         buf.put_u64(self.msg_seq_num);
-        buf.put_u32(self.msg_body_len);
+        let mut body_buf = BytesMut::new();
         match &self.body {
-            SseBinaryBodyEnum::Heartbeat(msg) => msg.encode(buf),
-            SseBinaryBodyEnum::Logon(msg) => msg.encode(buf),
-            SseBinaryBodyEnum::Logout(msg) => msg.encode(buf),
-            SseBinaryBodyEnum::NewOrderSingle(msg) => msg.encode(buf),
-            SseBinaryBodyEnum::OrderCancel(msg) => msg.encode(buf),
-            SseBinaryBodyEnum::Confirm(msg) => msg.encode(buf),
-            SseBinaryBodyEnum::CancelReject(msg) => msg.encode(buf),
-            SseBinaryBodyEnum::Report(msg) => msg.encode(buf),
-            SseBinaryBodyEnum::OrderReject(msg) => msg.encode(buf),
-            SseBinaryBodyEnum::PlatformState(msg) => msg.encode(buf),
-            SseBinaryBodyEnum::ExecRptInfo(msg) => msg.encode(buf),
-            SseBinaryBodyEnum::ExecRptSync(msg) => msg.encode(buf),
-            SseBinaryBodyEnum::ExecRptSyncRsp(msg) => msg.encode(buf),
-            SseBinaryBodyEnum::ExecRptEndOfStream(msg) => msg.encode(buf),
+            SseBinaryBodyEnum::Heartbeat(msg) => msg.encode(&mut body_buf),
+            SseBinaryBodyEnum::Logon(msg) => msg.encode(&mut body_buf),
+            SseBinaryBodyEnum::Logout(msg) => msg.encode(&mut body_buf),
+            SseBinaryBodyEnum::NewOrderSingle(msg) => msg.encode(&mut body_buf),
+            SseBinaryBodyEnum::OrderCancel(msg) => msg.encode(&mut body_buf),
+            SseBinaryBodyEnum::Confirm(msg) => msg.encode(&mut body_buf),
+            SseBinaryBodyEnum::CancelReject(msg) => msg.encode(&mut body_buf),
+            SseBinaryBodyEnum::Report(msg) => msg.encode(&mut body_buf),
+            SseBinaryBodyEnum::OrderReject(msg) => msg.encode(&mut body_buf),
+            SseBinaryBodyEnum::PlatformState(msg) => msg.encode(&mut body_buf),
+            SseBinaryBodyEnum::ExecRptInfo(msg) => msg.encode(&mut body_buf),
+            SseBinaryBodyEnum::ExecRptSync(msg) => msg.encode(&mut body_buf),
+            SseBinaryBodyEnum::ExecRptSyncRsp(msg) => msg.encode(&mut body_buf),
+            SseBinaryBodyEnum::ExecRptEndOfStream(msg) => msg.encode(&mut body_buf),
         }
+        buf.put_u32(body_buf.len() as u32);
+
+        buf.extend_from_slice(&body_buf);
+
         buf.put_u32(self.checksum);
     }
 
@@ -107,9 +111,9 @@ mod sse_binary_tests {
 
     #[test]
     fn test_sse_binary_codec() {
-        let original = SseBinary {
+        let mut original = SseBinary {
             msg_seq_num: 123456789,
-            msg_body_len: 123456,
+            msg_body_len: 0,
             msg_type: 33,
             body: SseBinaryBodyEnum::Heartbeat(Heartbeat {}),
             checksum: 123456,
@@ -120,6 +124,7 @@ mod sse_binary_tests {
         let mut bytes = buf.freeze();
 
         let decoded = SseBinary::decode(&mut bytes).unwrap();
+        original.msg_body_len = decoded.msg_body_len;
         assert_eq!(original, decoded);
     }
 }

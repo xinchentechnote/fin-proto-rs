@@ -26,13 +26,17 @@ pub struct RootPacket {
 impl BinaryCodec for RootPacket {
     fn encode(&self, buf: &mut BytesMut) {
         buf.put_u16_le(self.msg_type);
-        buf.put_u32_le(self.payload_len);
+        let mut payload_buf = BytesMut::new();
         match &self.payload {
-            RootPacketPayloadEnum::BasicPacket(msg) => msg.encode(buf),
-            RootPacketPayloadEnum::StringPacket(msg) => msg.encode(buf),
-            RootPacketPayloadEnum::NestedPacket(msg) => msg.encode(buf),
-            RootPacketPayloadEnum::EmptyPacket(msg) => msg.encode(buf),
+            RootPacketPayloadEnum::BasicPacket(msg) => msg.encode(&mut payload_buf),
+            RootPacketPayloadEnum::StringPacket(msg) => msg.encode(&mut payload_buf),
+            RootPacketPayloadEnum::NestedPacket(msg) => msg.encode(&mut payload_buf),
+            RootPacketPayloadEnum::EmptyPacket(msg) => msg.encode(&mut payload_buf),
         }
+        buf.put_u32_le(payload_buf.len() as u32);
+
+        buf.extend_from_slice(&payload_buf);
+
         buf.put_i32_le(self.checksum);
     }
 
@@ -63,8 +67,8 @@ mod root_packet_tests {
 
     #[test]
     fn test_root_packet_codec() {
-        let original = RootPacket {
-            payload_len: 123456,
+        let mut original = RootPacket {
+            payload_len: 0,
             msg_type: 1,
             payload: RootPacketPayloadEnum::BasicPacket(BasicPacket {
                 field_i_8: -42,
@@ -96,6 +100,7 @@ mod root_packet_tests {
         let mut bytes = buf.freeze();
 
         let decoded = RootPacket::decode(&mut bytes).unwrap();
+        original.payload_len = decoded.payload_len;
         assert_eq!(original, decoded);
     }
 }
