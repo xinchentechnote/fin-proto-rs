@@ -4,16 +4,16 @@ use bytes::{Bytes, BytesMut};
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct Extend206315 {
-    pub cash_margin: char,
+    pub cash_margin: String,
 }
 
 impl BinaryCodec for Extend206315 {
     fn encode(&self, buf: &mut BytesMut) {
-        put_char(buf, self.cash_margin);
+        put_char_array(buf, &self.cash_margin, 1);
     }
 
     fn decode(buf: &mut Bytes) -> Option<Extend206315> {
-        let cash_margin = get_char(buf)?;
+        let cash_margin = get_char_array(buf, 1)?;
         Some(Self { cash_margin })
     }
 }
@@ -25,7 +25,9 @@ mod extend_206315_tests {
 
     #[test]
     fn test_extend_206315_codec() {
-        let original = Extend206315 { cash_margin: 'a' };
+        let original = Extend206315 {
+            cash_margin: vec!['a'; 1].into_iter().collect::<String>(),
+        };
 
         let mut buf = BytesMut::new();
         original.encode(&mut buf);

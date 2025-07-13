@@ -7,8 +7,8 @@ pub struct Extend100101 {
     pub stop_px: i64,
     pub min_qty: i64,
     pub max_price_levels: u16,
-    pub time_in_force: char,
-    pub cash_margin: char,
+    pub time_in_force: String,
+    pub cash_margin: String,
 }
 
 impl BinaryCodec for Extend100101 {
@@ -16,16 +16,16 @@ impl BinaryCodec for Extend100101 {
         buf.put_i64(self.stop_px);
         buf.put_i64(self.min_qty);
         buf.put_u16(self.max_price_levels);
-        put_char(buf, self.time_in_force);
-        put_char(buf, self.cash_margin);
+        put_char_array(buf, &self.time_in_force, 1);
+        put_char_array(buf, &self.cash_margin, 1);
     }
 
     fn decode(buf: &mut Bytes) -> Option<Extend100101> {
         let stop_px = buf.get_i64();
         let min_qty = buf.get_i64();
         let max_price_levels = buf.get_u16();
-        let time_in_force = get_char(buf)?;
-        let cash_margin = get_char(buf)?;
+        let time_in_force = get_char_array(buf, 1)?;
+        let cash_margin = get_char_array(buf, 1)?;
         Some(Self {
             stop_px,
             min_qty,
@@ -47,8 +47,8 @@ mod extend_100101_tests {
             stop_px: -123456789,
             min_qty: -123456789,
             max_price_levels: 1234,
-            time_in_force: 'a',
-            cash_margin: 'a',
+            time_in_force: vec!['a'; 1].into_iter().collect::<String>(),
+            cash_margin: vec!['a'; 1].into_iter().collect::<String>(),
         };
 
         let mut buf = BytesMut::new();

@@ -10,11 +10,11 @@ pub struct NewOrderSingle {
     pub security_id: String,
     pub account: String,
     pub owner_type: u8,
-    pub side: char,
+    pub side: String,
     pub price: i64,
     pub order_qty: i64,
-    pub ord_type: char,
-    pub time_in_force: char,
+    pub ord_type: String,
+    pub time_in_force: String,
     pub transact_time: u64,
     pub credit_tag: String,
     pub clearing_firm: String,
@@ -30,11 +30,11 @@ impl BinaryCodec for NewOrderSingle {
         put_char_array(buf, &self.security_id, 12);
         put_char_array(buf, &self.account, 13);
         buf.put_u8(self.owner_type);
-        put_char(buf, self.side);
+        put_char_array(buf, &self.side, 1);
         buf.put_i64(self.price);
         buf.put_i64(self.order_qty);
-        put_char(buf, self.ord_type);
-        put_char(buf, self.time_in_force);
+        put_char_array(buf, &self.ord_type, 1);
+        put_char_array(buf, &self.time_in_force, 1);
         buf.put_u64(self.transact_time);
         put_char_array(buf, &self.credit_tag, 2);
         put_char_array(buf, &self.clearing_firm, 8);
@@ -49,11 +49,11 @@ impl BinaryCodec for NewOrderSingle {
         let security_id = get_char_array(buf, 12)?;
         let account = get_char_array(buf, 13)?;
         let owner_type = buf.get_u8();
-        let side = get_char(buf)?;
+        let side = get_char_array(buf, 1)?;
         let price = buf.get_i64();
         let order_qty = buf.get_i64();
-        let ord_type = get_char(buf)?;
-        let time_in_force = get_char(buf)?;
+        let ord_type = get_char_array(buf, 1)?;
+        let time_in_force = get_char_array(buf, 1)?;
         let transact_time = buf.get_u64();
         let credit_tag = get_char_array(buf, 2)?;
         let clearing_firm = get_char_array(buf, 8)?;
@@ -94,11 +94,11 @@ mod new_order_single_tests {
             security_id: vec!['a'; 12].into_iter().collect::<String>(),
             account: vec!['a'; 13].into_iter().collect::<String>(),
             owner_type: 42,
-            side: 'a',
+            side: vec!['a'; 1].into_iter().collect::<String>(),
             price: -123456789,
             order_qty: -123456789,
-            ord_type: 'a',
-            time_in_force: 'a',
+            ord_type: vec!['a'; 1].into_iter().collect::<String>(),
+            time_in_force: vec!['a'; 1].into_iter().collect::<String>(),
             transact_time: 123456789,
             credit_tag: vec!['a'; 2].into_iter().collect::<String>(),
             clearing_firm: vec!['a'; 8].into_iter().collect::<String>(),

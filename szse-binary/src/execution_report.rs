@@ -46,13 +46,13 @@ pub struct ExecutionReport {
     pub cl_ord_id: String,
     pub quote_msg_id: String,
     pub exec_id: String,
-    pub exec_type: char,
-    pub ord_status: char,
+    pub exec_type: String,
+    pub ord_status: String,
     pub last_px: i64,
     pub last_qty: i64,
     pub leaves_qty: i64,
     pub cum_qty: i64,
-    pub side: char,
+    pub side: String,
     pub account_id: String,
     pub branch_id: String,
     pub appl_extend: ExecutionReportApplExtendEnum,
@@ -75,13 +75,13 @@ impl BinaryCodec for ExecutionReport {
         put_char_array(buf, &self.cl_ord_id, 10);
         put_char_array(buf, &self.quote_msg_id, 10);
         put_char_array(buf, &self.exec_id, 16);
-        put_char(buf, self.exec_type);
-        put_char(buf, self.ord_status);
+        put_char_array(buf, &self.exec_type, 1);
+        put_char_array(buf, &self.ord_status, 1);
         buf.put_i64(self.last_px);
         buf.put_i64(self.last_qty);
         buf.put_i64(self.leaves_qty);
         buf.put_i64(self.cum_qty);
-        put_char(buf, self.side);
+        put_char_array(buf, &self.side, 1);
         put_char_array(buf, &self.account_id, 12);
         put_char_array(buf, &self.branch_id, 4);
         match &self.appl_extend {
@@ -115,13 +115,13 @@ impl BinaryCodec for ExecutionReport {
         let cl_ord_id = get_char_array(buf, 10)?;
         let quote_msg_id = get_char_array(buf, 10)?;
         let exec_id = get_char_array(buf, 16)?;
-        let exec_type = get_char(buf)?;
-        let ord_status = get_char(buf)?;
+        let exec_type = get_char_array(buf, 1)?;
+        let ord_status = get_char_array(buf, 1)?;
         let last_px = buf.get_i64();
         let last_qty = buf.get_i64();
         let leaves_qty = buf.get_i64();
         let cum_qty = buf.get_i64();
-        let side = get_char(buf)?;
+        let side = get_char_array(buf, 1)?;
         let account_id = get_char_array(buf, 12)?;
         let branch_id = get_char_array(buf, 4)?;
         let appl_extend = match appl_id.as_str() {
@@ -198,18 +198,18 @@ mod execution_report_tests {
             cl_ord_id: vec!['a'; 10].into_iter().collect::<String>(),
             quote_msg_id: vec!['a'; 10].into_iter().collect::<String>(),
             exec_id: vec!['a'; 16].into_iter().collect::<String>(),
-            exec_type: 'a',
-            ord_status: 'a',
+            exec_type: vec!['a'; 1].into_iter().collect::<String>(),
+            ord_status: vec!['a'; 1].into_iter().collect::<String>(),
             last_px: -123456789,
             last_qty: -123456789,
             leaves_qty: -123456789,
             cum_qty: -123456789,
-            side: 'a',
+            side: vec!['a'; 1].into_iter().collect::<String>(),
             account_id: vec!['a'; 12].into_iter().collect::<String>(),
             branch_id: vec!['a'; 4].into_iter().collect::<String>(),
             appl_id: "010".to_string(),
             appl_extend: ExecutionReportApplExtendEnum::Extend200115(Extend200115 {
-                cash_margin: 'a',
+                cash_margin: vec!['a'; 1].into_iter().collect::<String>(),
             }),
         };
 

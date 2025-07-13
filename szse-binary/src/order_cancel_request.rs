@@ -14,7 +14,7 @@ pub struct OrderCancelRequest {
     pub user_info: String,
     pub cl_ord_id: String,
     pub orig_cl_ord_id: String,
-    pub side: char,
+    pub side: String,
     pub order_id: String,
     pub order_qty: i64,
 }
@@ -31,7 +31,7 @@ impl BinaryCodec for OrderCancelRequest {
         put_char_array(buf, &self.user_info, 8);
         put_char_array(buf, &self.cl_ord_id, 10);
         put_char_array(buf, &self.orig_cl_ord_id, 10);
-        put_char(buf, self.side);
+        put_char_array(buf, &self.side, 1);
         put_char_array(buf, &self.order_id, 16);
         buf.put_i64(self.order_qty);
     }
@@ -47,7 +47,7 @@ impl BinaryCodec for OrderCancelRequest {
         let user_info = get_char_array(buf, 8)?;
         let cl_ord_id = get_char_array(buf, 10)?;
         let orig_cl_ord_id = get_char_array(buf, 10)?;
-        let side = get_char(buf)?;
+        let side = get_char_array(buf, 1)?;
         let order_id = get_char_array(buf, 16)?;
         let order_qty = buf.get_i64();
         Some(Self {
@@ -86,7 +86,7 @@ mod order_cancel_request_tests {
             user_info: vec!['a'; 8].into_iter().collect::<String>(),
             cl_ord_id: vec!['a'; 10].into_iter().collect::<String>(),
             orig_cl_ord_id: vec!['a'; 10].into_iter().collect::<String>(),
-            side: 'a',
+            side: vec!['a'; 1].into_iter().collect::<String>(),
             order_id: vec!['a'; 16].into_iter().collect::<String>(),
             order_qty: -123456789,
         };

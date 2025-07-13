@@ -6,7 +6,7 @@ use bytes::{Buf, BufMut, Bytes, BytesMut};
 pub struct Logon {
     pub sender_comp_id: String,
     pub target_comp_id: String,
-    pub heart_bt_int: i32,
+    pub heart_btint: i32,
     pub password: String,
     pub default_appl_ver_id: String,
 }
@@ -15,7 +15,7 @@ impl BinaryCodec for Logon {
     fn encode(&self, buf: &mut BytesMut) {
         put_char_array(buf, &self.sender_comp_id, 20);
         put_char_array(buf, &self.target_comp_id, 20);
-        buf.put_i32(self.heart_bt_int);
+        buf.put_i32(self.heart_btint);
         put_char_array(buf, &self.password, 16);
         put_char_array(buf, &self.default_appl_ver_id, 32);
     }
@@ -23,13 +23,13 @@ impl BinaryCodec for Logon {
     fn decode(buf: &mut Bytes) -> Option<Logon> {
         let sender_comp_id = get_char_array(buf, 20)?;
         let target_comp_id = get_char_array(buf, 20)?;
-        let heart_bt_int = buf.get_i32();
+        let heart_btint = buf.get_i32();
         let password = get_char_array(buf, 16)?;
         let default_appl_ver_id = get_char_array(buf, 32)?;
         Some(Self {
             sender_comp_id,
             target_comp_id,
-            heart_bt_int,
+            heart_btint,
             password,
             default_appl_ver_id,
         })
@@ -46,7 +46,7 @@ mod logon_tests {
         let original = Logon {
             sender_comp_id: vec!['a'; 20].into_iter().collect::<String>(),
             target_comp_id: vec!['a'; 20].into_iter().collect::<String>(),
-            heart_bt_int: -123456,
+            heart_btint: -123456,
             password: vec!['a'; 16].into_iter().collect::<String>(),
             default_appl_ver_id: vec!['a'; 32].into_iter().collect::<String>(),
         };

@@ -19,7 +19,7 @@ pub struct Extend104128 {
     pub settl_type: u16,
     pub settl_period: u8,
     pub pre_trade_anonymity: u8,
-    pub cash_margin: char,
+    pub cash_margin: String,
     pub memo: String,
 }
 
@@ -40,7 +40,7 @@ impl BinaryCodec for Extend104128 {
         buf.put_u16(self.settl_type);
         buf.put_u8(self.settl_period);
         buf.put_u8(self.pre_trade_anonymity);
-        put_char(buf, self.cash_margin);
+        put_char_array(buf, &self.cash_margin, 1);
         put_char_array(buf, &self.memo, 160);
     }
 
@@ -60,7 +60,7 @@ impl BinaryCodec for Extend104128 {
         let settl_type = buf.get_u16();
         let settl_period = buf.get_u8();
         let pre_trade_anonymity = buf.get_u8();
-        let cash_margin = get_char(buf)?;
+        let cash_margin = get_char_array(buf, 1)?;
         let memo = get_char_array(buf, 160)?;
         Some(Self {
             member_id,
@@ -107,7 +107,7 @@ mod extend_104128_tests {
             settl_type: 1234,
             settl_period: 42,
             pre_trade_anonymity: 42,
-            cash_margin: 'a',
+            cash_margin: vec!['a'; 1].into_iter().collect::<String>(),
             memo: vec!['a'; 160].into_iter().collect::<String>(),
         };
 

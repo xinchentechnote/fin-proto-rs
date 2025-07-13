@@ -5,18 +5,18 @@ use bytes::{Bytes, BytesMut};
 #[derive(Debug, Clone, PartialEq)]
 pub struct Extend200515 {
     pub confirm_id: String,
-    pub cash_margin: char,
+    pub cash_margin: String,
 }
 
 impl BinaryCodec for Extend200515 {
     fn encode(&self, buf: &mut BytesMut) {
         put_char_array(buf, &self.confirm_id, 8);
-        put_char(buf, self.cash_margin);
+        put_char_array(buf, &self.cash_margin, 1);
     }
 
     fn decode(buf: &mut Bytes) -> Option<Extend200515> {
         let confirm_id = get_char_array(buf, 8)?;
-        let cash_margin = get_char(buf)?;
+        let cash_margin = get_char_array(buf, 1)?;
         Some(Self {
             confirm_id,
             cash_margin,
@@ -33,7 +33,7 @@ mod extend_200515_tests {
     fn test_extend_200515_codec() {
         let original = Extend200515 {
             confirm_id: vec!['a'; 8].into_iter().collect::<String>(),
-            cash_margin: 'a',
+            cash_margin: vec!['a'; 1].into_iter().collect::<String>(),
         };
 
         let mut buf = BytesMut::new();

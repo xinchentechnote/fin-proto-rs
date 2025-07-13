@@ -7,8 +7,8 @@ pub struct Extend101401 {
     pub stop_px: i64,
     pub min_qty: i64,
     pub max_price_levels: u16,
-    pub time_in_force: char,
-    pub position_effect: char,
+    pub time_in_force: String,
+    pub position_effect: String,
     pub covered_or_uncovered: u8,
     pub contract_account_code: String,
     pub secondary_order_id: String,
@@ -19,8 +19,8 @@ impl BinaryCodec for Extend101401 {
         buf.put_i64(self.stop_px);
         buf.put_i64(self.min_qty);
         buf.put_u16(self.max_price_levels);
-        put_char(buf, self.time_in_force);
-        put_char(buf, self.position_effect);
+        put_char_array(buf, &self.time_in_force, 1);
+        put_char_array(buf, &self.position_effect, 1);
         buf.put_u8(self.covered_or_uncovered);
         put_char_array(buf, &self.contract_account_code, 6);
         put_char_array(buf, &self.secondary_order_id, 16);
@@ -30,8 +30,8 @@ impl BinaryCodec for Extend101401 {
         let stop_px = buf.get_i64();
         let min_qty = buf.get_i64();
         let max_price_levels = buf.get_u16();
-        let time_in_force = get_char(buf)?;
-        let position_effect = get_char(buf)?;
+        let time_in_force = get_char_array(buf, 1)?;
+        let position_effect = get_char_array(buf, 1)?;
         let covered_or_uncovered = buf.get_u8();
         let contract_account_code = get_char_array(buf, 6)?;
         let secondary_order_id = get_char_array(buf, 16)?;
@@ -59,8 +59,8 @@ mod extend_101401_tests {
             stop_px: -123456789,
             min_qty: -123456789,
             max_price_levels: 1234,
-            time_in_force: 'a',
-            position_effect: 'a',
+            time_in_force: vec!['a'; 1].into_iter().collect::<String>(),
+            position_effect: vec!['a'; 1].into_iter().collect::<String>(),
             covered_or_uncovered: 42,
             contract_account_code: vec!['a'; 6].into_iter().collect::<String>(),
             secondary_order_id: vec!['a'; 16].into_iter().collect::<String>(),

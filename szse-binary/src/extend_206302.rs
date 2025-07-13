@@ -8,8 +8,8 @@ pub struct Extend206302 {
     pub stop_px: i64,
     pub min_qty: i64,
     pub max_price_levels: u16,
-    pub time_in_force: char,
-    pub lot_type: char,
+    pub time_in_force: String,
+    pub lot_type: String,
     pub imc_reject_text_len: u32,
     pub imc_reject_text: String,
 }
@@ -20,8 +20,8 @@ impl BinaryCodec for Extend206302 {
         buf.put_i64(self.stop_px);
         buf.put_i64(self.min_qty);
         buf.put_u16(self.max_price_levels);
-        put_char(buf, self.time_in_force);
-        put_char(buf, self.lot_type);
+        put_char_array(buf, &self.time_in_force, 1);
+        put_char_array(buf, &self.lot_type, 1);
         buf.put_u32(self.imc_reject_text_len);
         put_string::<u32>(buf, &self.imc_reject_text);
     }
@@ -31,8 +31,8 @@ impl BinaryCodec for Extend206302 {
         let stop_px = buf.get_i64();
         let min_qty = buf.get_i64();
         let max_price_levels = buf.get_u16();
-        let time_in_force = get_char(buf)?;
-        let lot_type = get_char(buf)?;
+        let time_in_force = get_char_array(buf, 1)?;
+        let lot_type = get_char_array(buf, 1)?;
         let imc_reject_text_len = buf.get_u32();
         let imc_reject_text = get_string::<u32>(buf)?;
         Some(Self {
@@ -60,8 +60,8 @@ mod extend_206302_tests {
             stop_px: -123456789,
             min_qty: -123456789,
             max_price_levels: 1234,
-            time_in_force: 'a',
-            lot_type: 'a',
+            time_in_force: vec!['a'; 1].into_iter().collect::<String>(),
+            lot_type: vec!['a'; 1].into_iter().collect::<String>(),
             imc_reject_text_len: 123456,
             imc_reject_text: "example".to_string(),
         };

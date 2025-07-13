@@ -4,7 +4,7 @@ use bytes::{Buf, BufMut, Bytes, BytesMut};
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct Extend204115 {
-    pub cash_margin: char,
+    pub cash_margin: String,
     pub settl_type: u16,
     pub settl_period: u8,
     pub counterparty_member_id: String,
@@ -16,7 +16,7 @@ pub struct Extend204115 {
 
 impl BinaryCodec for Extend204115 {
     fn encode(&self, buf: &mut BytesMut) {
-        put_char(buf, self.cash_margin);
+        put_char_array(buf, &self.cash_margin, 1);
         buf.put_u16(self.settl_type);
         buf.put_u8(self.settl_period);
         put_char_array(buf, &self.counterparty_member_id, 6);
@@ -27,7 +27,7 @@ impl BinaryCodec for Extend204115 {
     }
 
     fn decode(buf: &mut Bytes) -> Option<Extend204115> {
-        let cash_margin = get_char(buf)?;
+        let cash_margin = get_char_array(buf, 1)?;
         let settl_type = buf.get_u16();
         let settl_period = buf.get_u8();
         let counterparty_member_id = get_char_array(buf, 6)?;
@@ -56,7 +56,7 @@ mod extend_204115_tests {
     #[test]
     fn test_extend_204115_codec() {
         let original = Extend204115 {
-            cash_margin: 'a',
+            cash_margin: vec!['a'; 1].into_iter().collect::<String>(),
             settl_type: 1234,
             settl_period: 42,
             counterparty_member_id: vec!['a'; 6].into_iter().collect::<String>(),
