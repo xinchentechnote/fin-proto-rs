@@ -10,7 +10,7 @@ pub struct OrderCancel {
     pub security_id: String,
     pub account: String,
     pub owner_type: u8,
-    pub side: char,
+    pub side: String,
     pub orig_cl_ord_id: String,
     pub transact_time: u64,
     pub branch_id: String,
@@ -25,7 +25,7 @@ impl BinaryCodec for OrderCancel {
         put_char_array(buf, &self.security_id, 12);
         put_char_array(buf, &self.account, 13);
         buf.put_u8(self.owner_type);
-        put_char(buf, self.side);
+        put_char_array(buf, &self.side, 1);
         put_char_array(buf, &self.orig_cl_ord_id, 10);
         buf.put_u64(self.transact_time);
         put_char_array(buf, &self.branch_id, 8);
@@ -39,7 +39,7 @@ impl BinaryCodec for OrderCancel {
         let security_id = get_char_array(buf, 12)?;
         let account = get_char_array(buf, 13)?;
         let owner_type = buf.get_u8();
-        let side = get_char(buf)?;
+        let side = get_char_array(buf, 1)?;
         let orig_cl_ord_id = get_char_array(buf, 10)?;
         let transact_time = buf.get_u64();
         let branch_id = get_char_array(buf, 8)?;
@@ -74,7 +74,7 @@ mod order_cancel_tests {
             security_id: vec!['a'; 12].into_iter().collect::<String>(),
             account: vec!['a'; 13].into_iter().collect::<String>(),
             owner_type: 42,
-            side: 'a',
+            side: vec!['a'; 1].into_iter().collect::<String>(),
             orig_cl_ord_id: vec!['a'; 10].into_iter().collect::<String>(),
             transact_time: 123456789,
             branch_id: vec!['a'; 8].into_iter().collect::<String>(),

@@ -4,7 +4,7 @@ use bytes::{Buf, BufMut, Bytes, BytesMut};
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct Extend200415 {
-    pub position_effect: char,
+    pub position_effect: String,
     pub covered_or_uncovered: u8,
     pub contract_account_code: String,
     pub secondary_order_id: String,
@@ -12,14 +12,14 @@ pub struct Extend200415 {
 
 impl BinaryCodec for Extend200415 {
     fn encode(&self, buf: &mut BytesMut) {
-        put_char(buf, self.position_effect);
+        put_char_array(buf, &self.position_effect, 1);
         buf.put_u8(self.covered_or_uncovered);
         put_char_array(buf, &self.contract_account_code, 6);
         put_char_array(buf, &self.secondary_order_id, 16);
     }
 
     fn decode(buf: &mut Bytes) -> Option<Extend200415> {
-        let position_effect = get_char(buf)?;
+        let position_effect = get_char_array(buf, 1)?;
         let covered_or_uncovered = buf.get_u8();
         let contract_account_code = get_char_array(buf, 6)?;
         let secondary_order_id = get_char_array(buf, 16)?;
@@ -40,7 +40,7 @@ mod extend_200415_tests {
     #[test]
     fn test_extend_200415_codec() {
         let original = Extend200415 {
-            position_effect: 'a',
+            position_effect: vec!['a'; 1].into_iter().collect::<String>(),
             covered_or_uncovered: 42,
             contract_account_code: vec!['a'; 6].into_iter().collect::<String>(),
             secondary_order_id: vec!['a'; 16].into_iter().collect::<String>(),

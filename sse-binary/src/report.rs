@@ -8,20 +8,20 @@ pub struct Report {
     pub set_id: u32,
     pub report_index: u64,
     pub biz_id: u32,
-    pub exec_type: char,
+    pub exec_type: String,
     pub biz_pbu: String,
     pub cl_ord_id: String,
     pub security_id: String,
     pub account: String,
     pub owner_type: u8,
-    pub side: char,
+    pub side: String,
     pub price: i64,
     pub order_qty: i64,
     pub leaves_qty: i64,
     pub cxl_qty: i64,
-    pub ord_type: char,
-    pub time_in_force: char,
-    pub ord_status: char,
+    pub ord_type: String,
+    pub time_in_force: String,
+    pub ord_status: String,
     pub credit_tag: String,
     pub orig_cl_ord_id: String,
     pub clearing_firm: String,
@@ -40,20 +40,20 @@ impl BinaryCodec for Report {
         buf.put_u32(self.set_id);
         buf.put_u64(self.report_index);
         buf.put_u32(self.biz_id);
-        put_char(buf, self.exec_type);
+        put_char_array(buf, &self.exec_type, 1);
         put_char_array(buf, &self.biz_pbu, 8);
         put_char_array(buf, &self.cl_ord_id, 10);
         put_char_array(buf, &self.security_id, 12);
         put_char_array(buf, &self.account, 13);
         buf.put_u8(self.owner_type);
-        put_char(buf, self.side);
+        put_char_array(buf, &self.side, 1);
         buf.put_i64(self.price);
         buf.put_i64(self.order_qty);
         buf.put_i64(self.leaves_qty);
         buf.put_i64(self.cxl_qty);
-        put_char(buf, self.ord_type);
-        put_char(buf, self.time_in_force);
-        put_char(buf, self.ord_status);
+        put_char_array(buf, &self.ord_type, 1);
+        put_char_array(buf, &self.time_in_force, 1);
+        put_char_array(buf, &self.ord_status, 1);
         put_char_array(buf, &self.credit_tag, 2);
         put_char_array(buf, &self.orig_cl_ord_id, 10);
         put_char_array(buf, &self.clearing_firm, 8);
@@ -71,20 +71,20 @@ impl BinaryCodec for Report {
         let set_id = buf.get_u32();
         let report_index = buf.get_u64();
         let biz_id = buf.get_u32();
-        let exec_type = get_char(buf)?;
+        let exec_type = get_char_array(buf, 1)?;
         let biz_pbu = get_char_array(buf, 8)?;
         let cl_ord_id = get_char_array(buf, 10)?;
         let security_id = get_char_array(buf, 12)?;
         let account = get_char_array(buf, 13)?;
         let owner_type = buf.get_u8();
-        let side = get_char(buf)?;
+        let side = get_char_array(buf, 1)?;
         let price = buf.get_i64();
         let order_qty = buf.get_i64();
         let leaves_qty = buf.get_i64();
         let cxl_qty = buf.get_i64();
-        let ord_type = get_char(buf)?;
-        let time_in_force = get_char(buf)?;
-        let ord_status = get_char(buf)?;
+        let ord_type = get_char_array(buf, 1)?;
+        let time_in_force = get_char_array(buf, 1)?;
+        let ord_status = get_char_array(buf, 1)?;
         let credit_tag = get_char_array(buf, 2)?;
         let orig_cl_ord_id = get_char_array(buf, 10)?;
         let clearing_firm = get_char_array(buf, 8)?;
@@ -140,20 +140,20 @@ mod report_tests {
             set_id: 123456,
             report_index: 123456789,
             biz_id: 123456,
-            exec_type: 'a',
+            exec_type: vec!['a'; 1].into_iter().collect::<String>(),
             biz_pbu: vec!['a'; 8].into_iter().collect::<String>(),
             cl_ord_id: vec!['a'; 10].into_iter().collect::<String>(),
             security_id: vec!['a'; 12].into_iter().collect::<String>(),
             account: vec!['a'; 13].into_iter().collect::<String>(),
             owner_type: 42,
-            side: 'a',
+            side: vec!['a'; 1].into_iter().collect::<String>(),
             price: -123456789,
             order_qty: -123456789,
             leaves_qty: -123456789,
             cxl_qty: -123456789,
-            ord_type: 'a',
-            time_in_force: 'a',
-            ord_status: 'a',
+            ord_type: vec!['a'; 1].into_iter().collect::<String>(),
+            time_in_force: vec!['a'; 1].into_iter().collect::<String>(),
+            ord_status: vec!['a'; 1].into_iter().collect::<String>(),
             credit_tag: vec!['a'; 2].into_iter().collect::<String>(),
             orig_cl_ord_id: vec!['a'; 10].into_iter().collect::<String>(),
             clearing_firm: vec!['a'; 8].into_iter().collect::<String>(),

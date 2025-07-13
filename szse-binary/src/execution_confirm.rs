@@ -63,13 +63,13 @@ pub struct ExecutionConfirm {
     pub quote_msg_id: String,
     pub orig_cl_ord_id: String,
     pub exec_id: String,
-    pub exec_type: char,
-    pub ord_status: char,
+    pub exec_type: String,
+    pub ord_status: String,
     pub ord_rej_reason: u16,
     pub leaves_qty: i64,
     pub cum_qty: i64,
-    pub side: char,
-    pub ord_type: char,
+    pub side: String,
+    pub ord_type: String,
     pub order_qty: i64,
     pub price: i64,
     pub account_id: String,
@@ -96,13 +96,13 @@ impl BinaryCodec for ExecutionConfirm {
         put_char_array(buf, &self.quote_msg_id, 10);
         put_char_array(buf, &self.orig_cl_ord_id, 10);
         put_char_array(buf, &self.exec_id, 16);
-        put_char(buf, self.exec_type);
-        put_char(buf, self.ord_status);
+        put_char_array(buf, &self.exec_type, 1);
+        put_char_array(buf, &self.ord_status, 1);
         buf.put_u16(self.ord_rej_reason);
         buf.put_i64(self.leaves_qty);
         buf.put_i64(self.cum_qty);
-        put_char(buf, self.side);
-        put_char(buf, self.ord_type);
+        put_char_array(buf, &self.side, 1);
+        put_char_array(buf, &self.ord_type, 1);
         buf.put_i64(self.order_qty);
         buf.put_i64(self.price);
         put_char_array(buf, &self.account_id, 12);
@@ -148,13 +148,13 @@ impl BinaryCodec for ExecutionConfirm {
         let quote_msg_id = get_char_array(buf, 10)?;
         let orig_cl_ord_id = get_char_array(buf, 10)?;
         let exec_id = get_char_array(buf, 16)?;
-        let exec_type = get_char(buf)?;
-        let ord_status = get_char(buf)?;
+        let exec_type = get_char_array(buf, 1)?;
+        let ord_status = get_char_array(buf, 1)?;
         let ord_rej_reason = buf.get_u16();
         let leaves_qty = buf.get_i64();
         let cum_qty = buf.get_i64();
-        let side = get_char(buf)?;
-        let ord_type = get_char(buf)?;
+        let side = get_char_array(buf, 1)?;
+        let ord_type = get_char_array(buf, 1)?;
         let order_qty = buf.get_i64();
         let price = buf.get_i64();
         let account_id = get_char_array(buf, 12)?;
@@ -248,13 +248,13 @@ mod execution_confirm_tests {
             quote_msg_id: vec!['a'; 10].into_iter().collect::<String>(),
             orig_cl_ord_id: vec!['a'; 10].into_iter().collect::<String>(),
             exec_id: vec!['a'; 16].into_iter().collect::<String>(),
-            exec_type: 'a',
-            ord_status: 'a',
+            exec_type: vec!['a'; 1].into_iter().collect::<String>(),
+            ord_status: vec!['a'; 1].into_iter().collect::<String>(),
             ord_rej_reason: 1234,
             leaves_qty: -123456789,
             cum_qty: -123456789,
-            side: 'a',
-            ord_type: 'a',
+            side: vec!['a'; 1].into_iter().collect::<String>(),
+            ord_type: vec!['a'; 1].into_iter().collect::<String>(),
             order_qty: -123456789,
             price: -123456789,
             account_id: vec!['a'; 12].into_iter().collect::<String>(),
@@ -265,8 +265,8 @@ mod execution_confirm_tests {
                 stop_px: -123456789,
                 min_qty: -123456789,
                 max_price_levels: 1234,
-                time_in_force: 'a',
-                cash_margin: 'a',
+                time_in_force: vec!['a'; 1].into_iter().collect::<String>(),
+                cash_margin: vec!['a'; 1].into_iter().collect::<String>(),
             }),
         };
 

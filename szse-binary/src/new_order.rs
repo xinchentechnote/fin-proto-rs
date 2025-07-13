@@ -59,8 +59,8 @@ pub struct NewOrder {
     pub account_id: String,
     pub branch_id: String,
     pub order_restrictions: String,
-    pub side: char,
-    pub ord_type: char,
+    pub side: String,
+    pub ord_type: String,
     pub order_qty: i64,
     pub price: i64,
     pub appl_extend: NewOrderApplExtendEnum,
@@ -80,8 +80,8 @@ impl BinaryCodec for NewOrder {
         put_char_array(buf, &self.account_id, 12);
         put_char_array(buf, &self.branch_id, 4);
         put_char_array(buf, &self.order_restrictions, 4);
-        put_char(buf, self.side);
-        put_char(buf, self.ord_type);
+        put_char_array(buf, &self.side, 1);
+        put_char_array(buf, &self.ord_type, 1);
         buf.put_i64(self.order_qty);
         buf.put_i64(self.price);
         match &self.appl_extend {
@@ -120,8 +120,8 @@ impl BinaryCodec for NewOrder {
         let account_id = get_char_array(buf, 12)?;
         let branch_id = get_char_array(buf, 4)?;
         let order_restrictions = get_char_array(buf, 4)?;
-        let side = get_char(buf)?;
-        let ord_type = get_char(buf)?;
+        let side = get_char_array(buf, 1)?;
+        let ord_type = get_char_array(buf, 1)?;
         let order_qty = buf.get_i64();
         let price = buf.get_i64();
         let appl_extend = match appl_id.as_str() {
@@ -196,8 +196,8 @@ mod new_order_tests {
             account_id: vec!['a'; 12].into_iter().collect::<String>(),
             branch_id: vec!['a'; 4].into_iter().collect::<String>(),
             order_restrictions: vec!['a'; 4].into_iter().collect::<String>(),
-            side: 'a',
-            ord_type: 'a',
+            side: vec!['a'; 1].into_iter().collect::<String>(),
+            ord_type: vec!['a'; 1].into_iter().collect::<String>(),
             order_qty: -123456789,
             price: -123456789,
             appl_id: "010".to_string(),
@@ -205,8 +205,8 @@ mod new_order_tests {
                 stop_px: -123456789,
                 min_qty: -123456789,
                 max_price_levels: 1234,
-                time_in_force: 'a',
-                cash_margin: 'a',
+                time_in_force: vec!['a'; 1].into_iter().collect::<String>(),
+                cash_margin: vec!['a'; 1].into_iter().collect::<String>(),
             }),
         };
 

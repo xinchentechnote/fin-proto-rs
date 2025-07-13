@@ -176,7 +176,7 @@ mod szse_binary_tests {
             body: SzseBinaryBodyEnum::Logon(Logon {
                 sender_comp_id: vec!['a'; 20].into_iter().collect::<String>(),
                 target_comp_id: vec!['a'; 20].into_iter().collect::<String>(),
-                heart_bt_int: -123456,
+                heart_btint: -123456,
                 password: vec!['a'; 16].into_iter().collect::<String>(),
                 default_appl_ver_id: vec!['a'; 32].into_iter().collect::<String>(),
             }),

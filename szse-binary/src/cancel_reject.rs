@@ -17,8 +17,8 @@ pub struct CancelReject {
     pub user_info: String,
     pub cl_ord_id: String,
     pub orig_cl_ord_id: String,
-    pub side: char,
-    pub ord_status: char,
+    pub side: String,
+    pub ord_status: String,
     pub cxl_rej_reason: u16,
     pub reject_text: String,
     pub order_id: String,
@@ -39,8 +39,8 @@ impl BinaryCodec for CancelReject {
         put_char_array(buf, &self.user_info, 8);
         put_char_array(buf, &self.cl_ord_id, 10);
         put_char_array(buf, &self.orig_cl_ord_id, 10);
-        put_char(buf, self.side);
-        put_char(buf, self.ord_status);
+        put_char_array(buf, &self.side, 1);
+        put_char_array(buf, &self.ord_status, 1);
         buf.put_u16(self.cxl_rej_reason);
         put_char_array(buf, &self.reject_text, 16);
         put_char_array(buf, &self.order_id, 16);
@@ -60,8 +60,8 @@ impl BinaryCodec for CancelReject {
         let user_info = get_char_array(buf, 8)?;
         let cl_ord_id = get_char_array(buf, 10)?;
         let orig_cl_ord_id = get_char_array(buf, 10)?;
-        let side = get_char(buf)?;
-        let ord_status = get_char(buf)?;
+        let side = get_char_array(buf, 1)?;
+        let ord_status = get_char_array(buf, 1)?;
         let cxl_rej_reason = buf.get_u16();
         let reject_text = get_char_array(buf, 16)?;
         let order_id = get_char_array(buf, 16)?;
@@ -109,8 +109,8 @@ mod cancel_reject_tests {
             user_info: vec!['a'; 8].into_iter().collect::<String>(),
             cl_ord_id: vec!['a'; 10].into_iter().collect::<String>(),
             orig_cl_ord_id: vec!['a'; 10].into_iter().collect::<String>(),
-            side: 'a',
-            ord_status: 'a',
+            side: vec!['a'; 1].into_iter().collect::<String>(),
+            ord_status: vec!['a'; 1].into_iter().collect::<String>(),
             cxl_rej_reason: 1234,
             reject_text: vec!['a'; 16].into_iter().collect::<String>(),
             order_id: vec!['a'; 16].into_iter().collect::<String>(),
