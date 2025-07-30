@@ -68,8 +68,14 @@ impl BinaryCodec for SseBinary {
         buf.put_u32(body_buf.len() as u32);
 
         buf.extend_from_slice(&body_buf);
-
-        buf.put_u32(self.checksum);
+        let val = CHECKSUM_SERVICE_CONTEXT
+            .get("SSE_BIN")
+            .and_then(|service| match service.calc(buf) {
+                Checksum::U32(v) => Some(v),
+                _ => None,
+            })
+            .unwrap_or(self.checksum);
+        buf.put_u32(val);
     }
 
     fn decode(buf: &mut Bytes) -> Option<SseBinary> {
@@ -125,6 +131,7 @@ mod sse_binary_tests {
 
         let decoded = SseBinary::decode(&mut bytes).unwrap();
         original.msg_body_len = decoded.msg_body_len;
+        original.checksum = decoded.checksum;
         assert_eq!(original, decoded);
     }
 }
