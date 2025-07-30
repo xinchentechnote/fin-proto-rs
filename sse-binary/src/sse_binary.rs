@@ -68,6 +68,7 @@ impl BinaryCodec for SseBinary {
         buf.put_u32(body_buf.len() as u32);
 
         buf.extend_from_slice(&body_buf);
+
         let val = CHECKSUM_SERVICE_CONTEXT
             .get("SSE_BIN")
             .and_then(|service| match service.calc(buf) {

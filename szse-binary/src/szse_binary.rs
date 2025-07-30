@@ -67,7 +67,14 @@ impl BinaryCodec for SzseBinary {
 
         buf.extend_from_slice(&body_buf);
 
-        buf.put_i32(self.checksum);
+        let val = CHECKSUM_SERVICE_CONTEXT
+            .get("SZSE_BIN")
+            .and_then(|service| match service.calc(buf) {
+                Checksum::I32(v) => Some(v),
+                _ => None,
+            })
+            .unwrap_or(self.checksum);
+        buf.put_i32(val);
     }
 
     fn decode(buf: &mut Bytes) -> Option<SzseBinary> {
@@ -189,6 +196,7 @@ mod szse_binary_tests {
 
         let decoded = SzseBinary::decode(&mut bytes).unwrap();
         original.body_length = decoded.body_length;
+        original.checksum = decoded.checksum;
         assert_eq!(original, decoded);
     }
 }
