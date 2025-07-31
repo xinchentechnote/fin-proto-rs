@@ -1,7 +1,7 @@
 # Makefile for fin-protoc project
 
 # Variables
-PROTO_DSL := ../submodules/fin-proto/sample/sample.pdsl
+PROTO_DSL := ../submodules/fin-proto/bse/bse_trade_bin_v0.9.pdsl
 PROTO_DIR := proto/
 OUTPUT_DIR := src/
 BIN_DIR := ~/workspace/fin-protoc/bin/
