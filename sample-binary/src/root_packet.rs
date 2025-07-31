@@ -20,7 +20,7 @@ pub struct RootPacket {
     pub msg_type: u16,
     pub payload_len: u32,
     pub payload: RootPacketPayloadEnum,
-    pub checksum: i32,
+    pub checksum: u32,
 }
 
 impl BinaryCodec for RootPacket {
@@ -37,7 +37,14 @@ impl BinaryCodec for RootPacket {
 
         buf.extend_from_slice(&payload_buf);
 
-        buf.put_i32_le(self.checksum);
+        let val = CHECKSUM_SERVICE_CONTEXT
+            .get("CRC32")
+            .and_then(|service| match service.calc(buf) {
+                Checksum::U32(v) => Some(v),
+                _ => None,
+            })
+            .unwrap_or(self.checksum);
+        buf.put_u32(val);
     }
 
     fn decode(buf: &mut Bytes) -> Option<RootPacket> {
@@ -50,7 +57,7 @@ impl BinaryCodec for RootPacket {
             4 => RootPacketPayloadEnum::EmptyPacket(EmptyPacket::decode(buf)?),
             _ => return None,
         };
-        let checksum = buf.get_i32_le();
+        let checksum = buf.get_u32_le();
         Some(Self {
             msg_type,
             payload_len,
@@ -75,6 +82,7 @@ mod root_packet_tests {
                 field_i_16: -1234,
                 field_i_32: -123456,
                 field_i_64: -123456789,
+                field_char: vec!['a'; 1].into_iter().collect::<String>(),
                 field_u_8: 42,
                 field_u_16: 1234,
                 field_u_32: 123456,
@@ -85,6 +93,7 @@ mod root_packet_tests {
                 field_i_16_list: vec![-1234, -4321],
                 field_i_32_list: vec![-123456, -654321],
                 field_i_64_list: vec![-123456789, -987654321],
+                field_char_list: vec!["a".to_string(); 1],
                 field_u_8_list: vec![42, 12],
                 field_u_16_list: vec![1234, 4321],
                 field_u_32_list: vec![123456, 654321],
@@ -92,7 +101,7 @@ mod root_packet_tests {
                 field_f_32_list: vec![],
                 field_f_64_list: vec![],
             }),
-            checksum: -123456,
+            checksum: 123456,
         };
 
         let mut buf = BytesMut::new();
@@ -101,6 +110,7 @@ mod root_packet_tests {
 
         let decoded = RootPacket::decode(&mut bytes).unwrap();
         original.payload_len = decoded.payload_len;
+        original.checksum = decoded.checksum;
         assert_eq!(original, decoded);
     }
 }

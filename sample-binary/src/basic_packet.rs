@@ -8,6 +8,7 @@ pub struct BasicPacket {
     pub field_i_16: i16,
     pub field_i_32: i32,
     pub field_i_64: i64,
+    pub field_char: String,
     pub field_u_8: u8,
     pub field_u_16: u16,
     pub field_u_32: u32,
@@ -18,6 +19,7 @@ pub struct BasicPacket {
     pub field_i_16_list: Vec<i16>,
     pub field_i_32_list: Vec<i32>,
     pub field_i_64_list: Vec<i64>,
+    pub field_char_list: Vec<String>,
     pub field_u_8_list: Vec<u8>,
     pub field_u_16_list: Vec<u16>,
     pub field_u_32_list: Vec<u32>,
@@ -32,6 +34,7 @@ impl BinaryCodec for BasicPacket {
         buf.put_i16_le(self.field_i_16);
         buf.put_i32_le(self.field_i_32);
         buf.put_i64_le(self.field_i_64);
+        put_char_array(buf, &self.field_char, 1);
         buf.put_u8(self.field_u_8);
         buf.put_u16_le(self.field_u_16);
         buf.put_u32_le(self.field_u_32);
@@ -42,6 +45,7 @@ impl BinaryCodec for BasicPacket {
         put_list_le::<i16, u16>(buf, &self.field_i_16_list);
         put_list_le::<i32, u16>(buf, &self.field_i_32_list);
         put_list_le::<i64, u16>(buf, &self.field_i_64_list);
+        put_fixed_string_list::<u16>(buf, &self.field_char_list, 1);
         put_list_le::<u8, u16>(buf, &self.field_u_8_list);
         put_list_le::<u16, u16>(buf, &self.field_u_16_list);
         put_list_le::<u32, u16>(buf, &self.field_u_32_list);
@@ -55,6 +59,7 @@ impl BinaryCodec for BasicPacket {
         let field_i_16 = buf.get_i16_le();
         let field_i_32 = buf.get_i32_le();
         let field_i_64 = buf.get_i64_le();
+        let field_char = get_char_array(buf, 1)?;
         let field_u_8 = buf.get_u8();
         let field_u_16 = buf.get_u16_le();
         let field_u_32 = buf.get_u32_le();
@@ -65,6 +70,7 @@ impl BinaryCodec for BasicPacket {
         let field_i_16_list = get_list_le::<i16, u16>(buf)?;
         let field_i_32_list = get_list_le::<i32, u16>(buf)?;
         let field_i_64_list = get_list_le::<i64, u16>(buf)?;
+        let field_char_list = get_fixed_string_list::<u16>(buf, 1)?;
         let field_u_8_list = get_list_le::<u8, u16>(buf)?;
         let field_u_16_list = get_list_le::<u16, u16>(buf)?;
         let field_u_32_list = get_list_le::<u32, u16>(buf)?;
@@ -76,6 +82,7 @@ impl BinaryCodec for BasicPacket {
             field_i_16,
             field_i_32,
             field_i_64,
+            field_char,
             field_u_8,
             field_u_16,
             field_u_32,
@@ -86,6 +93,7 @@ impl BinaryCodec for BasicPacket {
             field_i_16_list,
             field_i_32_list,
             field_i_64_list,
+            field_char_list,
             field_u_8_list,
             field_u_16_list,
             field_u_32_list,
@@ -108,6 +116,7 @@ mod basic_packet_tests {
             field_i_16: -1234,
             field_i_32: -123456,
             field_i_64: -123456789,
+            field_char: vec!['a'; 1].into_iter().collect::<String>(),
             field_u_8: 42,
             field_u_16: 1234,
             field_u_32: 123456,
@@ -118,6 +127,7 @@ mod basic_packet_tests {
             field_i_16_list: vec![-1234, -4321],
             field_i_32_list: vec![-123456, -654321],
             field_i_64_list: vec![-123456789, -987654321],
+            field_char_list: vec!["a".to_string(); 1],
             field_u_8_list: vec![42, 12],
             field_u_16_list: vec![1234, 4321],
             field_u_32_list: vec![123456, 654321],

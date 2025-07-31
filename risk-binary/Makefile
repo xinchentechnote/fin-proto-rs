@@ -17,7 +17,7 @@ set_env:
 
 compile:
 	@echo "Compiling protocol..."
-	$(BIN_DIR)/fin-protoc compile -f $(PROTO_DSL) -r $(OUTPUT_DIR)
+	$(BIN_DIR)/fin-protoc -f $(PROTO_DSL) -r $(OUTPUT_DIR)
 
 fmt: fix
 	@echo "Formatting code..."
