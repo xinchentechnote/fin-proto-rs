@@ -158,4 +158,38 @@ The system supports ApplID-based extensions for market-specific functionality: [
 
 This allows the same message type to have different field structures based on market segment requirements while maintaining protocol consistency.
 
+## Related Repositories
+
+- [`fin-proto`](https://github.com/xinchentechnote/fin-proto)
+
+  - A comprehensive financial protocol library
+  - Supports SSE, SZSE, and risk protocols
+  - Includes Lua dissectors for Wireshark
+
+- [`fin-proto-go`](https://github.com/xinchentechnote/fin-proto-go)
+
+  - Native Go implementation of the protocols
+  - Standardized codec interface
+  - Modular, exchange-specific architecture
+  - This repository has been integrated into the [`gt-auto`](https://github.com/xinchentechnote/gt-auto) repository, an automated testing tool for financial systems(gateway,engine and so on)
+
+- [`fin-proto-cpp`](https://github.com/xinchentechnote/fin-proto-cpp)
+
+  - Efficient C++ implementation
+  - Protocol support for SSE, SZSE, risk
+  - Optimized serialization logic
+
+- [`fin-proto-java`](https://github.com/xinchentechnote/fin-proto-java)
+
+  - Binary protocol codec for Java
+  - Netty ByteBuf integration
+  - Gradle build system
+  - Java 17+ compatible
+
+- [`fin-proto-py`](https://github.com/xinchentechnote/fin-proto-py)
+
+  - Python implementation for financial protocols
+  - SSE, SZSE, and risk protocol support
+  - Easy-to-use parsing and serialization API
+
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/xinchentechnote/fin-proto-rs)
