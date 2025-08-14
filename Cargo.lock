@@ -74,6 +74,7 @@ name = "bjse-binary"
 version = "0.1.0"
 dependencies = [
  "binary-codec",
+ "byteorder",
  "bytes",
 ]
 
@@ -240,6 +241,7 @@ name = "risk-binary"
 version = "0.1.0"
 dependencies = [
  "binary-codec",
+ "byteorder",
  "bytes",
 ]
 
@@ -260,6 +262,7 @@ name = "sample-binary"
 version = "0.1.0"
 dependencies = [
  "binary-codec",
+ "byteorder",
  "bytes",
 ]
 
@@ -355,6 +358,7 @@ name = "szse-binary"
 version = "0.1.0"
 dependencies = [
  "binary-codec",
+ "byteorder",
  "bytes",
 ]
 
