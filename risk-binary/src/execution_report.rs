@@ -4,29 +4,33 @@ use bytes::{Buf, BufMut, Bytes, BytesMut};
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct ExecutionReport {
+    pub unique_order_id: String,
     pub cl_ord_id: String,
     pub ord_cnfm_id: String,
     pub last_px: u64,
     pub last_qty: u64,
-    pub ord_status: char,
+    pub ord_status: String,
 }
 
 impl BinaryCodec for ExecutionReport {
     fn encode(&self, buf: &mut BytesMut) {
+        put_string::<u32>(buf, &self.unique_order_id);
         put_string::<u32>(buf, &self.cl_ord_id);
         put_string::<u32>(buf, &self.ord_cnfm_id);
         buf.put_u64(self.last_px);
         buf.put_u64(self.last_qty);
-        put_char(buf, self.ord_status);
+        put_char_array(buf, &self.ord_status, 1);
     }
 
     fn decode(buf: &mut Bytes) -> Option<ExecutionReport> {
+        let unique_order_id = get_string::<u32>(buf)?;
         let cl_ord_id = get_string::<u32>(buf)?;
         let ord_cnfm_id = get_string::<u32>(buf)?;
         let last_px = buf.get_u64();
         let last_qty = buf.get_u64();
-        let ord_status = get_char(buf)?;
+        let ord_status = get_char_array(buf, 1)?;
         Some(Self {
+            unique_order_id,
             cl_ord_id,
             ord_cnfm_id,
             last_px,
@@ -44,11 +48,12 @@ mod execution_report_tests {
     #[test]
     fn test_execution_report_codec() {
         let original = ExecutionReport {
+            unique_order_id: "example".to_string(),
             cl_ord_id: "example".to_string(),
             ord_cnfm_id: "example".to_string(),
             last_px: 123456789,
             last_qty: 123456789,
-            ord_status: 'a',
+            ord_status: vec!['a'; 1].into_iter().collect::<String>(),
         };
 
         let mut buf = BytesMut::new();

@@ -4,35 +4,39 @@ use bytes::{Buf, BufMut, Bytes, BytesMut};
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct NewOrder {
+    pub unique_order_id: String,
     pub cl_ord_id: String,
     pub security_id: String,
-    pub side: char,
+    pub side: String,
     pub price: u64,
     pub order_qty: u64,
-    pub ord_type: char,
+    pub ord_type: String,
     pub account: String,
 }
 
 impl BinaryCodec for NewOrder {
     fn encode(&self, buf: &mut BytesMut) {
+        put_string::<u32>(buf, &self.unique_order_id);
         put_string::<u32>(buf, &self.cl_ord_id);
         put_string::<u32>(buf, &self.security_id);
-        put_char(buf, self.side);
+        put_char_array(buf, &self.side, 1);
         buf.put_u64(self.price);
         buf.put_u64(self.order_qty);
-        put_char(buf, self.ord_type);
+        put_char_array(buf, &self.ord_type, 1);
         put_string::<u32>(buf, &self.account);
     }
 
     fn decode(buf: &mut Bytes) -> Option<NewOrder> {
+        let unique_order_id = get_string::<u32>(buf)?;
         let cl_ord_id = get_string::<u32>(buf)?;
         let security_id = get_string::<u32>(buf)?;
-        let side = get_char(buf)?;
+        let side = get_char_array(buf, 1)?;
         let price = buf.get_u64();
         let order_qty = buf.get_u64();
-        let ord_type = get_char(buf)?;
+        let ord_type = get_char_array(buf, 1)?;
         let account = get_string::<u32>(buf)?;
         Some(Self {
+            unique_order_id,
             cl_ord_id,
             security_id,
             side,
@@ -52,12 +56,13 @@ mod new_order_tests {
     #[test]
     fn test_new_order_codec() {
         let original = NewOrder {
+            unique_order_id: "example".to_string(),
             cl_ord_id: "example".to_string(),
             security_id: "example".to_string(),
-            side: 'a',
+            side: vec!['a'; 1].into_iter().collect::<String>(),
             price: 123456789,
             order_qty: 123456789,
-            ord_type: 'a',
+            ord_type: vec!['a'; 1].into_iter().collect::<String>(),
             account: "example".to_string(),
         };
 
