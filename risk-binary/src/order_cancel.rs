@@ -4,6 +4,8 @@ use bytes::{Bytes, BytesMut};
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct OrderCancel {
+    pub unique_order_id: String,
+    pub unique_orig_order_id: String,
     pub cl_ord_id: String,
     pub orig_cl_ord_id: String,
     pub security_id: String,
@@ -11,16 +13,22 @@ pub struct OrderCancel {
 
 impl BinaryCodec for OrderCancel {
     fn encode(&self, buf: &mut BytesMut) {
+        put_string::<u32>(buf, &self.unique_order_id);
+        put_string::<u32>(buf, &self.unique_orig_order_id);
         put_string::<u32>(buf, &self.cl_ord_id);
         put_string::<u32>(buf, &self.orig_cl_ord_id);
         put_string::<u32>(buf, &self.security_id);
     }
 
     fn decode(buf: &mut Bytes) -> Option<OrderCancel> {
+        let unique_order_id = get_string::<u32>(buf)?;
+        let unique_orig_order_id = get_string::<u32>(buf)?;
         let cl_ord_id = get_string::<u32>(buf)?;
         let orig_cl_ord_id = get_string::<u32>(buf)?;
         let security_id = get_string::<u32>(buf)?;
         Some(Self {
+            unique_order_id,
+            unique_orig_order_id,
             cl_ord_id,
             orig_cl_ord_id,
             security_id,
@@ -36,6 +44,8 @@ mod order_cancel_tests {
     #[test]
     fn test_order_cancel_codec() {
         let original = OrderCancel {
+            unique_order_id: "example".to_string(),
+            unique_orig_order_id: "example".to_string(),
             cl_ord_id: "example".to_string(),
             orig_cl_ord_id: "example".to_string(),
             security_id: "example".to_string(),

@@ -15,7 +15,7 @@ graph TB
         SZSE_PROTO["szse_bin_v1.29.pdsl"]
         SSE_PROTO["sse_bin_v0.57.pdsl"]
         SAMPLE_PROTO["sample.pdsl"]
-        RISK_PROTO["risk_v0.1.0.dsl"]
+        RISK_PROTO["risk_v0.1.0.pdsl"]
     end
 
     subgraph "Code Generation"
@@ -81,7 +81,7 @@ sequenceDiagram
     participant RUST as "Generated Rust"
     participant CARGO as "Cargo Tools"
 
-    DSL->>PROTOC: "Parse .pdsl/.dsl files"
+    DSL->>PROTOC: "Parse .pdsl/.pdsl files"
     PROTOC->>RUST: "Generate structs & impls"
     RUST->>CARGO: "cargo fix --allow-dirty"
     CARGO->>CARGO: "cargo fmt"

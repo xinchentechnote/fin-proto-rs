@@ -4,26 +4,34 @@ use bytes::{Buf, BufMut, Bytes, BytesMut};
 
 #[derive(Debug, Clone, PartialEq)]
 pub struct OrderConfirm {
+    pub unique_order_id: String,
+    pub unique_orig_order_id: String,
     pub cl_ord_id: String,
-    pub exec_type: char,
+    pub exec_type: String,
     pub ord_rej_reason: u32,
     pub ord_cnfm_id: String,
 }
 
 impl BinaryCodec for OrderConfirm {
     fn encode(&self, buf: &mut BytesMut) {
+        put_string::<u32>(buf, &self.unique_order_id);
+        put_string::<u32>(buf, &self.unique_orig_order_id);
         put_string::<u32>(buf, &self.cl_ord_id);
-        put_char(buf, self.exec_type);
+        put_char_array(buf, &self.exec_type, 1);
         buf.put_u32(self.ord_rej_reason);
         put_string::<u32>(buf, &self.ord_cnfm_id);
     }
 
     fn decode(buf: &mut Bytes) -> Option<OrderConfirm> {
+        let unique_order_id = get_string::<u32>(buf)?;
+        let unique_orig_order_id = get_string::<u32>(buf)?;
         let cl_ord_id = get_string::<u32>(buf)?;
-        let exec_type = get_char(buf)?;
+        let exec_type = get_char_array(buf, 1)?;
         let ord_rej_reason = buf.get_u32();
         let ord_cnfm_id = get_string::<u32>(buf)?;
         Some(Self {
+            unique_order_id,
+            unique_orig_order_id,
             cl_ord_id,
             exec_type,
             ord_rej_reason,
@@ -40,8 +48,10 @@ mod order_confirm_tests {
     #[test]
     fn test_order_confirm_codec() {
         let original = OrderConfirm {
+            unique_order_id: "example".to_string(),
+            unique_orig_order_id: "example".to_string(),
             cl_ord_id: "example".to_string(),
-            exec_type: 'a',
+            exec_type: vec!['a'; 1].into_iter().collect::<String>(),
             ord_rej_reason: 123456,
             ord_cnfm_id: "example".to_string(),
         };
