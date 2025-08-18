@@ -10,6 +10,7 @@ bytes = "1.10.1"
 
 [dev-dependencies]
 anyhow = "1.0.98"
+criterion = "0.7.0"
 serde = { version = "1.0.219", features = ["derive"] }
 serde_json = "1.0.140"
 tokio = { version = "1.45.1", features = ["full"] }
@@ -24,3 +25,7 @@ name = "example"
 name = "client"
 [[example]]
 name = "server"
+
+[[bench]]
+name = "new_order_bench"
+harness = false

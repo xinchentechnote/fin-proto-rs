@@ -11,3 +11,10 @@ bytes = "1.10.1"
 [lib]
 name = "szse_binary"
 path = "src/lib.rs"
+
+[dev-dependencies]
+criterion = "0.7.0"
+
+[[bench]]
+name = "new_order_bench"
+harness = false
