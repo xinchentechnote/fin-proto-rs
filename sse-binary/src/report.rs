@@ -14,21 +14,19 @@ pub struct Report {
     pub security_id: String,
     pub account: String,
     pub owner_type: u8,
+    pub order_entry_time: u64,
+    pub last_px: i64,
+    pub last_qty: i64,
+    pub gross_trade_amt: i64,
     pub side: String,
-    pub price: i64,
     pub order_qty: i64,
     pub leaves_qty: i64,
-    pub cxl_qty: i64,
-    pub ord_type: String,
-    pub time_in_force: String,
     pub ord_status: String,
     pub credit_tag: String,
-    pub orig_cl_ord_id: String,
     pub clearing_firm: String,
     pub branch_id: String,
-    pub ord_rej_reason: u32,
+    pub trd_cnfm_id: String,
     pub ord_cnfm_id: String,
-    pub orig_ord_cnfm_id: String,
     pub trade_date: u32,
     pub transact_time: u64,
     pub user_info: String,
@@ -46,21 +44,19 @@ impl BinaryCodec for Report {
         put_char_array(buf, &self.security_id, 12);
         put_char_array(buf, &self.account, 13);
         buf.put_u8(self.owner_type);
+        buf.put_u64(self.order_entry_time);
+        buf.put_i64(self.last_px);
+        buf.put_i64(self.last_qty);
+        buf.put_i64(self.gross_trade_amt);
         put_char_array(buf, &self.side, 1);
-        buf.put_i64(self.price);
         buf.put_i64(self.order_qty);
         buf.put_i64(self.leaves_qty);
-        buf.put_i64(self.cxl_qty);
-        put_char_array(buf, &self.ord_type, 1);
-        put_char_array(buf, &self.time_in_force, 1);
         put_char_array(buf, &self.ord_status, 1);
         put_char_array(buf, &self.credit_tag, 2);
-        put_char_array(buf, &self.orig_cl_ord_id, 10);
         put_char_array(buf, &self.clearing_firm, 8);
         put_char_array(buf, &self.branch_id, 8);
-        buf.put_u32(self.ord_rej_reason);
+        put_char_array(buf, &self.trd_cnfm_id, 16);
         put_char_array(buf, &self.ord_cnfm_id, 16);
-        put_char_array(buf, &self.orig_ord_cnfm_id, 16);
         buf.put_u32(self.trade_date);
         buf.put_u64(self.transact_time);
         put_char_array(buf, &self.user_info, 32);
@@ -77,21 +73,19 @@ impl BinaryCodec for Report {
         let security_id = get_char_array(buf, 12)?;
         let account = get_char_array(buf, 13)?;
         let owner_type = buf.get_u8();
+        let order_entry_time = buf.get_u64();
+        let last_px = buf.get_i64();
+        let last_qty = buf.get_i64();
+        let gross_trade_amt = buf.get_i64();
         let side = get_char_array(buf, 1)?;
-        let price = buf.get_i64();
         let order_qty = buf.get_i64();
         let leaves_qty = buf.get_i64();
-        let cxl_qty = buf.get_i64();
-        let ord_type = get_char_array(buf, 1)?;
-        let time_in_force = get_char_array(buf, 1)?;
         let ord_status = get_char_array(buf, 1)?;
         let credit_tag = get_char_array(buf, 2)?;
-        let orig_cl_ord_id = get_char_array(buf, 10)?;
         let clearing_firm = get_char_array(buf, 8)?;
         let branch_id = get_char_array(buf, 8)?;
-        let ord_rej_reason = buf.get_u32();
+        let trd_cnfm_id = get_char_array(buf, 16)?;
         let ord_cnfm_id = get_char_array(buf, 16)?;
-        let orig_ord_cnfm_id = get_char_array(buf, 16)?;
         let trade_date = buf.get_u32();
         let transact_time = buf.get_u64();
         let user_info = get_char_array(buf, 32)?;
@@ -106,21 +100,19 @@ impl BinaryCodec for Report {
             security_id,
             account,
             owner_type,
+            order_entry_time,
+            last_px,
+            last_qty,
+            gross_trade_amt,
             side,
-            price,
             order_qty,
             leaves_qty,
-            cxl_qty,
-            ord_type,
-            time_in_force,
             ord_status,
             credit_tag,
-            orig_cl_ord_id,
             clearing_firm,
             branch_id,
-            ord_rej_reason,
+            trd_cnfm_id,
             ord_cnfm_id,
-            orig_ord_cnfm_id,
             trade_date,
             transact_time,
             user_info,
@@ -146,21 +138,19 @@ mod report_tests {
             security_id: vec!['a'; 12].into_iter().collect::<String>(),
             account: vec!['a'; 13].into_iter().collect::<String>(),
             owner_type: 42,
+            order_entry_time: 123456789,
+            last_px: -123456789,
+            last_qty: -123456789,
+            gross_trade_amt: -123456789,
             side: vec!['a'; 1].into_iter().collect::<String>(),
-            price: -123456789,
             order_qty: -123456789,
             leaves_qty: -123456789,
-            cxl_qty: -123456789,
-            ord_type: vec!['a'; 1].into_iter().collect::<String>(),
-            time_in_force: vec!['a'; 1].into_iter().collect::<String>(),
             ord_status: vec!['a'; 1].into_iter().collect::<String>(),
             credit_tag: vec!['a'; 2].into_iter().collect::<String>(),
-            orig_cl_ord_id: vec!['a'; 10].into_iter().collect::<String>(),
             clearing_firm: vec!['a'; 8].into_iter().collect::<String>(),
             branch_id: vec!['a'; 8].into_iter().collect::<String>(),
-            ord_rej_reason: 123456,
+            trd_cnfm_id: vec!['a'; 16].into_iter().collect::<String>(),
             ord_cnfm_id: vec!['a'; 16].into_iter().collect::<String>(),
-            orig_ord_cnfm_id: vec!['a'; 16].into_iter().collect::<String>(),
             trade_date: 123456,
             transact_time: 123456789,
             user_info: vec!['a'; 32].into_iter().collect::<String>(),
