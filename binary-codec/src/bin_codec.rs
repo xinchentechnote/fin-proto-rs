@@ -198,7 +198,12 @@ where
     Some(result)
 }
 
-pub fn get_fixed_string_list<L>(buf: &mut Bytes, fixed_length: usize) -> Option<Vec<String>>
+pub fn get_fixed_string_list_trim_padding<L>(
+    buf: &mut Bytes,
+    fixed_length: usize,
+    padding: char,
+    from_left: bool,
+) -> Option<Vec<String>>
 where
     L: LengthPrefix,
 {
@@ -208,14 +213,24 @@ where
         if buf.remaining() < fixed_length {
             return None;
         }
-        let bytes = buf.copy_to_bytes(fixed_length);
-        let s = String::from_utf8(bytes.to_vec()).ok()?;
-        result.push(s.trim_end_matches('\0').to_string());
+        let s = get_char_array_trim_padding(buf, fixed_length, padding, from_left)?;
+        result.push(s);
     }
     Some(result)
 }
+pub fn get_fixed_string_list<L>(buf: &mut Bytes, fixed_length: usize) -> Option<Vec<String>>
+where
+    L: LengthPrefix,
+{
+    get_fixed_string_list_trim_padding::<L>(buf, fixed_length, ' ', false)
+}
 
-pub fn get_fixed_string_list_le<L>(buf: &mut Bytes, fixed_length: usize) -> Option<Vec<String>>
+pub fn get_fixed_string_list_trim_padding_le<L>(
+    buf: &mut Bytes,
+    fixed_length: usize,
+    padding: char,
+    from_left: bool,
+) -> Option<Vec<String>>
 where
     L: LengthPrefix,
 {
@@ -225,11 +240,16 @@ where
         if buf.remaining() < fixed_length {
             return None;
         }
-        let bytes = buf.copy_to_bytes(fixed_length);
-        let s = String::from_utf8(bytes.to_vec()).ok()?;
-        result.push(s.trim_end_matches('\0').to_string());
+        let s = get_char_array_trim_padding(buf, fixed_length, padding, from_left)?;
+        result.push(s);
     }
     Some(result)
+}
+pub fn get_fixed_string_list_le<L>(buf: &mut Bytes, fixed_length: usize) -> Option<Vec<String>>
+where
+    L: LengthPrefix,
+{
+    get_fixed_string_list_trim_padding_le::<L>(buf, fixed_length, ' ', false)
 }
 
 pub fn put_string_list<L1, L2>(buf: &mut BytesMut, items: &[String])
@@ -258,18 +278,39 @@ where
     }
 }
 
-pub fn put_fixed_string_list<L>(buf: &mut BytesMut, items: &[String], fixed_length: usize)
-where
+pub fn put_fixed_string_list_with_padding<L>(
+    buf: &mut BytesMut,
+    items: &[String],
+    fixed_length: usize,
+    padding: char,
+    from_left: bool,
+) where
     L: LengthPrefix,
 {
     L::write(items.len(), buf, false);
     for item in items {
-        let bytes = item.as_bytes();
-        let len = bytes.len().min(fixed_length);
-        buf.extend_from_slice(&bytes[..len]);
-        if len < fixed_length {
-            buf.extend_from_slice(&vec![0; fixed_length - len]);
-        }
+        put_char_array_with_padding(buf, item, fixed_length, padding, from_left);
+    }
+}
+pub fn put_fixed_string_list<L>(buf: &mut BytesMut, items: &[String], fixed_length: usize)
+where
+    L: LengthPrefix,
+{
+    put_fixed_string_list_with_padding::<L>(buf, items, fixed_length, ' ', false);
+}
+
+pub fn put_fixed_string_list_with_padding_le<L>(
+    buf: &mut BytesMut,
+    items: &[String],
+    fixed_length: usize,
+    padding: char,
+    from_left: bool,
+) where
+    L: LengthPrefix,
+{
+    L::write(items.len(), buf, true);
+    for item in items {
+        put_char_array_with_padding(buf, item, fixed_length, padding, from_left);
     }
 }
 
@@ -277,15 +318,7 @@ pub fn put_fixed_string_list_le<L>(buf: &mut BytesMut, items: &[String], fixed_l
 where
     L: LengthPrefix,
 {
-    L::write(items.len(), buf, true);
-    for item in items {
-        let bytes = item.as_bytes();
-        let len = bytes.len().min(fixed_length);
-        buf.extend_from_slice(&bytes[..len]);
-        if len < fixed_length {
-            buf.extend_from_slice(&vec![0; fixed_length - len]);
-        }
-    }
+    put_fixed_string_list_with_padding_le::<L>(buf, items, fixed_length, ' ', false);
 }
 
 pub fn put_list<T, L>(buf: &mut BytesMut, items: &[T])
@@ -375,15 +408,15 @@ pub fn put_char_array_with_padding(
     s: &str,
     fixed_length: usize,
     padding: char,
-    left: bool,
+    from_left: bool,
 ) {
     let bytes = s.as_bytes();
     let len = bytes.len().min(fixed_length);
-    if left && fixed_length - len > 0 {
+    if from_left && fixed_length - len > 0 {
         buf.extend_from_slice(&vec![padding as u8; fixed_length - len]);
     }
     buf.extend_from_slice(&bytes[..len]);
-    if !left && fixed_length - len > 0 {
+    if !from_left && fixed_length - len > 0 {
         buf.extend_from_slice(&vec![padding as u8; fixed_length - len]);
     }
 }
@@ -396,14 +429,14 @@ pub fn get_char_array_trim_padding(
     buf: &mut Bytes,
     len: usize,
     padding: char,
-    left: bool,
+    from_left: bool,
 ) -> Option<String> {
     if buf.remaining() < len {
         return None;
     }
     let bytes = buf.copy_to_bytes(len);
     let s = String::from_utf8(bytes.to_vec()).ok()?;
-    if left {
+    if from_left {
         Some(s.trim_start_matches(padding).to_string())
     } else {
         Some(s.trim_end_matches(padding).to_string())
