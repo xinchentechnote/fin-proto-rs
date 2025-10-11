@@ -370,22 +370,48 @@ where
     String::from_utf8(buf.copy_to_bytes(len).to_vec()).ok()
 }
 
-pub fn put_char_array(buf: &mut BytesMut, s: &str, fixed_length: usize) {
+pub fn put_char_array_with_padding(
+    buf: &mut BytesMut,
+    s: &str,
+    fixed_length: usize,
+    padding: char,
+    left: bool,
+) {
     let bytes = s.as_bytes();
     let len = bytes.len().min(fixed_length);
+    if left && fixed_length - len > 0 {
+        buf.extend_from_slice(&vec![padding as u8; fixed_length - len]);
+    }
     buf.extend_from_slice(&bytes[..len]);
-    if len < fixed_length {
-        buf.extend_from_slice(&vec![0; fixed_length - len]);
+    if !left && fixed_length - len > 0 {
+        buf.extend_from_slice(&vec![padding as u8; fixed_length - len]);
     }
 }
 
-pub fn get_char_array(buf: &mut Bytes, len: usize) -> Option<String> {
+pub fn put_char_array(buf: &mut BytesMut, s: &str, fixed_length: usize) {
+    put_char_array_with_padding(buf, s, fixed_length, ' ', false);
+}
+
+pub fn get_char_array_trim_padding(
+    buf: &mut Bytes,
+    len: usize,
+    padding: char,
+    left: bool,
+) -> Option<String> {
     if buf.remaining() < len {
         return None;
     }
     let bytes = buf.copy_to_bytes(len);
     let s = String::from_utf8(bytes.to_vec()).ok()?;
-    Some(s.trim_end_matches('\0').to_string())
+    if left {
+        Some(s.trim_start_matches(padding).to_string())
+    } else {
+        Some(s.trim_end_matches(padding).to_string())
+    }
+}
+
+pub fn get_char_array(buf: &mut Bytes, len: usize) -> Option<String> {
+    get_char_array_trim_padding(buf, len, ' ', false)
 }
 
 pub fn put_char(buf: &mut BytesMut, c: char) {
