@@ -8,42 +8,71 @@ pub struct StringPacket {
     pub field_dynamic_string_1: String,
     pub field_fixed_string_1: String,
     pub field_fixed_string_10: String,
+    pub field_fixed_string_10_pad: String,
     pub field_dynamic_string_list: Vec<String>,
     pub field_dynamic_string_1_list: Vec<String>,
     pub field_fixed_string_1_list: Vec<String>,
     pub field_fixed_string_10_list: Vec<String>,
+    pub field_fixed_string_10_list_pad: Vec<String>,
 }
 
 impl BinaryCodec for StringPacket {
     fn encode(&self, buf: &mut BytesMut) {
         put_string_le::<u16>(buf, &self.field_dynamic_string);
         put_string_le::<u16>(buf, &self.field_dynamic_string_1);
-        put_char_array(buf, &self.field_fixed_string_1, 1);
-        put_char_array(buf, &self.field_fixed_string_10, 10);
+        put_char_array_with_padding(buf, &self.field_fixed_string_1, 1, '0', true);
+        put_char_array_with_padding(buf, &self.field_fixed_string_10, 10, '0', true);
+        put_char_array_with_padding(buf, &self.field_fixed_string_10_pad, 10, ' ', true);
         put_string_list_le::<u16, u16>(buf, &self.field_dynamic_string_list);
         put_string_list_le::<u16, u16>(buf, &self.field_dynamic_string_1_list);
-        put_fixed_string_list::<u16>(buf, &self.field_fixed_string_1_list, 1);
-        put_fixed_string_list::<u16>(buf, &self.field_fixed_string_10_list, 10);
+        put_fixed_string_list_with_padding_le::<u16>(
+            buf,
+            &self.field_fixed_string_1_list,
+            1,
+            '0',
+            true,
+        );
+        put_fixed_string_list_with_padding_le::<u16>(
+            buf,
+            &self.field_fixed_string_10_list,
+            10,
+            '0',
+            true,
+        );
+        put_fixed_string_list_with_padding_le::<u16>(
+            buf,
+            &self.field_fixed_string_10_list_pad,
+            10,
+            '0',
+            false,
+        );
     }
 
     fn decode(buf: &mut Bytes) -> Option<StringPacket> {
         let field_dynamic_string = get_string_le::<u16>(buf)?;
         let field_dynamic_string_1 = get_string_le::<u16>(buf)?;
-        let field_fixed_string_1 = get_char_array(buf, 1)?;
-        let field_fixed_string_10 = get_char_array(buf, 10)?;
+        let field_fixed_string_1 = get_char_array_trim_padding(buf, 1, '0', true)?;
+        let field_fixed_string_10 = get_char_array_trim_padding(buf, 10, '0', true)?;
+        let field_fixed_string_10_pad = get_char_array_trim_padding(buf, 10, ' ', true)?;
         let field_dynamic_string_list = get_string_list_le::<u16, u16>(buf)?;
         let field_dynamic_string_1_list = get_string_list_le::<u16, u16>(buf)?;
-        let field_fixed_string_1_list = get_fixed_string_list::<u16>(buf, 1)?;
-        let field_fixed_string_10_list = get_fixed_string_list::<u16>(buf, 10)?;
+        let field_fixed_string_1_list =
+            get_fixed_string_list_trim_padding_le::<u16>(buf, 1, '0', true)?;
+        let field_fixed_string_10_list =
+            get_fixed_string_list_trim_padding_le::<u16>(buf, 10, '0', true)?;
+        let field_fixed_string_10_list_pad =
+            get_fixed_string_list_trim_padding_le::<u16>(buf, 10, '0', false)?;
         Some(Self {
             field_dynamic_string,
             field_dynamic_string_1,
             field_fixed_string_1,
             field_fixed_string_10,
+            field_fixed_string_10_pad,
             field_dynamic_string_list,
             field_dynamic_string_1_list,
             field_fixed_string_1_list,
             field_fixed_string_10_list,
+            field_fixed_string_10_list_pad,
         })
     }
 }
@@ -60,10 +89,12 @@ mod string_packet_tests {
             field_dynamic_string_1: "example".to_string(),
             field_fixed_string_1: vec!['a'; 1].into_iter().collect::<String>(),
             field_fixed_string_10: vec!['a'; 10].into_iter().collect::<String>(),
+            field_fixed_string_10_pad: vec!['a'; 10].into_iter().collect::<String>(),
             field_dynamic_string_list: vec!["example".to_string(), "test".to_string()],
             field_dynamic_string_1_list: vec!["example".to_string(), "test".to_string()],
             field_fixed_string_1_list: vec!["a".to_string(); 1],
             field_fixed_string_10_list: vec!["a".to_string(); 10],
+            field_fixed_string_10_list_pad: vec!["a".to_string(); 10],
         };
 
         let mut buf = BytesMut::new();
