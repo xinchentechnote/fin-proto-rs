@@ -34,7 +34,7 @@ impl BinaryCodec for BasicPacket {
         buf.put_i16_le(self.field_i_16);
         buf.put_i32_le(self.field_i_32);
         buf.put_i64_le(self.field_i_64);
-        put_char_array_with_padding(buf, &self.field_char, 1, '0', true);
+        put_char_array_with_pad_char(buf, &self.field_char, 1, '0', true);
         buf.put_u8(self.field_u_8);
         buf.put_u16_le(self.field_u_16);
         buf.put_u32_le(self.field_u_32);
@@ -45,7 +45,7 @@ impl BinaryCodec for BasicPacket {
         put_list_le::<i16, u16>(buf, &self.field_i_16_list);
         put_list_le::<i32, u16>(buf, &self.field_i_32_list);
         put_list_le::<i64, u16>(buf, &self.field_i_64_list);
-        put_fixed_string_list_with_padding_le::<u16>(buf, &self.field_char_list, 1, '0', true);
+        put_fixed_string_list_with_pad_char_le::<u16>(buf, &self.field_char_list, 1, '0', true);
         put_list_le::<u8, u16>(buf, &self.field_u_8_list);
         put_list_le::<u16, u16>(buf, &self.field_u_16_list);
         put_list_le::<u32, u16>(buf, &self.field_u_32_list);
@@ -59,7 +59,7 @@ impl BinaryCodec for BasicPacket {
         let field_i_16 = buf.get_i16_le();
         let field_i_32 = buf.get_i32_le();
         let field_i_64 = buf.get_i64_le();
-        let field_char = get_char_array_trim_padding(buf, 1, '0', true)?;
+        let field_char = get_char_array_trim_pad_char(buf, 1, '0', true)?;
         let field_u_8 = buf.get_u8();
         let field_u_16 = buf.get_u16_le();
         let field_u_32 = buf.get_u32_le();
@@ -70,7 +70,7 @@ impl BinaryCodec for BasicPacket {
         let field_i_16_list = get_list_le::<i16, u16>(buf)?;
         let field_i_32_list = get_list_le::<i32, u16>(buf)?;
         let field_i_64_list = get_list_le::<i64, u16>(buf)?;
-        let field_char_list = get_fixed_string_list_trim_padding_le::<u16>(buf, 1, '0', true)?;
+        let field_char_list = get_fixed_string_list_trim_pad_char_le::<u16>(buf, 1, '0', true)?;
         let field_u_8_list = get_list_le::<u8, u16>(buf)?;
         let field_u_16_list = get_list_le::<u16, u16>(buf)?;
         let field_u_32_list = get_list_le::<u32, u16>(buf)?;
